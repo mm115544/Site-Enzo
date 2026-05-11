@@ -593,13 +593,48 @@ def concept_header(num, name, accent):
     return out
 
 
+def orientation_box(book_title, author, year, theme, why_read, accent=GOLD):
+    """Encadré d'orientation bibliographique en début de partie.
+    Non dérivatif — seulement référence générale."""
+    inner = [
+        Paragraph("◇  ORIENTATION DE LECTURE",
+            ParagraphStyle("ob_label", fontName="DV-Bold", fontSize=9.5,
+                textColor=accent, alignment=TA_LEFT, spaceAfter=4)),
+        Paragraph(f"<b>Livre conseillé en parallèle :</b> <i>{book_title}</i> — {author} ({year}).",
+            ParagraphStyle("ob_body", fontName="DV", fontSize=9.5, leading=13,
+                textColor=NAVY, alignment=TA_LEFT, spaceAfter=2)),
+        Paragraph(f"<b>Thème général :</b> {theme}",
+            ParagraphStyle("ob_body2", fontName="DV", fontSize=9.5, leading=13,
+                textColor=NAVY, alignment=TA_LEFT, spaceAfter=2)),
+        Paragraph(f"<b>Pourquoi le lire :</b> {why_read}",
+            ParagraphStyle("ob_body3", fontName="DV", fontSize=9.5, leading=13,
+                textColor=NAVY, alignment=TA_LEFT, spaceAfter=4)),
+        Paragraph(
+            "<i>Note : cette partie est un manuel original d'intégration appliqué à mon profil. "
+            "Elle ne résume pas le livre et ne suit pas sa structure.</i>",
+            ParagraphStyle("ob_disc", fontName="DV-Italic", fontSize=8.5, leading=11,
+                textColor=MID_GREY, alignment=TA_LEFT)),
+    ]
+    t = Table([[inner]], colWidths=[16*cm])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), CREAM),
+        ("LEFTPADDING", (0, 0), (-1, -1), 12),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 12),
+        ("TOPPADDING", (0, 0), (-1, -1), 10),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LINEBEFORE", (0, 0), (0, -1), 3, accent),
+    ]))
+    return [Spacer(1, 4), t, Spacer(1, 10)]
+
+
 print("✓ Infrastructure chargée")
 
 
 # ============================================================
 # DOCUMENT
 # ============================================================
-OUTPUT = "/home/user/Site-Enzo/devenir_trader_stable_v2.pdf"
+OUTPUT = "/home/user/Site-Enzo/devenir_trader_stable_v3.pdf"
 doc = SimpleDocTemplate(
     OUTPUT, pagesize=A4,
     leftMargin=2.5*cm, rightMargin=2.5*cm,
@@ -704,6 +739,75 @@ sommaire_data = [
      C("intégration des 9 parties, plan 30 jours, plan 12 mois, checklist quotidienne")],
 ]
 story.append(styled_table(sommaire_data, [1.2*cm, 5.8*cm, 9*cm]))
+story.append(PageBreak())
+
+
+# ---------- COMPAGNONS DE LECTURE ----------
+_part_color[0] = GOLD
+story.append(P("COMPAGNONS DE LECTURE", h_part))
+story.append(P("Ta carte bibliographique pour le plan 12 mois", h_part_sub))
+story.append(GoldRule())
+story.append(Spacer(1, 12))
+
+story.append(P(
+    "Ce manuel est un cours <b>original</b> sur des concepts généraux de psychologie, neurosciences et "
+    "sciences comportementales. Il n'est ni un résumé, ni un dérivé, ni un substitut des ouvrages ci-dessous. "
+    "Les 9 livres listés ici sont des références <b>indépendantes</b> à lire en parallèle, dans ton propre rythme, "
+    "selon les thèmes que tu veux approfondir avec la voix de leurs auteurs."
+))
+story.append(P(
+    "Tu peux intégrer ces lectures à partir du <b>Mois 7</b> de ton plan 12 mois (à raison d'un livre par mois). "
+    "Avant le Mois 7, concentre-toi sur l'application des modules de ce manuel — pas sur la consommation de "
+    "contenu nouveau."
+))
+story.append(Spacer(1, 10))
+
+companions_data = [
+    [C("Thème de partie", cell_g), C("Livre conseillé en parallèle", cell_g), C("Quand le lire", cell_g)],
+    [C("P1 — Apprendre à perdre", cell_b),
+     C("Best Loser Wins — Tom Hougaard (2022)"),
+     C("Mois 7")],
+    [C("P2 — Dopamine", cell_b),
+     C("Un monde sous dopamine — Anna Lembke (2021)"),
+     C("Mois 8")],
+    [C("P3 — Trauma & SN", cell_b),
+     C("Le corps n'oublie rien — Bessel van der Kolk (2014)"),
+     C("Mois 9 — prioritaire pour ton TBI")],
+    [C("P4 — Décharger le stress", cell_b),
+     C("Réveiller le tigre — Peter Levine (1997)"),
+     C("Mois 9-10")],
+    [C("P5 — Pensée probabiliste", cell_b),
+     C("Trader dans la zone — Mark Douglas (2000)"),
+     C("Mois 10")],
+    [C("P6 — Corps qui dit stop", cell_b),
+     C("Quand le corps dit non — Gabor Maté (2003)"),
+     C("Mois 11")],
+    [C("P7 — Habitudes", cell_b),
+     C("Un rien peut tout changer (Atomic Habits) — James Clear (2018)"),
+     C("Mois 7 ou 8 (court et opérationnel)")],
+    [C("P8 — Lâcher prise", cell_b),
+     C("Lâcher prise — David R. Hawkins (2012)"),
+     C("Mois 11-12")],
+    [C("P9 — Patience financière", cell_b),
+     C("La psychologie de l'argent — Morgan Housel (2020)"),
+     C("Mois 12")],
+]
+story.append(styled_table(companions_data, [4*cm, 7.5*cm, 4.5*cm]))
+story.append(Spacer(1, 14))
+
+story.append(P("Important", h_section))
+story.append(P(
+    "Ne lis PAS ces livres avant d'avoir appliqué les modules de ce manuel. Les premières 6 semaines, tu "
+    "appliques. Tu ne consommes pas. Sinon tu fais exactement ce que le Concept 1 de la Partie 1 te décrit : "
+    "fuir l'exécution dans l'apprentissage. Six semaines de purge contenu trading, puis tu reprends la lecture "
+    "à un rythme contrôlé."
+))
+story.append(P(
+    "Ne t'attends pas non plus à retrouver le contenu de mon manuel dans ces livres — ni l'inverse. Ce sont "
+    "des chemins parallèles vers les mêmes territoires. Chaque auteur a sa propre approche, son propre angle, "
+    "ses propres anecdotes cliniques. Mon manuel a la sienne. Ces deux corpus se complètent, ils ne se "
+    "substituent pas."
+))
 story.append(PageBreak())
 
 
