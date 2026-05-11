@@ -634,7 +634,7 @@ print("✓ Infrastructure chargée")
 # ============================================================
 # DOCUMENT
 # ============================================================
-OUTPUT = "/home/user/Site-Enzo/devenir_trader_stable_v3.pdf"
+OUTPUT = "/home/user/Site-Enzo/devenir_trader_stable_v4.pdf"
 doc = SimpleDocTemplate(
     OUTPUT, pagesize=A4,
     leftMargin=2.5*cm, rightMargin=2.5*cm,
@@ -811,6 +811,96 @@ story.append(P(
 story.append(PageBreak())
 
 
+# ---------- MASTER INDEX DES EXERCICES ----------
+_part_color[0] = GOLD
+_part_name[0] = "Index exercices"
+
+story.append(P("MASTER INDEX DES EXERCICES", h_part))
+story.append(P("Tous les exercices du manuel, classés par fréquence", h_part_sub))
+story.append(GoldRule())
+story.append(Spacer(1, 12))
+
+story.append(P(
+    "Le manuel contient ~70 exercices répartis dans les 9 parties. Cet index te permet de naviguer : qu'est-ce "
+    "que je fais aujourd'hui ? Cette semaine ? Ce mois ? Tu peux imprimer cette page et la cocher au fur et à mesure."
+))
+story.append(Spacer(1, 10))
+
+story.append(P("QUOTIDIEN — tous les jours", h_section))
+story.append(styled_table([
+    [C("Exercice", cell_g), C("Partie", cell_g), C("Durée", cell_g)],
+    [C("Méditation / pleine présence matinale"), C("P2, P3"), C("20 min")],
+    [C("Respiration 4-6 (5 sessions × 2-5 min)"), C("P3, P4"), C("15 min cumulé")],
+    [C("Cold shower"), C("P2, P4"), C("2-5 min")],
+    [C("Scan corporel matin et soir"), C("P3, P4"), C("10 min")],
+    [C("Journal manuscrit — pré + post session"), C("P7"), C("15-20 min")],
+    [C("Récitation des 5 vérités"), C("P5"), C("3 min")],
+    [C("Relecture du protocole personnel"), C("P1"), C("2 min")],
+    [C("Phrase d'ancrage du jour (1 des 9)"), C("Toutes"), C("1 min")],
+], [9*cm, 2.5*cm, 4.5*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("HEBDOMADAIRE — une fois par semaine", h_section))
+story.append(styled_table([
+    [C("Exercice", cell_g), C("Partie", cell_g), C("Durée", cell_g)],
+    [C("Pansage conscient avec ta filly"), C("P3, P4"), C("45 min")],
+    [C("Sortie nature sans téléphone"), C("P4"), C("90 min")],
+    [C("3 séances sport (box / équitation / course)"), C("P2, P4, P6"), C("3 × 60 min")],
+    [C("Journée OFF complète (1 jour fixe)"), C("P6"), C("Toute la journée")],
+    [C("Revue hebdo dans le journal (dimanche)"), C("P7"), C("30 min")],
+    [C("Pratique d'expression émotionnelle"), C("P6"), C("15 min × plusieurs jours")],
+    [C("5 « non » à dire dans la semaine"), C("P6"), C("Opportuniste")],
+    [C("Exercice de pendulation"), C("P4"), C("5 min")],
+], [9*cm, 2.5*cm, 4.5*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("BIMENSUEL — toutes les 2 semaines", h_section))
+story.append(styled_table([
+    [C("Exercice", cell_g), C("Partie", cell_g)],
+    [C("Séance praticien somatique (SE / EMDR)"), C("P3, P4")],
+    [C("Exploration mouvement inachevé"), C("P4")],
+    [C("Compteur d'extinction (révision sessions sans décalage SL)"), C("P2")],
+], [11*cm, 5*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("MENSUEL — une fois par mois", h_section))
+story.append(styled_table([
+    [C("Exercice", cell_g), C("Partie", cell_g)],
+    [C("Bilan grille 100 trades (avancement)"), C("P5")],
+    [C("Lettre à l'un des 3 Marien (rotation : avant / reconstruction / après)"), C("Section Identité")],
+    [C("Bilan financier — règle 50/30/20"), C("P9")],
+    [C("Calcul de progression vers ton « assez »"), C("P9")],
+    [C("Test calibration style trading (à partir du Mois 2)"), C("Section Style")],
+    [C("Audit du risque de ruine"), C("P9")],
+], [11*cm, 5*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("FONDATIONS — à faire une seule fois (et puis maintenir)", h_section))
+story.append(styled_table([
+    [C("Exercice fondateur", cell_g), C("Partie", cell_g)],
+    [C("Acheter le cahier journal — page 1 manuscrite"), C("P7")],
+    [C("Écrire le protocole personnel (9 lignes) — signé, affiché"), C("P1")],
+    [C("Écrire la méthode de trading en A4 (mode systématique)"), C("P5")],
+    [C("Calculer ton « assez » (capital cible + délai + plan mensuel)"), C("P9")],
+    [C("Ouvrir un compte épargne dédié au surplus trading"), C("P9")],
+    [C("Désinstaller les apps de trading du téléphone"), C("P2, P7")],
+    [C("Trouver un praticien somatique — premier RDV pris"), C("P3, P4")],
+    [C("Bilan neuropsychologique post-TBI"), C("Section Ressources")],
+    [C("Identifier 3 ressources somatiques disponibles 24h/24"), C("P4")],
+    [C("Écriture des 3 lettres aux 3 Marien"), C("Section Identité")],
+    [C("Audit de l'environnement (téléphone, bureau, chambre)"), C("P7")],
+    [C("Identifier ton seuil corporel personnel (red flag)"), C("P6")],
+], [11*cm, 5*cm]))
+story.append(Spacer(1, 14))
+
+story.extend(retenir(
+    "Tu n'es pas censé tout faire en même temps. Le plan 30 jours te dit par où commencer. Cet index te "
+    "permet de savoir quel exercice appartient à quelle fréquence — pour ne pas le confondre avec une tâche "
+    "ponctuelle ou oublier qu'il est récurrent."
+))
+story.append(PageBreak())
+
+
 # ---------- INTRODUCTION GÉNÉRALE ----------
 story.append(P("INTRODUCTION GÉNÉRALE", h_part))
 story.append(P("Le diagnostic complet — ton cas", h_part_sub))
@@ -857,6 +947,187 @@ story.append(Spacer(1, 10))
 story.extend(retenir(
     "Tu n'as pas UN problème. Tu as cinq couches superposées. Ce manuel les traite une par une. "
     "Le traiter dans l'ordre, c'est dérouler une corde du nœud — pas tirer dessus au hasard."
+))
+story.append(PageBreak())
+
+
+# ============================================================
+# SECTION SPÉCIALE — IDENTITÉ MARIEN POST-2022
+# ============================================================
+_part_color[0] = GOLD
+_part_num[0] = None
+_part_name[0] = "Identité post-2022"
+
+story.append(P("SECTION FONDATRICE", h_part))
+story.append(P("Identité Marien post-2022 — qui es-tu depuis ?", h_part_sub))
+story.append(GoldRule())
+story.append(Spacer(1, 12))
+
+story.append(P(
+    "Avant d'entrer dans les 9 parties techniques, il faut nommer ce qui traverse tout : l'événement de 2022 "
+    "n'est pas un épisode médical à oublier. C'est probablement <b>l'événement fondateur</b> de la vie adulte "
+    "que tu vis maintenant. Toute ta psychologie de trader, ton rapport à l'intensité, ton besoin de prouver, "
+    "ton lien identité-performance — tout part de là."
+))
+story.append(P(
+    "Cette section spéciale est dédiée à cette question : qui es-tu depuis 2022 ? Comment habiter ce qui s'est "
+    "passé sans en faire ni un trauma figé, ni une histoire effacée. C'est un travail à part entière, qui "
+    "soutient tout le reste."
+))
+
+story.append(P("1.  La rupture biographique", h_section))
+story.append(P(
+    "En psychologie, une « rupture biographique » désigne un événement qui sépare ta vie en un <b>avant</b> et "
+    "un <b>après</b>. Pas un simple changement — une césure. Ton accident de 2022 en est une, manifestement. "
+    "Pour la plupart des gens, la vie suit un fil continu (école → études → travail → famille). Pour quelqu'un "
+    "qui a vécu un coma, des opérations multiples, une reconstruction longue, la continuité est cassée. "
+    "Quelque chose s'est terminé en 2022. Quelque chose d'autre a commencé. La continuité n'existe plus en "
+    "ligne droite."
+))
+story.append(P(
+    "Cette rupture biographique n'est pas une malédiction. C'est un fait. Tu peux la nier (« je suis toujours "
+    "le même »), la fuir (« je n'en parle pas »), ou l'habiter (« oui, je suis Marien-d'après-2022, et alors ? »). "
+    "Seule la troisième option ouvre quelque chose. Les deux premières te bloquent dans des comportements "
+    "compensatoires."
+))
+
+story.append(P("2.  Les trois Marien", h_section))
+story.append(P(
+    "Il y a probablement trois figures de toi qui coexistent en ce moment, sans que tu les distingues clairement :"
+))
+story.append(styled_table([
+    [C("Figure", cell_g), C("Caractéristiques", cell_g)],
+    [C("Marien-d'avant", cell_b),
+     C("Le Marien d'avant l'accident. Continuité, projets, identité non-troublée. Tu le portes en nostalgie possible.")],
+    [C("Marien-en-reconstruction", cell_b),
+     C("Celui qui a survécu, qui a refait son corps et son cerveau pendant des mois. Combatif, intense, déterminé. C'est celui qui parle quand tu trades pour prouver.")],
+    [C("Marien-d'après", cell_b),
+     C("Celui qui est sorti de la reconstruction. Plus ancien d'expérience, mais à construire encore. Tu n'as probablement pas encore fini de le faire émerger.")],
+], [4.5*cm, 11.5*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P(
+    "La plupart de ton temps mental, tu es probablement en mode « Marien-en-reconstruction » — encore en "
+    "preuve, encore en combat, encore en démonstration. C'est la posture qui t'a sauvé pendant 1-2 ans après "
+    "l'accident. C'est aussi celle qui te détruit aujourd'hui en trading, parce qu'elle te pousse à transformer "
+    "chaque trade en test identitaire."
+))
+story.append(P(
+    "Le travail psychologique de fond, c'est de <b>laisser émerger Marien-d'après</b>. Pas par effort. Par "
+    "permission. Lui n'a plus à prouver, parce qu'il est déjà sorti de la phase de preuve. Lui peut trader "
+    "sans drama, parce que le trading n'est plus son terrain de validation."
+))
+story.append(PageBreak())
+
+story.append(P("3.  Le besoin de prouver — d'où il vient, où il va", h_section))
+story.append(P(
+    "Quand tu te lèves le matin avec l'intention « il faut que je gagne », tu n'es pas en mode trader rentable. "
+    "Tu es en mode survivant qui prouve qu'il existe encore. Ce besoin de prouver a une racine claire : pendant "
+    "ta reconstruction post-2022, chaque progrès (re-marcher, retrouver une mémoire, gérer un effort cognitif) "
+    "était une preuve VITALE que tu allais récupérer. Le besoin de prouver a sauvé ta récupération."
+))
+story.append(P(
+    "Mais le besoin de prouver ne s'éteint pas tout seul quand la phase aiguë est terminée. Il continue, "
+    "désormais sans cible. Il cherche un terrain. Le trading devient ce terrain — chaque trade est devenu, "
+    "sans que tu le décides, une mini-preuve que ton cerveau marche, que ta volonté tient, que tu n'es pas "
+    "réduit à ton accident."
+))
+story.append(P(
+    "Cette logique est <b>inadaptée</b> au trading. Le trading rentable demande du détachement, pas de la preuve. "
+    "Aussi longtemps que tu portes la preuve dans chaque clic, tu vas perdre. Pas par incompétence — par "
+    "mauvais combat. Ton besoin de prouver gagnerait à se réorienter vers des terrains qui le portent bien : "
+    "compétitions équestres, projets ATHÉNA qui se construisent dans la durée, peut-être un projet créatif ou "
+    "sportif personnel. Pas le marché — qui ne te demande aucune preuve et qui sanctionne le besoin d'en donner."
+))
+
+story.append(P("4.  Le « grand sommeil » du coma", h_section))
+story.append(P(
+    "Quelque chose de spécifique au coma mérite d'être nommé. Pendant le coma, ta conscience était suspendue. "
+    "Pour toi, le temps écoulé du coma n'a pas existé — tu t'es endormi en septembre 2022 et tu t'es réveillé "
+    "« plus tard », sans expérience subjective intermédiaire. Cette discontinuité phénoménologique n'est pas "
+    "anodine. Elle crée souvent une sensation d'irréalité, de flottement, ou d'impossibilité à se sentir "
+    "« vraiment de retour »."
+))
+story.append(P(
+    "Ce phénomène est documenté chez les patients post-coma. Il peut s'exprimer par : sensation que la vie est "
+    "un rêve, difficulté à se prendre au sérieux soi-même, recherche d'événements intenses pour « s'assurer "
+    "que je suis là », fragilité du sentiment de continuité personnelle. Si tu reconnais l'un de ces signaux, "
+    "il appartient probablement à cette dimension."
+))
+story.extend(make_callout("◈  CE QUI CHANGE QUAND TU NOMMES ÇA",
+    "Le sentiment d'irréalité que tu portes peut-être en arrière-plan n'est pas de la « faiblesse mentale ». "
+    "C'est une conséquence neurologique d'une discontinuité de conscience. Le nommer ne le supprime pas. Mais "
+    "ça te permet de cesser de le combattre comme une défaillance — et de le traiter comme une caractéristique "
+    "à intégrer.",
+    GOLD, NAVY, accent=NAVY))
+
+story.append(P("5.  Réintégrer les trois Marien", h_section))
+story.append(P(
+    "Le travail identitaire n'est pas de « redevenir Marien-d'avant ». Cette personne est partie. C'est aussi "
+    "de ne pas rester bloqué en Marien-en-reconstruction. C'est d'<b>intégrer les trois figures</b> dans une "
+    "identité élargie qui les contient toutes."
+))
+story.append(P(
+    "Marien-d'après n'est pas Marien-d'avant + récupération. C'est une figure entièrement nouvelle, qui inclut "
+    "l'expérience de 2022 sans en être prisonnière, qui inclut la force de la reconstruction sans rester en "
+    "mode preuve, qui inclut une connaissance corporelle de ta propre finitude que la plupart des gens de 25 "
+    "ans n'ont pas. C'est, potentiellement, une figure plus profonde que celle que tu aurais été sans 2022."
+))
+story.append(PageBreak())
+
+story.append(P("6.  Pratiques d'intégration identitaire", h_section))
+
+story.append(styled_table([
+    [C("Pratique", cell_g), C("Comment", cell_g), C("Effet", cell_g)],
+    [C("Écriture autobiographique"), C("1 page/mois, manuscrit, sur un événement de 2022"),
+     C("Cohérence narrative reconstruite")],
+    [C("Dialogue avec Marien-d'avant"), C("Lettre à toi-d'avant-l'accident"),
+     C("Reconnaissance de la perte")],
+    [C("Dialogue avec Marien-en-recons."), C("Lettre de remerciement à toi-survivant"),
+     C("Reconnaissance de la dette + permission de passer à l'après")],
+    [C("Photo de toi avant et après"), C("Regarde-les côte à côte 5 min"),
+     C("Sensation directe des trois Marien")],
+    [C("Activité non-performance"), C("1h/sem dédiée à une activité sans enjeu"),
+     C("Marien-d'après s'exprime")],
+    [C("Thérapie identitaire"), C("Un psy spécialisé trauma OU coach identitaire"),
+     C("Accompagnement professionnel du processus")],
+], [4*cm, 6.5*cm, 5.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(exercice([
+    "<b>L'exercice fondateur — 3 lettres.</b> Sur 3 séances séparées (1 par semaine) : "
+    "(1) Une lettre à Marien-d'avant. Tu lui dis ce qui s'est passé, ce que tu perds en n'étant plus lui, "
+    "ce que tu gardes de lui. "
+    "(2) Une lettre à Marien-en-reconstruction. Tu le remercies. Tu lui dis qu'il peut se reposer. Tu lui "
+    "donnes la permission de céder la place. "
+    "(3) Une lettre à Marien-d'après. Tu lui demandes qui il veut être. Tu écoutes ce qui vient. "
+    "Tu gardes les 3 lettres. Tu les relis dans 6 mois. Tu vois ce qui a bougé."
+]))
+
+story.append(P("7.  Le risque du sur-investissement dans la performance", h_section))
+story.append(P(
+    "Pour quelqu'un qui sort d'une rupture biographique, la tentation est massive de <b>tout miser sur la "
+    "performance</b> pour reconstruire un sens. Performance sportive (saut d'obstacles), performance "
+    "entrepreneuriale (ATHÉNA), performance financière (trading), parfois performance relationnelle. C'est "
+    "compréhensible. C'est aussi un piège."
+))
+story.append(P(
+    "La performance ne reconstruit pas une identité. Elle ne fait que reporter le moment où la question "
+    "identitaire doit être posée. Tant que tu performes assez, tu ne te demandes pas qui tu es. Le jour où la "
+    "performance baisse (crash de compte, blessure, échec ATHÉNA), la question revient brutalement — souvent "
+    "sous forme de crise."
+))
+story.append(P(
+    "La voie alternative : <b>nourrir une identité non-performance en parallèle</b>. Pas à la place. En "
+    "parallèle. Tu maintiens tes terrains de performance (ils sont utiles et valent quelque chose), mais tu "
+    "construis aussi des terrains où tu existes sans accomplir. Lecture, pansage avec ta filly, conversations "
+    "gratuites, présence à des proches qui ne te jugent pas par tes résultats. Ces terrains-là, lentement, "
+    "construisent Marien-d'après."
+))
+story.extend(retenir(
+    "Ton accident de 2022 est l'événement fondateur de ton identité adulte actuelle. Le nier le rend toxique. "
+    "L'habiter le rend constitutif. Les trois Marien (avant / en reconstruction / d'après) coexistent en toi. "
+    "L'enjeu est de les intégrer — pas d'en sauver un ou de revenir à un autre."
 ))
 story.append(PageBreak())
 
@@ -5098,34 +5369,344 @@ story.append(P(
     "12 mois, tu es transformé."
 ))
 
-story.append(styled_table([
-    [C("Mois", cell_g), C("Focus principal", cell_g), C("Pratique à installer", cell_g)],
-    [C("M1"), C("Sevrage et fondations"),
-     C("Cold shower + sport + méditation quotidiens. Cahier ouvert.")],
-    [C("M2"), C("Dopamine"),
-     C("Bascule pré-/post-pic. Substituts constructifs identifiés.")],
-    [C("M3"), C("Trauma + SN"),
-     C("Praticien SE actif. Pansage conscient hebdo. Respiration 5x/j.")],
-    [C("M4"), C("Décharge somatique"),
-     C("Scan quotidien. Pendulation. Mouvements explorés.")],
-    [C("M5"), C("Pensée probabiliste"),
-     C("Reformulation grammaticale automatique. 5 vérités intégrées.")],
-    [C("M6"), C("Corps qui dit stop"),
-     C("5 non/sem. Jour OFF hebdo non négociable. Émotions exprimées.")],
-    [C("M7"), C("Habitudes"),
-     C("Architecture en place. 3 habitudes installées par empilement.")],
-    [C("M8"), C("Lâcher prise"),
-     C("Protocole 6 étapes quotidien. Lâcher dans 7 moments-clés trading.")],
-    [C("M9"), C("Patience financière"),
-     C("« Assez » défini. Compte épargne actif. Règle 50/30/20.")],
-    [C("M10"), C("Consolidation"),
-     C("Reprise trade réel UN compte. Protocole strict.")],
-    [C("M11"), C("Ancrage"),
-     C("Évaluation à mi-année. Ajustements. Maintien des 9 piliers.")],
-    [C("M12"), C("Bilan + décision"),
-     C("Bilan complet. Décision : scaling, prolongation, retour à phase précédente.")],
-], [1.2*cm, 4.5*cm, 10.3*cm]))
+story.append(P(
+    "Chaque mois a sa thématique, ses objectifs précis, ses métriques de validation, ses signaux d'alerte et "
+    "ses critères de passage. Tu ne progresses au mois suivant que si les critères du mois en cours sont "
+    "remplis. Si non, tu refais le mois. Ce n'est pas une punition — c'est de l'ingénierie."
+))
 story.append(PageBreak())
+
+
+def mois_block(num, theme, objectifs, metriques, alertes, passage):
+    out = []
+    out.append(P(f"MOIS {num}", small_label))
+    out.append(P(theme, h_concept))
+    out.append(GoldRule(thickness=0.8))
+    out.append(Spacer(1, 6))
+    out.append(P("Objectifs concrets", h_sub))
+    for o in objectifs:
+        out.append(P("•  " + o, body))
+    out.append(P("Métriques de validation", h_sub))
+    for m in metriques:
+        out.append(P("•  " + m, body))
+    out.append(P("Signaux d'alerte (à corriger immédiatement)", h_sub))
+    for a in alertes:
+        out.append(P("•  " + a, body))
+    out.append(P("Critères de passage au mois suivant", h_sub))
+    for p in passage:
+        out.append(P("✓  " + p, body))
+    out.append(PageBreak())
+    return out
+
+
+story.extend(mois_block(1, "Sevrage et fondations",
+    objectifs=[
+        "Arrêt total du trading pendant 30 jours (aucun trade, démo ou réel).",
+        "Désinstallation des apps de trading du téléphone. Mot de passe TradingView donné à un proche.",
+        "Mise en place des routines de base : cold shower quotidien, méditation 20 min/jour, sport 3x/sem.",
+        "Achat du cahier sérieux et première page manuscrite.",
+        "Premier contact avec un praticien somatique (SE / EMDR) — RDV pris.",
+    ],
+    metriques=[
+        "30 jours consécutifs sans aucun trade.",
+        "Cold shower ≥ 25/30 jours.",
+        "Méditation ≥ 25/30 jours.",
+        "Journal manuscrit rempli ≥ 25/30 jours.",
+        "1 RDV pris (et idéalement honoré) avec praticien somatique.",
+    ],
+    alertes=[
+        "Tu ouvres une plateforme « juste pour voir » → reset du compteur de jours.",
+        "Tu compenses par alcool/sucre/écrans excessifs → ce n'est pas un sevrage, c'est un déplacement.",
+        "Tu reproches au temps qui passe d'être lent → résistance, pas progrès.",
+    ],
+    passage=[
+        "30 jours sans trade complets.",
+        "Au moins 4 pratiques quotidiennes installées comme automatismes (sans effort de volonté).",
+        "Praticien somatique au moins contacté.",
+    ],
+))
+
+story.extend(mois_block(2, "Reconstruction du baseline dopaminergique",
+    objectifs=[
+        "Maintien strict du sevrage trading.",
+        "Inconfort volontaire intensifié : douche froide quotidienne (étendue à 5 min), 2 séances HIIT/sem.",
+        "Substitution active des comportements compensatoires (alcool, scroll, sucre, écrans excessifs).",
+        "Pratique 5×/jour de respiration 4-6 — installation comme automatisme.",
+        "Pansage conscient avec ta filly : 1 fois/sem minimum, 45 min, sans téléphone.",
+    ],
+    metriques=[
+        "Baseline énergétique évalué quotidiennement 1-10. Moyenne sur 30 jours ≥ 7/10.",
+        "Substituts toxiques (alcool/scroll/sucre) réduits de 70%+ vs mois 1.",
+        "Pansage conscient ≥ 4 fois dans le mois.",
+        "Test du baseline : plaisirs simples reviennent (repas, lecture, marche).",
+    ],
+    alertes=[
+        "Tu te dis « le calme est encore vide » → SN encore en tolérance. Ne reviens pas au trading.",
+        "Tu commences à scroller du contenu trading « pour rester à jour » → fuite déguisée.",
+        "Tu te sens vidé/déprimé chronique → consulte. Possible décompensation post-sevrage.",
+    ],
+    passage=[
+        "Plaisirs simples (marche, repas calme) procurent ≥ 6/10 de satisfaction.",
+        "Sevrage maintenu intact sur 60 jours cumulés (mois 1 + mois 2).",
+        "Au moins 1 séance avec praticien somatique effectuée.",
+    ],
+))
+
+story.extend(mois_block(3, "Travail somatique et SN",
+    objectifs=[
+        "Toujours pas de trading. Sevrage prolongé à 90 jours total.",
+        "Praticien somatique : 1 séance toutes les 2 semaines (2 séances ce mois).",
+        "Scan corporel matin et soir installé comme automatisme (sans rappel nécessaire).",
+        "Cartographie quotidienne SN (V/S/D à 8h, 12h, 16h, 20h) pendant tout le mois.",
+        "Bilan neuropsychologique post-TBI prescrit (idéalement passé dans le mois).",
+    ],
+    metriques=[
+        "Sevrage trading total ≥ 90 jours.",
+        "2 séances somatiques effectuées.",
+        "Score moyen sympathique sur la journée (sur 0-10) en baisse mesurable vs mois 1-2.",
+        "Sommeil ≥ 7h en moyenne, sentiment de récupération amélioré.",
+    ],
+    alertes=[
+        "Le travail somatique réveille des émotions fortes → c'est attendu. Pas raison d'arrêter.",
+        "Tu sens « ça ne sert à rien » → résistance classique au travail corporel. Continuer.",
+        "Insomnies aggravées sur > 7 jours → en parler au praticien.",
+    ],
+    passage=[
+        "État SN baseline majoritairement V ou S calme (pas S élevé).",
+        "Reconnaissance fluide des signaux corporels précoces.",
+        "Engagement de continuer le travail somatique sur les 9 mois suivants.",
+    ],
+))
+
+story.extend(mois_block(4, "Décharge somatique et intégration",
+    objectifs=[
+        "Reprise possible du trading en DÉMO uniquement à partir de la 3e semaine du mois.",
+        "Pratique active de la pendulation (1 fois/jour minimum).",
+        "Exploration hebdomadaire d'un mouvement inachevé (push/pull/reach/run/voice).",
+        "Sortie nature 1 fois/sem (90 min sans téléphone).",
+        "Lecture du manuel — parties 1 et 2 — relue et annotée.",
+    ],
+    metriques=[
+        "Démo : minimum 20 trades exécutés selon protocole strict (SL/TP préfixés, BE+1R, plateforme fermée).",
+        "Zéro décalage de SL en démo.",
+        "Pendulation pratiquée ≥ 25 jours sur 30.",
+        "Capacité à sentir une émotion 90 sec sans agir sur elle (testée plusieurs fois).",
+    ],
+    alertes=[
+        "Tu sautes la démo et veux passer en réel → c'est de l'impatience, signal rouge.",
+        "Tu modifies ton protocole en démo → reset l'engagement.",
+        "Tu te dis « la démo c'est pas pareil que le réel » → vrai, mais c'est exprès. Tiens.",
+    ],
+    passage=[
+        "20+ trades démo exécutés selon protocole exact, sans aucune dérogation.",
+        "Sensation de fluidité corporelle vs début du mois.",
+        "Carnet du lâcher actif (1 entrée/jour minimum).",
+    ],
+))
+
+story.extend(mois_block(5, "Pensée probabiliste et exécution",
+    objectifs=[
+        "Trading réel autorisé : UN seul compte prop firm, le plus petit possible (ex : Apex 25K).",
+        "Risque par trade : 0,5% MAXIMUM. Non négociable.",
+        "Méthode de trading entièrement écrite sur A4 (mode systématique).",
+        "Récitation matinale des 5 vérités, installée comme automatisme.",
+        "Premier groupe de 100 trades commencé — grille de suivi visuel au mur.",
+    ],
+    metriques=[
+        "Réel : minimum 30 trades exécutés selon protocole.",
+        "Zéro décalage de SL. Zéro modification de méthode.",
+        "Journal pré + post session rempli 100% des sessions de trading.",
+        "Score quotidien d'exécution (OUI/NON) — minimum 90% OUI.",
+    ],
+    alertes=[
+        "Tu rates UN scan corporel pré-session → laisse-toi un strike. Deux strikes consécutifs → pause 48h.",
+        "Tu prends un trade en colère / fatigué / euphorique → reset compteur série.",
+        "Tu te compares à des comptes Twitter qui font « +$10K » → désintoxication immédiate des réseaux.",
+    ],
+    passage=[
+        "30+ trades réels selon protocole strict.",
+        "Compteur d'extinction « sans décalage SL » à 30 sessions consécutives.",
+        "Vivre un trade perdant sans drama émotionnel notable.",
+    ],
+))
+
+story.extend(mois_block(6, "Limites du corps et modulation",
+    objectifs=[
+        "Continuation trading réel sur le même compte. Aucune augmentation de risque.",
+        "Audit complet de ta charge totale (trading + ATHÉNA + équitation + relations). Identification des excès.",
+        "Pratique du « non » : 5 « non » concrets par semaine, dont au moins 1 « non à toi-même ».",
+        "Jour OFF hebdomadaire complet — non négociable. Pas un demi-jour. Une journée entière.",
+        "Une vraie pause de 3-5 jours sur le mois (vacances OFF totales).",
+    ],
+    metriques=[
+        "5 non par semaine sur 4 semaines = 20 non documentés.",
+        "1 jour OFF par semaine respecté ≥ 4 fois.",
+        "1 pause longue 3-5 jours effectuée.",
+        "Score moyen de récupération (sommeil, énergie, irritabilité) en amélioration.",
+    ],
+    alertes=[
+        "Tu te dis « j'ai pas le temps de prendre une journée OFF » → c'est exactement le pattern à casser.",
+        "Tu utilises le jour OFF pour bosser ATHÉNA en cachette → c'est pas un jour OFF.",
+        "Tensions corporelles chroniques (mâchoire, épaules) persistent → continuer travail somatique.",
+    ],
+    passage=[
+        "Capacité à dire 5 non/sem sans culpabilité massive.",
+        "Jour OFF intégré dans la semaine comme évident.",
+        "Sentiment de récupération mesurable post-pause longue.",
+    ],
+))
+
+story.extend(mois_block(7, "Habitudes et automatisation",
+    objectifs=[
+        "Audit complet des 8 habitudes-clés (cf. master index). Lesquelles sont automatisées ? Lesquelles demandent encore de la volonté ?",
+        "Choix d'UNE habitude prioritaire à automatiser sur le mois — empilement sur déclencheur existant.",
+        "Première lecture (à partir d'un livre de la bibliographie) — 1 livre dans le mois.",
+        "Continuation du compte prop firm. Premier payout sollicité si atteignable selon règles.",
+        "Mise en place du système anti-rechute personnel (plan 6 étapes écrit, en portefeuille).",
+    ],
+    metriques=[
+        "Premier livre de la bibliographie lu et annoté avec tes propres notes.",
+        "Une habitude nouvelle installée comme automatisme (30 jours consécutifs).",
+        "Plan anti-rechute écrit, signé, présent physiquement sur toi.",
+        "Si éligible : premier payout reçu sur compte prop firm.",
+    ],
+    alertes=[
+        "Tu lis 3 livres en parallèle → c'est de la fuite dans la consommation. Un seul à la fois.",
+        "Tu veux installer 3 habitudes en même temps → 2 vont échouer. Une seule.",
+        "Tu veux ton payout entier transféré vers ton compte trading → règle 50/30/20.",
+    ],
+    passage=[
+        "1 livre lu, 1 habitude automatisée, plan anti-rechute en place.",
+        "Si applicable : 1 payout pris et SORTI vers compte personnel (pas tout réinvesti).",
+        "Sens d'avoir installé du DURABLE, pas du temporaire.",
+    ],
+))
+
+story.extend(mois_block(8, "Lâcher prise opérationnel",
+    objectifs=[
+        "Pratique quotidienne du protocole 6 étapes de lâcher prise.",
+        "Identification de TES 2-3 moments-clés où tu n'arrives pas à lâcher (parmi les 7 moments du Concept 4 P8).",
+        "Travail spécifique sur ces moments — pratique délibérée en démo si nécessaire.",
+        "Continuation trading réel. Évaluation : suis-je passé en mode systématique stable ?",
+        "Lecture du 2e livre de la bibliographie.",
+    ],
+    metriques=[
+        "Protocole 6 étapes pratiqué quotidiennement ≥ 25/30 jours.",
+        "Tes 2-3 moments-clés améliorés vs début du mois (autoévaluation honnête).",
+        "Compteur d'extinction « sans décalage SL » à 60 sessions consécutives.",
+        "Vivre un gros gain sans euphorie déstabilisante (testé au moins une fois).",
+    ],
+    alertes=[
+        "Le lâcher reste un mot, pas une pratique → reviens au protocole 6 étapes par écrit.",
+        "Tu reviens systématiquement aux mêmes 2-3 moments-clés sans progrès → besoin d'aide externe (coach, psy, praticien).",
+        "Excitation post-gain qui reste 12h+ → SN encore peu modulé.",
+    ],
+    passage=[
+        "Protocole 6 étapes intégré comme automatisme.",
+        "Au moins UN des 2-3 moments-clés clairement amélioré.",
+        "Une grosse journée gagnante traversée sans crash le lendemain.",
+    ],
+))
+
+story.extend(mois_block(9, "Patience financière et structure",
+    objectifs=[
+        "Calcul officiel de ton « assez » (capital cible + délai + plan mensuel).",
+        "Compte épargne dédié pleinement actif. Règle 50/30/20 appliquée à chaque payout.",
+        "Audit du risque de ruine avec un calculateur en ligne — résultats inscrits.",
+        "Calibrage : ton risque par trade reste à 0,5% MAX. Aucune augmentation.",
+        "Lecture du 3e livre de la bibliographie.",
+    ],
+    metriques=[
+        "« Assez » calculé et écrit dans le journal (nombre précis, délai précis).",
+        "Compte épargne dédié contient au moins 1 versement provenant des payouts.",
+        "Risque de ruine évalué et sous 5%.",
+        "Sentiment de cohérence : « je sais où je vais ».",
+    ],
+    alertes=[
+        "Tu repoussés le calcul de « assez » → c'est précisément la résistance à dissoudre.",
+        "Tu te dis « 0,5% c'est trop peu » → re-lecture P9 concept 6 (risque de ruine).",
+        "Tu compares ton compte épargne à des Twitter trader avec « 7 figures » → désintoxication.",
+    ],
+    passage=[
+        "« Assez » défini, écrit, accepté.",
+        "Premier versement vers épargne effectué.",
+        "Calcul du risque de ruine documenté.",
+    ],
+))
+
+story.extend(mois_block(10, "Consolidation et stabilité",
+    objectifs=[
+        "Trois mois d'application réelle continue (mois 5, 6, 7-8 ou équivalent). Bilan honnête.",
+        "Audit complet des 9 parties — où en suis-je dans chacune ?",
+        "Maintien strict de toutes les pratiques acquises.",
+        "Lecture du 4e livre de la bibliographie.",
+        "Test calibration scalping vs swing — si pas encore fait — appliqué cette semaine.",
+    ],
+    metriques=[
+        "Tableau d'auto-évaluation 9 parties — score 1-10 par partie.",
+        "Parties ≥ 7/10 : 6 sur 9 minimum.",
+        "Aucune pratique fondamentale abandonnée.",
+        "Compteur d'extinction « sans décalage SL » à 90 sessions consécutives.",
+    ],
+    alertes=[
+        "Une pratique a été abandonnée sans que tu t'en rendes compte → revenir dessus.",
+        "Tu commences à « connaître » le manuel par cœur et à zapper les exercices → relire le concept 1 de la P1.",
+    ],
+    passage=[
+        "Auto-évaluation honnête : 6/9 parties à 7+/10.",
+        "Stabilité globale notable vs il y a 6 mois.",
+        "Sens d'identité différente — Marien-d'après commence à émerger.",
+    ],
+))
+
+story.extend(mois_block(11, "Préparation au scaling — ou maintien",
+    objectifs=[
+        "Si stabilité confirmée sur les 6 derniers mois : possibilité d'AUGMENTER LÉGÈREMENT la taille (risque/trade de 0,5% → 0,75%, pas plus).",
+        "Si instabilité ou rechutes : prolongation du mode actuel, pas de scaling.",
+        "Décision honnête sur la base des METRIQUES, pas du désir.",
+        "Renforcement des pratiques somatiques en parallèle du scaling.",
+        "Lecture du 5e livre.",
+    ],
+    metriques=[
+        "PnL sur 6 derniers mois en positif (modeste mais positif).",
+        "Zéro crash de compte sur 6 mois.",
+        "Compteur d'extinction « sans décalage SL » à 120+ sessions consécutives.",
+        "Sentiment d'opérateur stable.",
+    ],
+    alertes=[
+        "Tu scales par excitation, pas par évidence chiffrée → DANGER. Revenir en arrière.",
+        "Tu sautes les pratiques somatiques parce que « ça va » → c'est exactement ce qui les fait revenir.",
+    ],
+    passage=[
+        "Décision documentée : scaling ou maintien. Sans drame.",
+        "Plan précis pour le mois 12.",
+    ],
+))
+
+story.extend(mois_block(12, "Bilan, intégration, décision année 2",
+    objectifs=[
+        "Bilan complet sur 12 mois. Mesures chiffrées (PnL, drawdowns max, jours OFF respectés, séances somatiques, etc.).",
+        "Relecture du manuel — sections les plus utilisées vs les moins utilisées.",
+        "Décision année 2 : continuer le manuel comme référence ? Approfondir un thème ? Changer de style de trading ?",
+        "Bilan identitaire : où en es-tu sur Marien-d'après ?",
+        "Engagement année 2 écrit dans le journal.",
+    ],
+    metriques=[
+        "Bilan financier précis (% de progression du capital, drawdowns, payouts).",
+        "Bilan psychologique honnête (qualité du sommeil, état SN, vie hors écran).",
+        "Bilan identitaire (sentiment de Marien-d'après vs Marien-en-reconstruction).",
+        "Bilan relationnel (rapports proches, ouverture, vulnérabilité).",
+    ],
+    alertes=[
+        "Tu juges l'année uniquement sur le PnL → la mesure est partielle.",
+        "Tu veux « tout finir » en mois 12 → le travail continue. Le manuel reste un compagnon.",
+    ],
+    passage=[
+        "Bilan complet écrit dans le journal — plusieurs pages.",
+        "Engagement année 2 clair et réaliste.",
+        "Sens d'avoir avancé — quel que soit le PnL.",
+    ],
+))
 
 
 # ============================================================
@@ -5252,6 +5833,255 @@ story.append(P(
     "Porges, Brewer, Schultz, Duhigg, Bogle, etc.). Cette liste est un point de départ, pas une liste exhaustive.",
     body_i
 ))
+story.append(PageBreak())
+
+
+# ============================================================
+# CARTE D'URGENCE — APRÈS UN CRASH DE COMPTE
+# ============================================================
+_part_color[0] = HexColor("#B33A3A")
+_part_num[0] = None
+_part_name[0] = "Carte d'urgence"
+
+story.append(P("CARTE D'URGENCE", h_part))
+story.append(P("Protocole post-crash — à imprimer et garder à portée", h_part_sub))
+story.append(GoldRule(color=HexColor("#B33A3A")))
+story.append(Spacer(1, 12))
+
+story.append(P(
+    "Tu vas cramer un compte. Pas peut-être — sur 12-24 mois, certainement, au moins une fois. C'est dans la "
+    "distribution. Ce protocole te donne la séquence précise des 7 jours suivants. Imprime-le. Garde-le dans "
+    "ton portefeuille ou collé au mur. Quand le moment arrive (et il arrivera), tu ne réfléchis pas — tu suis."
+))
+story.append(Spacer(1, 8))
+
+story.append(P("60 PREMIÈRES MINUTES — Stabilisation immédiate", h_section))
+story.append(styled_table([
+    [C("Temps", cell_g), C("Action obligatoire", cell_g)],
+    [C("0-5 min", cell_b),
+     C("FERMER LA PLATEFORME. Téléphone autre pièce. AUCUNE tentative de se refaire. AUCUN message envoyé.")],
+    [C("5-15 min", cell_b),
+     C("SORTIR PHYSIQUEMENT. Marcher dehors. Pas écouter de musique. Juste marcher. Respiration ample.")],
+    [C("15-30 min", cell_b),
+     C("Eau froide visage / cold shower / contact eau froide. Activation parasympathique forcée.")],
+    [C("30-45 min", cell_b),
+     C("Manger quelque chose de simple (banane, fruits, eau). Stabiliser la glycémie.")],
+    [C("45-60 min", cell_b),
+     C("Allonger 5 min. Scan corporel. NOMMER l'émotion (honte/colère/tristesse/dégoût). Ne pas combattre.")],
+], [1.8*cm, 14.2*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(make_callout("⚠  INTERDICTIONS ABSOLUES — 24 PREMIÈRES HEURES",
+    "Aucun trade. Aucun nouveau compte acheté. Aucune décision financière. Aucun message envoyé à un autre "
+    "trader. Aucune analyse rétrospective. Aucun engagement de « plus jamais ». Aucun alcool en excès. "
+    "Aucun ordre Amazon impulsif. RIEN d'irréversible.",
+    HexColor("#B33A3A"), white, accent=GOLD))
+
+story.append(P("JOUR 1 — Soir du crash", h_section))
+story.append(styled_table([
+    [C("Action", cell_g), C("Pourquoi", cell_g)],
+    [C("Dire à au moins UNE personne de confiance"), C("La honte cachée grandit. La honte dite décroît.")],
+    [C("Repas simple, hydraté, pas d'alcool"), C("Système nerveux déjà saturé, pas de toxique en plus.")],
+    [C("Sport doux ou marche longue"), C("Décharge somatique. Pas sport intense — déjà fatigué.")],
+    [C("Coucher tôt (avant 23h)"), C("Le sommeil consolide. Tu en as besoin.")],
+    [C("Si insomnie : lecture papier"), C("Pas d'écran. Pas de re-rumination.")],
+], [7*cm, 9*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("JOURS 2-3 — Phase de descente", h_section))
+story.append(P(
+    "Ton SN va probablement basculer en vagal dorsal (vide, dissociation, fatigue lourde). C'est la "
+    "conséquence de l'activation extrême précédente. <b>Ne combats pas cet état</b> — accompagne-le. C'est "
+    "biologique, ça passera."
+))
+story.append(styled_table([
+    [C("Action", cell_g), C("À faire / À éviter", cell_g)],
+    [C("Maintenir routines de base", cell_b), C("Sommeil 8h+. Repas réguliers. Hydratation. Pas plus.")],
+    [C("Sortie nature 1h/jour", cell_b), C("Forêt, parc, eau. Sans téléphone. Marche lente.")],
+    [C("Présence animale", cell_b), C("Pansage filly, contact lent. Co-régulation passive.")],
+    [C("NE PAS retourner à la plateforme", cell_b), C("Même pour « voir ». L'envie va revenir. Ne cède pas.")],
+    [C("NE PAS lire de contenu trading", cell_b), C("Pas YouTube, pas Twitter, pas livre. Purge sensorielle.")],
+    [C("Journal court le soir", cell_b), C("3-5 phrases. Pas plus. Pas d'analyse profonde encore.")],
+], [4.5*cm, 11.5*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("JOURS 4-7 — Émergence et analyse", h_section))
+story.append(styled_table([
+    [C("Action", cell_g), C("Détail", cell_g)],
+    [C("Reprise progressive de l'activité", cell_b),
+     C("Sport, équitation, ATHÉNA. Pas trading.")],
+    [C("Premier journal d'analyse (J5-J6)", cell_b),
+     C("30 min max. Identifier : déclencheur, pattern, état corporel. Pas de flagellation.")],
+    [C("Identifier UN ajustement", cell_b),
+     C("Pas tout repenser. UN ajustement précis (taille, règle, seuil).")],
+    [C("Engagement de reprise (J7)", cell_b),
+     C("Date précise. Conditions précises. SI fatigué/instable → reporter d'une semaine.")],
+], [5*cm, 11*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(retenir(
+    "Tu n'as pas à reprendre vite. Tu as à reprendre PROPRE. Une semaine de pause est moins coûteuse qu'une "
+    "rechute mal préparée. Pas de héroïsme. Suis le protocole.",
+    HexColor("#B33A3A")
+))
+story.append(PageBreak())
+
+
+# ============================================================
+# STYLE DE TRADING ET PHYSIOLOGIE
+# ============================================================
+_part_color[0] = GOLD
+_part_name[0] = "Style de trading"
+
+story.append(P("STYLE DE TRADING ET PHYSIOLOGIE", h_part))
+story.append(P("Une question que tu n'as peut-être jamais posée", h_part_sub))
+story.append(GoldRule())
+story.append(Spacer(1, 12))
+
+story.append(P(
+    "Tu fais du scalping XAUUSD en killzones London et NY. C'est un style de trading qui te demande : "
+    "(1) attention soutenue sur 1-3 heures, (2) prise de décision rapide, (3) tolérance à des micro-mouvements "
+    "intenses, (4) gestion d'une charge dopaminergique très haute (chaque clic est un shoot d'anticipation). "
+    "Question honnête : <b>est-ce que ce style est aligné avec ta physiologie post-TBI ?</b>"
+))
+
+story.append(P("Spectre des styles de trading", h_section))
+story.append(styled_table([
+    [C("Style", cell_g), C("Charge SN", cell_g), C("Aligné avec post-TBI ?", cell_g)],
+    [C("Scalping (sec-min)"), C("TRÈS HAUTE"),
+     C("Difficile. Hyper-stimulation. Risque de dérégulation amplifié.")],
+    [C("Intraday (heures)"), C("HAUTE"),
+     C("Possible mais demande une régulation SN solide.")],
+    [C("Swing (jours)"), C("MOYENNE"),
+     C("Plus adapté. Décisions plus lentes, moins d'adrénaline.")],
+    [C("Position (semaines-mois)"), C("BASSE"),
+     C("Très adapté. Décisions rares, basées sur analyse longue.")],
+], [4*cm, 3*cm, 9*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("Ce que ça implique pour toi", h_section))
+story.append(P(
+    "Je ne te dis pas d'arrêter le scalping. Je te dis de te poser la question. Le scalping demande un SN "
+    "<b>très bien régulé</b> — capacité à rester en sympathique productif sans déraper en hyper-activation, "
+    "capacité à revenir vite au calme entre les trades. Ton SN post-TBI a probablement encore du mal avec cette "
+    "modulation fine. Tu peux passer du calme au pic en 30 secondes — pas l'inverse aussi rapidement."
+))
+story.append(P(
+    "Trois pistes à considérer honnêtement :"
+))
+story.append(styled_table([
+    [C("Option", cell_g), C("Logique", cell_g)],
+    [C("Maintenir le scalping", cell_b),
+     C("Si tu travailles solidement la régulation SN (Parties 3-4) pendant 6-12 mois et que les patterns destructeurs s'éteignent, le style peut rester. Mais ça demande un travail somatique sérieux en parallèle.")],
+    [C("Passer en intraday plus lent", cell_b),
+     C("1-2 trades/jour sur timeframes plus larges (H1, H4). Moins de décisions, moins de stimulation, plus de temps entre les trades pour réguler. Probablement le meilleur compromis pour ton profil actuel.")],
+    [C("Passer en swing trading", cell_b),
+     C("1-3 trades/semaine sur D1. Décisions calmes, analyses profondes. Charge SN très basse. Compatible avec ATHÉNA, équitation, vie équilibrée. À considérer sérieusement.")],
+], [4.5*cm, 11.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(retenir(
+    "Le « bon style de trading » n'est pas un absolu. C'est celui qui s'aligne avec ta physiologie ET ton edge "
+    "technique. Pour quelqu'un avec un SN post-TBI cherchant à se réguler, un style plus lent peut être un "
+    "ACCÉLÉRATEUR de progrès — pas un compromis."
+))
+story.append(Spacer(1, 8))
+
+story.extend(exercice([
+    "<b>Test de calibration honnête.</b> Pendant 4 semaines, fais une session de scalping ET une session de swing "
+    "sur la même semaine. Pour chaque session : score d'état SN avant/après, qualité d'exécution, PnL. À la fin "
+    "des 4 semaines, compare. Laquelle correspond mieux à ta physiologie ACTUELLE ? Tu pourras toujours revenir "
+    "au scalping plus tard si tu veux. Mais teste."
+]))
+story.append(PageBreak())
+
+
+# ============================================================
+# RESSOURCES CONCRÈTES — FRANCE
+# ============================================================
+_part_color[0] = GOLD
+_part_name[0] = "Ressources"
+
+story.append(P("RESSOURCES CONCRÈTES", h_part))
+story.append(P("Trouver les bons praticiens en France", h_part_sub))
+story.append(GoldRule())
+story.append(Spacer(1, 12))
+
+story.append(P(
+    "Ce manuel te recommande à plusieurs reprises de consulter un praticien somatique (SE, EMDR), un "
+    "neuropsychologue, éventuellement un thérapeute spécialisé trauma. Voici les ressources concrètes pour "
+    "passer de l'intention à l'action — parce que sans points de contact précis, tu vas remettre à plus tard."
+))
+
+story.append(P("Somatic Experiencing (SE) — pour ton TBI 2022", h_section))
+story.append(styled_table([
+    [C("Item", cell_g), C("Détail", cell_g)],
+    [C("Annuaire officiel", cell_b),
+     C("Association France SE / EASE (European Association for Somatic Experiencing). Recherche : « somatic experiencing france annuaire » sur moteur de recherche.")],
+    [C("Praticien certifié", cell_b),
+     C("Cherche un praticien ayant fait l'intégralité du cursus SE (3 ans). Pas un praticien qui a juste fait une formation de week-end.")],
+    [C("Prix indicatif", cell_b),
+     C("70-110€ la séance d'1h en province. 100-150€ en région parisienne.")],
+    [C("Rythme typique", cell_b),
+     C("1 séance par 2-3 semaines. Travail sur 12-24 mois pour un trauma majeur.")],
+    [C("Couverture mutuelle", cell_b),
+     C("La SE n'est généralement pas remboursée par la Sécu. Certaines mutuelles remboursent partiellement (vérifie ton contrat — rubrique « médecines douces » ou « ostéopathie »).")],
+], [4*cm, 12*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("EMDR — alternative ou complément", h_section))
+story.append(styled_table([
+    [C("Item", cell_g), C("Détail", cell_g)],
+    [C("Annuaire officiel", cell_b),
+     C("Association EMDR France — site officiel avec annuaire géographique des praticiens certifiés.")],
+    [C("Praticien certifié", cell_b),
+     C("Certification Niveau 1 ou Niveau 2. Beaucoup de psychologues/psychiatres se sont formés. Vérifie la certification.")],
+    [C("Prix indicatif", cell_b),
+     C("60-100€ la séance. Si fait par psychiatre conventionné, partiellement remboursé Sécu.")],
+    [C("Rythme typique", cell_b),
+     C("1 séance par semaine au début, puis tous les 15 jours. 10-25 séances pour un trauma défini.")],
+], [4*cm, 12*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("Bilan neuropsychologique post-TBI", h_section))
+story.append(styled_table([
+    [C("Item", cell_g), C("Détail", cell_g)],
+    [C("Pour quoi", cell_b),
+     C("Évaluer précisément tes séquelles cognitives 3+ ans après ton TBI. Si jamais fait, à faire absolument.")],
+    [C("Praticien", cell_b),
+     C("Neuropsychologue. Peut être trouvé via CHU, centre de rééducation post-AVC/TBI, ou en libéral.")],
+    [C("Prix indicatif", cell_b),
+     C("Hôpital public : remboursé par Sécu sur prescription. Libéral : 150-300€ le bilan complet.")],
+    [C("Démarche", cell_b),
+     C("Demande à ton médecin traitant une orientation. Mention « bilan neuropsychologique post-TBI ».")],
+], [4*cm, 12*cm]))
+story.append(Spacer(1, 10))
+
+story.append(P("TRE (Tension & Trauma Releasing Exercises)", h_section))
+story.append(styled_table([
+    [C("Item", cell_g), C("Détail", cell_g)],
+    [C("Annuaire", cell_b),
+     C("Site officiel TRE for All — annuaire international avec filtre France.")],
+    [C("Format", cell_b),
+     C("3-5 séances pour apprendre la technique, puis pratique autonome possible.")],
+    [C("Prix indicatif", cell_b),
+     C("60-90€ la séance individuelle. Existe aussi en groupe (moins cher).")],
+], [4*cm, 12*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(retenir(
+    "Investissement total estimé sur 12 mois : 1500-3000€ (1 praticien SE/EMDR régulier + 1 bilan neuropsy). "
+    "Comparé au coût total de tes comptes prop firm cramés, c'est dérisoire. À la différence des comptes "
+    "cramés, c'est un investissement qui produit un retour cumulé sur 20+ ans."
+))
+story.append(Spacer(1, 8))
+
+story.extend(exercice([
+    "<b>Action concrète cette semaine.</b> 30 minutes de recherche en ligne. Annuaire SE France + EMDR France. "
+    "Identifie 3 praticiens dans ton département. Contacte 1 d'entre eux. Premier RDV pris dans les 15 jours.",
+    "<b>Action concrète ce mois.</b> Demande à ton médecin traitant une prescription pour un bilan "
+    "neuropsychologique post-TBI. Si jamais fait, c'est ton premier diagnostic objectif."
+]))
 story.append(PageBreak())
 
 
