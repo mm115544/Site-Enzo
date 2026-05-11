@@ -207,15 +207,740 @@ def _arrow(c, x1, y1, x2, y2, color=GOLD, lw=1.4, head=5):
     dx, dy = x2 - x1, y2 - y1
     d = math.sqrt(dx*dx + dy*dy) or 1
     ux, uy = dx/d, dy/d
+
+
+# ============================================================
+# RENDERERS VISUELS — schémas de manuel d'étude
+# ============================================================
+
+def _arrow_full(c, x1, y1, x2, y2, color=GOLD, lw=1.4, head=6):
+    """Flèche complète avec tête remplie."""
+    c.setStrokeColor(color); c.setFillColor(color); c.setLineWidth(lw)
+    c.line(x1, y1, x2, y2)
+    dx, dy = x2 - x1, y2 - y1
+    d = math.sqrt(dx*dx + dy*dy) or 1
+    ux, uy = dx/d, dy/d
     px, py = -uy, ux
-    p1 = (x2 - head*ux + head*0.5*px, y2 - head*uy + head*0.5*py)
-    p2 = (x2 - head*ux - head*0.5*px, y2 - head*uy - head*0.5*py)
+    p1 = (x2 - head*ux + head*0.45*px, y2 - head*uy + head*0.45*py)
+    p2 = (x2 - head*ux - head*0.45*px, y2 - head*uy - head*0.45*py)
     path = c.beginPath()
-    path.moveTo(x2, y2)
-    path.lineTo(*p1)
-    path.lineTo(*p2)
-    path.close()
+    path.moveTo(x2, y2); path.lineTo(*p1); path.lineTo(*p2); path.close()
     c.drawPath(path, fill=1, stroke=1)
+
+
+def _rounded_box(c, x, y, w, h, title=None, body=None, bg=DARK_GREY, fg=GOLD,
+                 body_color=white, radius=5, title_size=9.5, body_size=8,
+                 accent=None, center=False):
+    """Boîte arrondie avec titre + corps optionnel."""
+    c.setFillColor(bg)
+    c.setStrokeColor(accent or bg)
+    c.setLineWidth(0.8 if accent else 0)
+    c.roundRect(x, y, w, h, radius, fill=1, stroke=1 if accent else 0)
+    if title:
+        c.setFillColor(fg)
+        c.setFont("DejaVu-Bold", title_size)
+        if center:
+            c.drawCentredString(x + w/2, y + h - title_size - 4, title)
+        else:
+            c.drawString(x + 8, y + h - title_size - 4, title)
+    if body:
+        c.setFillColor(body_color)
+        c.setFont("DejaVu", body_size)
+        lines = body.split("\n") if isinstance(body, str) else body
+        ly = y + h - title_size - 16 if title else y + h - body_size - 4
+        for line in lines:
+            if center:
+                c.drawCentredString(x + w/2, ly, line)
+            else:
+                c.drawString(x + 8, ly, line)
+            ly -= body_size + 2
+
+
+# ---------- MINDMAP (Carte mentale) ----------
+def draw_mindmap(c, w, h, title, branches, accent=GOLD):
+    """
+    title : str (texte du nœud central)
+    branches : list of dicts {label, leaves: [list of str], color}
+    """
+    cx, cy = w/2, h/2
+    # central node — adaptive radius based on title length
+    longest_word = max((len(w_) for w_ in title.upper().split()), default=0)
+    central_r = max(1.5*cm, longest_word * 0.13*cm)
+    c.setFillColor(DARK_BG)
+    c.circle(cx, cy, central_r, fill=1, stroke=0)
+    c.setStrokeColor(accent); c.setLineWidth(1.8)
+    c.circle(cx, cy, central_r, fill=0, stroke=1)
+    # title — wrap to multiple lines if needed
+    c.setFillColor(accent)
+    c.setFont("DejaVu-Bold", 10)
+    words = title.upper().split()
+    lines_t = []
+    cur = []
+    max_w = central_r * 1.6
+    for word in words:
+        test_line = (" ".join(cur + [word])) if cur else word
+        if c.stringWidth(test_line, "DejaVu-Bold", 10) > max_w and cur:
+            lines_t.append(" ".join(cur)); cur = [word]
+        else:
+            cur.append(word)
+    if cur: lines_t.append(" ".join(cur))
+    total_h = len(lines_t) * 11
+    for i, line in enumerate(lines_t):
+        c.drawCentredString(cx, cy + total_h/2 - 11 - i*11 + 3, line)
+
+    n = len(branches)
+    # 3 branches : haut-gauche, droite, bas-gauche (mieux espacé visuellement)
+    if n == 3:
+        positions = [
+            ("left", "top"),
+            ("right", "middle"),
+            ("left", "bottom"),
+        ]
+    elif n == 4:
+        positions = [
+            ("left", "top"),
+            ("right", "top"),
+            ("left", "bottom"),
+            ("right", "bottom"),
+        ]
+    else:
+        positions = []
+        for i in range(n):
+            side = "left" if i % 2 == 0 else "right"
+            row = ["top", "middle", "bottom"][i // 2 % 3]
+            positions.append((side, row))
+
+    bw, bh = 3.4*cm, 1*cm
+
+    for i, (br, (side, row)) in enumerate(zip(branches, positions)):
+        # position
+        if side == "left":
+            bx = 0.5*cm
+        else:
+            bx = w - bw - 0.5*cm
+        if row == "top":
+            by = h - bh - 0.6*cm
+        elif row == "bottom":
+            by = 0.6*cm
+        else:
+            by = (h - bh) / 2
+
+        # rectangle
+        col = br.get("color", accent)
+        c.setFillColor(col)
+        c.roundRect(bx, by, bw, bh, 5, fill=1, stroke=0)
+        c.setFillColor(white); c.setFont("DejaVu-Bold", 9.5)
+        c.drawCentredString(bx + bw/2, by + bh/2 - 3, br["label"])
+
+        # connecting line from central node edge to branch box edge
+        # branch attachment point: middle of the side closer to center
+        if side == "left":
+            attach_x = bx + bw
+            attach_y = by + bh/2
+        else:
+            attach_x = bx
+            attach_y = by + bh/2
+        # direction
+        dx, dy = attach_x - cx, attach_y - cy
+        d = math.sqrt(dx*dx + dy*dy) or 1
+        ux, uy = dx/d, dy/d
+        start_x = cx + ux * central_r
+        start_y = cy + uy * central_r
+        c.setStrokeColor(accent); c.setLineWidth(1.3)
+        c.line(start_x, start_y, attach_x, attach_y)
+
+        # leaves listed BELOW the branch box (or above if at bottom row)
+        leaves = br.get("leaves", [])
+        if leaves:
+            c.setFillColor(MID_GREY); c.setFont("DejaVu", 7.8)
+            if row == "bottom":
+                leaf_y = by + bh + 4
+                step = 10
+            else:
+                leaf_y = by - 8
+                step = -10
+            for leaf in leaves:
+                if side == "left":
+                    c.drawString(bx + 4, leaf_y, "• " + leaf)
+                else:
+                    c.drawRightString(bx + bw - 4, leaf_y, leaf + " •")
+                leaf_y += step
+
+
+# ---------- CYCLE (boucle circulaire) ----------
+def draw_cycle(c, w, h, nodes, title=None, accent=GOLD, node_color=DARK_BG):
+    """nodes : list of (label, sublabel)."""
+    cx, cy = w/2, h/2
+    R = min(w, h) * 0.32
+    node_r = 0.42 * cm
+    n = len(nodes)
+    pts = []
+    for i, (label, sub) in enumerate(nodes):
+        deg = 90 - i * 360 / n
+        rad = math.radians(deg)
+        x = cx + R * math.cos(rad)
+        y = cy + R * math.sin(rad)
+        pts.append((x, y, label, sub, rad))
+    # arrows between consecutive
+    for i in range(n):
+        x1, y1, _, _, r1 = pts[i]
+        x2, y2, _, _, r2 = pts[(i + 1) % n]
+        dx, dy = x2 - x1, y2 - y1
+        d = math.sqrt(dx*dx + dy*dy) or 1
+        ux, uy = dx/d, dy/d
+        _arrow_full(c, x1 + ux*node_r*1.3, y1 + uy*node_r*1.3,
+                    x2 - ux*node_r*1.3, y2 - uy*node_r*1.3,
+                    color=accent, lw=1.1, head=5)
+    # nodes + labels
+    for x, y, label, sub, rad in pts:
+        # numbered node
+        c.setFillColor(node_color)
+        c.circle(x, y, node_r, fill=1, stroke=0)
+        c.setStrokeColor(accent); c.setLineWidth(1.2)
+        c.circle(x, y, node_r, fill=0, stroke=1)
+        # label positioned outside
+        ux, uy = math.cos(rad), math.sin(rad)
+        lx = x + ux * 1.5*cm
+        ly = y + uy * 0.7*cm
+        c.setFillColor(DARK_BG)
+        c.setFont("DejaVu-Bold", 8.2)
+        if abs(ux) < 0.3:  # cardinal top/bottom
+            c.drawCentredString(lx, ly + 3, label)
+            c.setFont("DejaVu-Italic", 7)
+            c.setFillColor(MID_GREY)
+            c.drawCentredString(lx, ly - 8, sub)
+        elif ux >= 0:
+            c.drawString(lx, ly + 3, label)
+            c.setFont("DejaVu-Italic", 7)
+            c.setFillColor(MID_GREY)
+            c.drawString(lx, ly - 8, sub)
+        else:
+            c.drawRightString(lx, ly + 3, label)
+            c.setFont("DejaVu-Italic", 7)
+            c.setFillColor(MID_GREY)
+            c.drawRightString(lx, ly - 8, sub)
+    # center text
+    if title:
+        c.setFillColor(accent)
+        c.setFont("DejaVu-Serif-Bold", 11)
+        lines = title.split("\n")
+        for i, line in enumerate(lines):
+            c.drawCentredString(cx, cy + 5 - i*12, line)
+
+
+# ---------- COMPARISON (Saboteur vs Cible) ----------
+def draw_comparison(c, w, h, left_title, left_items, right_title, right_items,
+                    left_color=RED_ACC, right_color=GREEN, arrows_between=True,
+                    left_sub=None, right_sub=None):
+    """Deux colonnes opposées avec items."""
+    gap = 0.4*cm
+    box_w = (w - 2*gap) / 2
+    bh = h - 0.4*cm
+    # left box
+    c.setFillColor(HexColor("#F8E5E5") if left_color == RED_ACC else left_color)
+    c.roundRect(0, 0.2*cm, box_w, bh, 8, fill=1, stroke=0)
+    c.setFillColor(left_color)
+    c.setFont("DejaVu-Bold", 12)
+    c.drawCentredString(box_w/2, bh - 14, left_title)
+    if left_sub:
+        c.setFont("DejaVu-Italic", 9)
+        c.drawCentredString(box_w/2, bh - 28, left_sub)
+    # right box
+    rx = box_w + 2*gap
+    c.setFillColor(HexColor("#E5F0E0") if right_color == GREEN else right_color)
+    c.roundRect(rx, 0.2*cm, box_w, bh, 8, fill=1, stroke=0)
+    c.setFillColor(right_color)
+    c.setFont("DejaVu-Bold", 12)
+    c.drawCentredString(rx + box_w/2, bh - 14, right_title)
+    if right_sub:
+        c.setFont("DejaVu-Italic", 9)
+        c.drawCentredString(rx + box_w/2, bh - 28, right_sub)
+    # items
+    item_count = max(len(left_items), len(right_items))
+    start_y = bh - 50
+    step = (bh - 60) / max(item_count, 1) if item_count > 0 else 0
+    for i in range(item_count):
+        y_ = start_y - i * step
+        if i < len(left_items):
+            c.setFillColor(DARK_BG)
+            c.setFont("DejaVu", 9)
+            c.drawCentredString(box_w/2, y_, "•  " + left_items[i])
+        if i < len(right_items):
+            c.setFillColor(DARK_BG)
+            c.setFont("DejaVu", 9)
+            c.drawCentredString(rx + box_w/2, y_, "•  " + right_items[i])
+        if arrows_between and i < min(len(left_items), len(right_items)):
+            _arrow_full(c, box_w + 4, y_ + 3, rx - 4, y_ + 3, color=DARK_GREY, lw=0.7, head=4)
+
+
+# ---------- PYRAMID 3-couches ----------
+def draw_pyramid_3(c, w, h, levels, accent=GOLD):
+    """levels: list of (title, example, sub, bg, txt) du BAS vers le HAUT."""
+    cx = w/2
+    top_y = h - 0.4*cm
+    bot_y = 0.8*cm
+    pyramid_h = top_y - bot_y
+    half_base = 4.5*cm
+    band_h = pyramid_h / 3
+    for i in range(3):
+        y_lo = bot_y + i * band_h
+        y_hi = y_lo + band_h
+        ratio_lo = (top_y - y_lo) / pyramid_h
+        ratio_hi = (top_y - y_hi) / pyramid_h
+        hw_lo = half_base * ratio_lo
+        hw_hi = half_base * ratio_hi
+        title, ex, sub, bg, txt = levels[i]
+        c.setFillColor(bg)
+        p = c.beginPath()
+        p.moveTo(cx - hw_lo, y_lo); p.lineTo(cx + hw_lo, y_lo)
+        p.lineTo(cx + hw_hi, y_hi); p.lineTo(cx - hw_hi, y_hi); p.close()
+        c.setStrokeColor(DARK_BG); c.setLineWidth(0.6)
+        c.drawPath(p, fill=1, stroke=1)
+        c.setFillColor(txt)
+        c.setFont("DejaVu-Bold", 10 if i < 2 else 11)
+        c.drawCentredString(cx, (y_lo + y_hi)/2 + 2, title)
+        c.setFont("DejaVu-Italic", 7.5)
+        c.drawCentredString(cx, (y_lo + y_hi)/2 - 8, ex)
+        # right-side annotation
+        c.setFillColor(MID_GREY); c.setFont("DejaVu-Italic", 7.5)
+        c.drawString(cx + half_base + 0.4*cm, (y_lo + y_hi)/2, sub)
+    # left arrow
+    c.setFillColor(MID_GREY); c.setFont("DejaVu-Italic", 8)
+    c.saveState()
+    c.translate(cx - half_base - 0.8*cm, bot_y + pyramid_h/2)
+    c.rotate(90)
+    c.drawCentredString(0, 0, "↑ profondeur du changement ↑")
+    c.restoreState()
+
+
+# ---------- SEESAW (Bascule plaisir-douleur) ----------
+def draw_seesaw(c, w, h, state="balanced", accent=GOLD):
+    """state in {'balanced', 'pleasure', 'pain'}"""
+    cx, cy = w/2, h/2
+    beam_w = 10*cm
+    beam_h = 0.4*cm
+    # pivot triangle
+    pivot_h = 1.4*cm
+    pivot_w = 1.8*cm
+    c.setFillColor(DARK_BG)
+    p = c.beginPath()
+    p.moveTo(cx, cy - 0.3*cm)
+    p.lineTo(cx - pivot_w/2, cy - pivot_h)
+    p.lineTo(cx + pivot_w/2, cy - pivot_h)
+    p.close()
+    c.drawPath(p, fill=1, stroke=0)
+    # beam tilt according to state
+    tilt = 0
+    if state == "pleasure":
+        tilt = -10  # plaisir down on right
+    elif state == "pain":
+        tilt = 10
+    c.saveState()
+    c.translate(cx, cy)
+    c.rotate(tilt)
+    # beam
+    c.setFillColor(accent)
+    c.roundRect(-beam_w/2, -beam_h/2, beam_w, beam_h, 0.1*cm, fill=1, stroke=0)
+    # weight on left (douleur)
+    lw_size = 1.2*cm
+    c.setFillColor(RED_ACC)
+    c.roundRect(-beam_w/2 + 0.2*cm, beam_h/2, lw_size, lw_size, 4, fill=1, stroke=0)
+    c.setFillColor(white); c.setFont("DejaVu-Bold", 8)
+    c.drawCentredString(-beam_w/2 + 0.2*cm + lw_size/2, beam_h/2 + lw_size/2 - 3, "DOULEUR")
+    # weight on right (plaisir)
+    c.setFillColor(GOLD_SOFT)
+    c.roundRect(beam_w/2 - 0.2*cm - lw_size, beam_h/2, lw_size, lw_size, 4, fill=1, stroke=0)
+    c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 8)
+    c.drawCentredString(beam_w/2 - 0.2*cm - lw_size/2, beam_h/2 + lw_size/2 - 3, "PLAISIR")
+    c.restoreState()
+
+
+# ---------- TIMELINE / PHASES horizontale ----------
+def draw_phases_timeline(c, w, h, phases, ticks=None):
+    """phases: list of (label, days, desc, bg, fg)"""
+    margin = 0.4*cm
+    seg_w = (w - 2*margin) / len(phases)
+    bar_h = 2.2*cm
+    bar_y = h - 4*cm if ticks else h/2 - bar_h/2
+    if ticks:
+        c.setStrokeColor(DARK_BG); c.setLineWidth(0.6); c.setFillColor(DARK_BG)
+        c.setFont("DejaVu-Bold", 9)
+        for k, t in enumerate(ticks):
+            tx = margin + k * seg_w
+            c.line(tx, bar_y + bar_h, tx, bar_y + bar_h + 8)
+            c.drawCentredString(tx, bar_y + bar_h + 14, t)
+    for i, (lbl, days, desc, bg, fg) in enumerate(phases):
+        x = margin + i * seg_w
+        c.setFillColor(bg); c.setStrokeColor(fg); c.setLineWidth(0.8)
+        c.rect(x + 4, bar_y, seg_w - 8, bar_h, fill=1, stroke=1)
+        c.setFillColor(fg); c.setFont("DejaVu-Bold", 12)
+        c.drawCentredString(x + seg_w/2, bar_y + bar_h - 20, lbl)
+        c.setFillColor(DARK_BG); c.setFont("DejaVu", 9)
+        c.drawCentredString(x + seg_w/2, bar_y + bar_h - 38, days)
+        c.setFont("DejaVu-Italic", 9); c.setFillColor(MID_GREY)
+        c.drawCentredString(x + seg_w/2, bar_y + 14, desc)
+    _arrow_full(c, margin, bar_y - 0.7*cm, w - margin, bar_y - 0.7*cm, color=GOLD, lw=1.2, head=6)
+
+
+# ---------- VERTICAL FLOW (Boucle linéaire) ----------
+def draw_flow_vertical(c, w, h, steps, title=None, accent=GOLD, color_each=None):
+    """steps: list of strings (each becomes a box). Arrows connect them top-down."""
+    n = len(steps)
+    if title:
+        c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 11)
+        c.drawCentredString(w/2, h - 14, title)
+        top_offset = 0.7*cm
+    else:
+        top_offset = 0.2*cm
+    available = h - top_offset - 0.3*cm
+    box_h = 0.85*cm
+    spacing = (available - n*box_h) / max(n-1, 1) if n > 1 else 0
+    box_w = w * 0.55
+    bx = (w - box_w) / 2
+    for i, step in enumerate(steps):
+        by = h - top_offset - (i+1)*box_h - i*spacing
+        col = accent if color_each is None else color_each[i % len(color_each)]
+        c.setFillColor(col)
+        c.roundRect(bx, by, box_w, box_h, 5, fill=1, stroke=0)
+        # white or dark text depending on color
+        c.setFillColor(white)
+        c.setFont("DejaVu-Bold", 9)
+        c.drawCentredString(w/2, by + box_h/2 - 3, step)
+        # arrow between
+        if i < n - 1:
+            ay_start = by
+            ay_end = by - spacing + 4
+            _arrow_full(c, w/2, ay_start, w/2, ay_end, color=DARK_GREY, lw=1, head=5)
+
+
+# ---------- HORIZONTAL FLOW ----------
+def draw_flow_horizontal(c, w, h, steps, title=None, accent=GOLD):
+    """Linear flow left-to-right."""
+    n = len(steps)
+    if title:
+        c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 11)
+        c.drawCentredString(w/2, h - 14, title)
+        margin_top = 0.7*cm
+    else:
+        margin_top = 0.2*cm
+    avail_w = w - 0.4*cm
+    box_w = avail_w / n - 0.3*cm
+    box_h = h - margin_top - 0.7*cm
+    by = 0.4*cm
+    for i, step in enumerate(steps):
+        bx = 0.2*cm + i * (avail_w / n) + 0.15*cm
+        c.setFillColor(accent)
+        c.roundRect(bx, by, box_w, box_h, 5, fill=1, stroke=0)
+        c.setFillColor(white); c.setFont("DejaVu-Bold", 9)
+        # word wrap
+        words = step.split(" ")
+        lines = []
+        cur = []
+        max_chars = int(box_w / 5)
+        for word in words:
+            if sum(len(w_) for w_ in cur) + len(word) + len(cur) > max_chars:
+                lines.append(" ".join(cur)); cur = [word]
+            else:
+                cur.append(word)
+        if cur: lines.append(" ".join(cur))
+        for j, line in enumerate(lines):
+            c.drawCentredString(bx + box_w/2, by + box_h/2 + 5 - j*11, line)
+        if i < n - 1:
+            ax = bx + box_w + 1
+            ax_end = bx + (avail_w / n) + 0.1*cm
+            _arrow_full(c, ax, by + box_h/2, ax_end, by + box_h/2, color=DARK_GREY, lw=1, head=5)
+
+
+# ---------- HIERARCHY / TREE ----------
+def draw_hierarchy(c, w, h, root, children, accent=GOLD):
+    """Simple top-down hierarchy."""
+    # root at top
+    rw, rh = 5*cm, 1*cm
+    rx = w/2 - rw/2
+    ry = h - rh - 0.3*cm
+    c.setFillColor(DARK_BG)
+    c.roundRect(rx, ry, rw, rh, 5, fill=1, stroke=0)
+    c.setStrokeColor(accent); c.setLineWidth(1)
+    c.roundRect(rx, ry, rw, rh, 5, fill=0, stroke=1)
+    c.setFillColor(accent); c.setFont("DejaVu-Bold", 11)
+    c.drawCentredString(w/2, ry + rh/2 - 3, root)
+    # children
+    n = len(children)
+    cw, ch = (w - 0.4*cm) / n - 0.3*cm, 1.4*cm
+    cy_ = 0.4*cm
+    for i, (label, sub) in enumerate(children):
+        cx_ = 0.2*cm + i * ((w - 0.4*cm) / n) + 0.15*cm
+        c.setFillColor(accent)
+        c.roundRect(cx_, cy_, cw, ch, 5, fill=1, stroke=0)
+        c.setFillColor(white); c.setFont("DejaVu-Bold", 9.5)
+        c.drawCentredString(cx_ + cw/2, cy_ + ch - 14, label)
+        if sub:
+            c.setFont("DejaVu", 8); c.setFillColor(white)
+            words = sub.split(" "); lines = []; cur = []
+            max_chars = int(cw / 5)
+            for word in words:
+                if sum(len(w_) for w_ in cur) + len(word) + len(cur) > max_chars:
+                    lines.append(" ".join(cur)); cur = [word]
+                else:
+                    cur.append(word)
+            if cur: lines.append(" ".join(cur))
+            for j, line in enumerate(lines):
+                c.drawCentredString(cx_ + cw/2, cy_ + ch - 26 - j*9, line)
+        # connector line from root to child
+        c.setStrokeColor(MID_GREY); c.setLineWidth(0.7)
+        c.line(w/2, ry, cx_ + cw/2, cy_ + ch + 3)
+
+
+# ---------- GRAPH (Plateau vs linéaire) ----------
+def draw_plateau_graph(c, w, h):
+    """Graphique attente vs réalité."""
+    margin_l = 1*cm; margin_r = 0.4*cm; margin_b = 1.2*cm; margin_t = 0.6*cm
+    pw = w - margin_l - margin_r
+    ph = h - margin_b - margin_t
+    x0, y0 = margin_l, margin_b
+
+    # axis
+    c.setStrokeColor(MID_GREY); c.setLineWidth(0.5)
+    c.line(x0, y0, x0 + pw, y0)
+    c.line(x0, y0, x0, y0 + ph)
+    c.setFillColor(MID_GREY); c.setFont("DejaVu-Italic", 7.5)
+    c.drawString(x0, y0 - 12, "temps →")
+
+    # linear (expected) — gold
+    c.setStrokeColor(GOLD_SOFT); c.setLineWidth(1.5)
+    path1 = c.beginPath()
+    path1.moveTo(x0, y0)
+    path1.lineTo(x0 + pw, y0 + ph * 0.9)
+    c.drawPath(path1, stroke=1, fill=0)
+    c.setFillColor(GOLD_SOFT); c.setFont("DejaVu-Bold", 8)
+    c.drawString(x0 + pw - 90, y0 + ph * 0.9 - 4, "Ce que tu attends")
+
+    # real (plateau then breakthrough) — dark
+    c.setStrokeColor(DARK_BG); c.setLineWidth(2)
+    path2 = c.beginPath()
+    path2.moveTo(x0, y0 + 4)
+    path2.lineTo(x0 + pw * 0.5, y0 + 8)
+    path2.lineTo(x0 + pw * 0.65, y0 + 14)
+    path2.lineTo(x0 + pw * 0.75, y0 + ph * 0.3)
+    path2.lineTo(x0 + pw * 0.88, y0 + ph * 0.7)
+    path2.lineTo(x0 + pw, y0 + ph * 0.92)
+    c.drawPath(path2, stroke=1, fill=0)
+    c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 8)
+    c.drawString(x0 + 10, y0 + 8, "Ce qui se passe vraiment")
+    # marker basculement
+    bx, by = x0 + pw * 0.7, y0 + ph * 0.2
+    c.setFillColor(RED_ACC); c.circle(bx, by, 4, fill=1, stroke=0)
+    c.setFillColor(RED_ACC); c.setFont("DejaVu-Bold", 7.5)
+    c.drawString(bx + 8, by - 2, "★ basculement")
+    c.setFont("DejaVu-Italic", 7); c.setFillColor(MID_GREY)
+    c.drawString(bx + 8, by - 12, "  (préparé pendant le plateau)")
+
+
+# ---------- 80/20 BAR ----------
+def draw_8020_bar(c, w, h, perdants=80, gagnants=20):
+    """Barre stacked."""
+    bar_h = 1.3*cm
+    bar_y = h/2 - bar_h/2
+    p_w = w * perdants / 100
+    g_w = w * gagnants / 100
+    c.setFillColor(RED_ACC)
+    c.rect(0, bar_y, p_w, bar_h, fill=1, stroke=0)
+    c.setFillColor(GREEN)
+    c.rect(p_w, bar_y, g_w, bar_h, fill=1, stroke=0)
+    c.setFont("DejaVu-Bold", 13); c.setFillColor(white)
+    c.drawCentredString(p_w/2, bar_y + bar_h/2 - 4, f"{perdants}%  PERDENT")
+    c.drawCentredString(p_w + g_w/2, bar_y + bar_h/2 - 4, f"{gagnants}%")
+    c.setFont("DejaVu", 8.5); c.setFillColor(DARK_BG)
+    c.drawCentredString(p_w/2, bar_y + bar_h + 8, "Tu es ici — pas par hasard")
+    c.drawCentredString(p_w + g_w/2, bar_y + bar_h + 8, "La sortie")
+
+
+# ---------- ÉTAGES de compétence ----------
+def draw_etages(c, w, h, levels, accent=GOLD):
+    """3 étages d'une compétence. levels: list (titre, description, %)."""
+    n = len(levels)
+    margin = 0.4*cm
+    avail_h = h - 0.4*cm
+    box_h = avail_h / n - 0.2*cm
+    for i, (title, desc, perc) in enumerate(reversed(levels)):
+        idx = n - 1 - i  # actual index from bottom
+        by = margin + i * (box_h + 0.2*cm)
+        # color : top brightest
+        col_pool = [GREEN_SOFT, GOLD_PALE, RED_SOFT]
+        col = col_pool[i] if i < len(col_pool) else GOLD_PALE
+        c.setFillColor(col)
+        c.setStrokeColor(DARK_BG); c.setLineWidth(0.6)
+        c.rect(0.3*cm, by, w - 0.6*cm, box_h, fill=1, stroke=1)
+        c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 11)
+        c.drawString(0.6*cm, by + box_h - 16, f"ÉTAGE {idx+1} — {title}")
+        c.setFont("DejaVu-Italic", 9)
+        c.drawString(0.6*cm, by + box_h - 30, desc)
+        c.setFillColor(MID_GREY); c.setFont("DejaVu-Bold", 9)
+        c.drawRightString(w - 0.5*cm, by + box_h - 16, perc)
+
+
+# ---------- THERMOSTAT (déjà fait avant, à réutiliser) ----------
+def draw_thermostat_v(c, w, h):
+    c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 12)
+    c.drawCentredString(w/2, h - 16, "TON THERMOSTAT FINANCIER")
+    c.setFillColor(MID_GREY); c.setFont("DejaVu-Italic", 9)
+    c.drawCentredString(w/2, h - 32, "le sabotage est mécanique, pas moral")
+    tx, ty, tw, th = 4.2*cm, 1.4*cm, 1.4*cm, h - 3.6*cm
+    c.setStrokeColor(DARK_GREY); c.setLineWidth(1)
+    c.roundRect(tx, ty, tw, th, 8, fill=0, stroke=1)
+    bands = [(0.0, 0.30, GREEN_SOFT), (0.30, 0.55, GOLD_PALE),
+             (0.55, 0.80, GOLD), (0.80, 1.0, RED_ACC)]
+    for lo, hi, col in bands:
+        c.setFillColor(col)
+        c.rect(tx + 2, ty + 2 + lo*(th-4), tw - 4, (hi - lo)*(th-4), fill=1, stroke=0)
+    # zone labels
+    c.setFillColor(MID_GREY); c.setFont("DejaVu-Italic", 8)
+    for ratio, lbl in [(0.90, "danger"), (0.65, "inconfort"), (0.42, "tolérable"), (0.15, "confort")]:
+        c.drawRightString(tx - 10, ty + ratio * th - 3, lbl)
+    # markers
+    cy_y = ty + 0.80 * th
+    c.setStrokeColor(RED_ACC); c.setLineWidth(1.4)
+    c.line(tx + tw, cy_y, tx + tw + 20, cy_y)
+    c.setFillColor(RED_ACC); c.setFont("DejaVu-Bold", 10)
+    c.drawString(tx + tw + 26, cy_y - 3, "PLAFOND")
+    c.setFillColor(MID_GREY); c.setFont("DejaVu-Italic", 8)
+    c.drawString(tx + tw + 26, cy_y - 15, "zone du sabotage (+1500)")
+    bs_y = ty + 0.30 * th
+    c.setStrokeColor(DARK_BG); c.setLineWidth(1.4)
+    c.line(tx + tw, bs_y, tx + tw + 20, bs_y)
+    c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 10)
+    c.drawString(tx + tw + 26, bs_y - 3, "BASELINE")
+    c.setFillColor(MID_GREY); c.setFont("DejaVu-Italic", 8)
+    c.drawString(tx + tw + 26, bs_y - 15, "ton « normal pour moi »")
+    _arrow_full(c, tx + tw/2, cy_y - 0.3*cm, tx + tw/2, bs_y + 0.4*cm, color=DARK_BG, lw=1.4, head=6)
+
+
+# ---------- 4 FORCES PSY ----------
+def draw_4_forces_psy(c, w, h):
+    cx, cy = w/2, h/2
+    r = 1.3*cm
+    c.setFillColor(GOLD)
+    c.circle(cx, cy, r, fill=1, stroke=0)
+    c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 10)
+    c.drawCentredString(cx, cy + 4, "TOI")
+    c.setFont("DejaVu", 8.5)
+    c.drawCentredString(cx, cy - 8, "EN TRADE")
+    box_w, box_h = 5*cm, 1.4*cm
+    positions = [
+        (0.4*cm, cy + 1.2*cm, "BESOIN D'AVOIR RAISON", "Ego refuse d'être contredit"),
+        (w - box_w - 0.4*cm, cy + 1.2*cm, "AVERSION À LA PERTE", "Kahneman : 2x plus mal"),
+        (0.4*cm, cy - 1.2*cm - box_h, "BESOIN DE CERTITUDE", "Invente du « je suis sûr »"),
+        (w - box_w - 0.4*cm, cy - 1.2*cm - box_h, "PROJECTION ÉMOTIONNELLE", "Tu vois ce que tu veux voir"),
+    ]
+    for bx, by, title, sub in positions:
+        c.setFillColor(DARK_GREY)
+        c.roundRect(bx, by, box_w, box_h, 4, fill=1, stroke=0)
+        c.setFillColor(GOLD); c.setFont("DejaVu-Bold", 8.5)
+        c.drawString(bx + 8, by + box_h - 14, title)
+        c.setFillColor(white); c.setFont("DejaVu", 7.5)
+        c.drawString(bx + 8, by + 8, sub)
+        # arrow
+        bcx, bcy = bx + box_w/2, by + box_h/2
+        dx, dy = cx - bcx, cy - bcy
+        d = math.sqrt(dx*dx + dy*dy)
+        ux, uy = dx/d, dy/d
+        ex, ey = cx - ux*r, cy - uy*r
+        _arrow_full(c, bcx + ux*box_w*0.35, bcy + uy*box_h*0.45, ex, ey,
+                    color=RED_ACC, lw=1.3, head=5)
+
+
+# ---------- PATTERN +1500 ----------
+def draw_1500_curve(c, w, h):
+    margin_l, margin_r = 1*cm, 0.4*cm
+    margin_b, margin_t = 1.2*cm, 0.6*cm
+    pw = w - margin_l - margin_r
+    ph = h - margin_b - margin_t
+    x0 = margin_l; y0 = margin_b
+    c.setStrokeColor(MID_GREY); c.setLineWidth(0.5)
+    c.line(x0, y0, x0 + pw, y0)
+    c.line(x0, y0, x0, y0 + ph)
+    zero_y = y0 + ph * 0.45
+    c.setStrokeColor(LIGHT_GREY)
+    c.line(x0, zero_y, x0 + pw, zero_y)
+    c.setFont("DejaVu", 7.5); c.setFillColor(MID_GREY)
+    c.drawString(x0 - 20, zero_y - 2, "0")
+    c.drawString(x0 - 30, y0 + ph - 6, "+1500")
+    c.drawString(x0 - 28, y0 + 4, "-800")
+    pts = [(0.00, 0.00), (0.18, 0.45), (0.30, 0.95), (0.42, 0.70),
+           (0.55, 0.35), (0.68, 0.00), (0.78, -0.35), (0.88, -0.65), (1.00, -0.95)]
+    def px(t): return x0 + t * pw
+    def py(v): return zero_y + v * (ph * 0.50)
+    c.setStrokeColor(GOLD); c.setLineWidth(1.8)
+    path = c.beginPath()
+    path.moveTo(px(pts[0][0]), py(pts[0][1]))
+    for t, v in pts[1:]:
+        path.lineTo(px(t), py(v))
+    c.drawPath(path, stroke=1, fill=0)
+    markers = [
+        (pts[0], "Entrée", "calme", GREEN),
+        (pts[1], "+800 dopamine ON", "« je tiens »", GOLD_SOFT),
+        (pts[2], "+1500 — préfrontal OFF", "tu es passager", RED_ACC),
+        (pts[5], "Retour à 0", "« ça va repartir »", RED_ACC),
+        (pts[6], "SL touché → décalé", "auto-destruction", RED_ACC),
+        (pts[8], "Compte cramé", "game over", DARK_BG),
+    ]
+    for (t, v), lab, sub, col in markers:
+        x, y = px(t), py(v)
+        c.setFillColor(col); c.circle(x, y, 3.5, fill=1, stroke=0)
+        c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 7.5)
+        ly = y + 8 if v > 0 else y - 14
+        c.drawCentredString(x, ly, lab)
+        c.setFillColor(MID_GREY); c.setFont("DejaVu-Italic", 7)
+        c.drawCentredString(x, ly - 9, sub)
+
+
+# ---------- BOUCLE D'HABITUDE (4 phases) ----------
+def draw_habit_loop(c, w, h):
+    """Boucle déclencheur → désir → réponse → récompense."""
+    nodes = [
+        ("DÉCLENCHEUR", "signal / contexte"),
+        ("DÉSIR", "anticipation"),
+        ("RÉPONSE", "comportement"),
+        ("RÉCOMPENSE", "gratification"),
+    ]
+    cx, cy = w/2, h/2
+    R = min(w, h) * 0.30
+    node_r = 0.7*cm
+    pts = []
+    for i, (label, sub) in enumerate(nodes):
+        deg = 90 - i * 90
+        rad = math.radians(deg)
+        x = cx + R * math.cos(rad)
+        y = cy + R * math.sin(rad)
+        pts.append((x, y, label, sub, rad))
+    for i in range(4):
+        x1, y1, _, _, _ = pts[i]
+        x2, y2, _, _, _ = pts[(i + 1) % 4]
+        dx, dy = x2 - x1, y2 - y1
+        d = math.sqrt(dx*dx + dy*dy)
+        ux, uy = dx/d, dy/d
+        _arrow_full(c, x1 + ux*node_r, y1 + uy*node_r,
+                    x2 - ux*node_r, y2 - uy*node_r,
+                    color=GOLD_SOFT, lw=1.3, head=6)
+    for i, (x, y, label, sub, rad) in enumerate(pts):
+        c.setFillColor(DARK_BG); c.circle(x, y, node_r, fill=1, stroke=0)
+        c.setStrokeColor(GOLD); c.setLineWidth(1.5)
+        c.circle(x, y, node_r, fill=0, stroke=1)
+        c.setFillColor(GOLD); c.setFont("DejaVu-Bold", 8)
+        c.drawCentredString(x, y + 2, str(i+1))
+        c.setFillColor(DARK_BG); c.setFont("DejaVu-Bold", 9)
+        ux, uy = math.cos(rad), math.sin(rad)
+        lx = x + ux * 1.5*cm
+        ly = y + uy * 1*cm
+        c.drawCentredString(lx, ly + 4, label)
+        c.setFillColor(MID_GREY); c.setFont("DejaVu-Italic", 8)
+        c.drawCentredString(lx, ly - 7, sub)
+    c.setFillColor(GOLD); c.setFont("DejaVu-Serif-Bold", 11)
+    c.drawCentredString(cx, cy + 5, "BOUCLE")
+    c.drawCentredString(cx, cy - 8, "D'HABITUDE")
+
+
+print("✓ Renderers visuels ajoutés")
 
 
 # ---------- ASCII-style schema rendered as styled box ----------
@@ -565,29 +1290,16 @@ story.append(P(
 
 # --- Bloc C : Carte mentale ---
 story.append(P("C.  Carte mentale", h_section))
-story.extend(ascii_schema("""
-                       BEST LOSER WINS
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        │                     │                     │
-   THÈSE CENTRALE       MÉCANISMES EXPOSÉS    TRANSFORMATION
-        │                     │                     │
-   "Best loser           Aversion à la perte    De l'analyse
-    wins"                Besoin d'avoir raison  à l'exécution
-        │                Besoin de certitude    Du joueur au
-   La perte gérée        Projection émotionnelle  statisticien
-   est l'edge réel       Dopamine d'anticipation Du performeur
-                         Identité-performance     à l'identité
-                              │
-   ─────────────────────────────────────────────────────────────
-                              │
-            ┌─────────────────┼─────────────────┐
-        APPLICATION       OUTILS              ANCRAGE
-        Pattern +1500     Journal manuscrit   "Trader
-        Décalage SL       Visualisation       chirurgical"
-        Sur-trading       pré-trade
-        FOMO              Close the platform
-""", accent=ACCENT))
+story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
+    "Best Loser Wins",
+    [
+        {"label": "THÈSE", "leaves": ["« best loser wins »", "perte gérée = edge"], "color": DARK_GREY},
+        {"label": "MÉCANISMES", "leaves": ["aversion perte", "besoin certitude", "dopamine", "identité-perf"], "color": ACCENT},
+        {"label": "APPLICATION", "leaves": ["pattern +1500", "décalage SL", "FOMO", "sur-trading"], "color": GREEN},
+    ],
+    accent=ACCENT
+)))
+story.append(P("Vue d'ensemble du livre — concepts et application personnelle.", diagram_caption))
 story.append(PageBreak())
 
 
@@ -1482,28 +2194,16 @@ story.append(P(
 ))
 
 story.append(P("C.  Carte mentale", h_section))
-story.extend(ascii_schema("""
-                        UN MONDE SOUS DOPAMINE
-                                  │
-        ┌─────────────────────────┼─────────────────────────┐
-        │                         │                         │
-   BASCULE                    MÉCANISMES                 SOLUTIONS
-   Plaisir/Douleur                │                         │
-        │                  ┌──────┼──────┐           ┌──────┼──────┐
-        │                  │      │      │           │      │      │
-   Plus tu pousses    Tolérance Anhé- Renforce-   Jeûne   Incon-  Honnêteté
-   d'un côté, plus               donie ment        dopamine fort  radicale
-   tu seras tiré                       intermittent (4 sem) volontaire
-   de l'autre.
-                                  │
-   ───────────────────────────────────────────────────────────────────────
-                                  │
-          ┌───────────────────────┼───────────────────────┐
-        TOI                                            APPLICATION
-        Pattern +1500              SN dérégulé          Trading sevré
-        Addict intensité           post-TBI 2022        12 semaines
-        Calme = vide               Baseline ↑ ?         Cold + sport
-""", accent=ACCENT))
+story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
+    "Un monde sous dopamine",
+    [
+        {"label": "BASCULE", "leaves": ["plaisir/douleur", "compensation auto"], "color": DARK_GREY},
+        {"label": "MÉCANISMES", "leaves": ["tolérance", "anhédonie", "renforcement intermittent"], "color": ACCENT},
+        {"label": "SOLUTIONS", "leaves": ["jeûne 4 sem", "inconfort volontaire", "honnêteté radicale"], "color": GREEN},
+    ],
+    accent=ACCENT
+)))
+story.append(P("Le mécanisme neurochimique et ses solutions structurées.", diagram_caption))
 story.append(PageBreak())
 
 
@@ -2021,30 +2721,16 @@ story.append(P(
 ))
 
 story.append(P("C.  Carte mentale", h_section))
-story.extend(ascii_schema("""
-                      LE CORPS N'OUBLIE RIEN
-                                │
-        ┌───────────────────────┼───────────────────────┐
-        │                       │                       │
-   THÈSE CENTRALE         MÉCANISMES NEURO         RÉPARATION
-        │                       │                       │
-   Le trauma est           Théorie polyvagale       Approches
-   une empreinte           (3 états du SN)          corporelles
-   corporelle              Désintégration             - EMDR
-   permanente              mémorielle                 - Yoga trauma
-                           Imprint corporel           - Neurofeedback
-                           Hypervigilance             - Somatic Experiencing
-                           Interoception altérée      - Théâtre / chant
-
-   ───────────────────────────────────────────────────────────────────
-                                │
-        ┌───────────────────────┼───────────────────────┐
-      TOI                    EFFETS QUOTIDIENS       PROTOCOLE
-      TBI 2022               Intolérance au calme    Travail corporel
-      Coma                   Hypervigilance          quotidien
-      Opérations             Recherche d'intensité   Thérapie somatique
-      Reconstruction         Crispation à +1500      Régulation SN
-""", accent=ACCENT))
+story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
+    "Le corps n'oublie rien",
+    [
+        {"label": "THÈSE", "leaves": ["trauma = empreinte", "vit dans le corps"], "color": DARK_GREY},
+        {"label": "MÉCANISMES", "leaves": ["polyvagal (3 états)", "hypervigilance", "interoception altérée"], "color": ACCENT},
+        {"label": "RÉPARATION", "leaves": ["SE / EMDR", "yoga trauma", "neurofeedback", "co-régulation animale"], "color": GREEN},
+    ],
+    accent=ACCENT
+)))
+story.append(P("Le trauma stocké et les voies de réparation corporelle.", diagram_caption))
 story.append(PageBreak())
 
 
@@ -2589,32 +3275,16 @@ story.append(P(
 ))
 
 story.append(P("C.  Carte mentale", h_section))
-story.extend(ascii_schema("""
-                         RÉVEILLER LE TIGRE
-                                  │
-        ┌─────────────────────────┼─────────────────────────┐
-        │                         │                         │
-   THÈSE CENTRALE             MÉCANISMES                MÉTHODE SE
-        │                         │                         │
-   Le trauma =              Fight/Flight/             Felt Sense
-   énergie figée            Freeze                    (sensation
-   non déchargée                  │                    ressentie)
-        │                   Réflexe achèvement              │
-   Animaux:                       │                    Pendulation
-   décharge auto             Énergie figée            (oscillation)
-                                  │                         │
-   Humains:                  Inhibition humaine        Titration
-   inhibition                                          (petites doses)
-
-   ───────────────────────────────────────────────────────────────────
-                                  │
-            ┌─────────────────────┼─────────────────────┐
-       TOI / TBI 2022                              APPLICATION
-       Coma + anesthésie                           Praticien SE
-       + immobilisation                            + exercices solo
-       = activation max                            + chevaux comme
-       sans décharge                                co-régulation
-""", accent=ACCENT))
+story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
+    "Réveiller le tigre",
+    [
+        {"label": "THÈSE", "leaves": ["énergie figée", "décharge inachevée"], "color": DARK_GREY},
+        {"label": "MÉCANISMES", "leaves": ["fight/flight/freeze", "réflexe achèvement", "inhibition humaine"], "color": ACCENT},
+        {"label": "MÉTHODE SE", "leaves": ["felt sense", "pendulation", "titration", "SIBAM"], "color": GREEN},
+    ],
+    accent=ACCENT
+)))
+story.append(P("Somatic Experiencing — comment libérer l'énergie figée du trauma.", diagram_caption))
 story.append(PageBreak())
 
 
@@ -3165,38 +3835,16 @@ story.append(P(
 ))
 
 story.append(P("C.  Carte mentale", h_section))
-story.extend(ascii_schema("""
-                        TRADER DANS LA ZONE
-                                  │
-        ┌─────────────────────────┼─────────────────────────┐
-        │                         │                         │
-   THÈSE CENTRALE             MÉCANISMES                ÉTAT CIBLE
-        │                         │                         │
-   Paix avec                 Piège analyse           "La zone"
-   l'incertitude             plus poussée            Flow exécutif
-        │                         │                         │
-   Probabilités              Confusion micro         Confiance
-   pas certitudes            /macro                  + discipline
-                                  │                  + probabilités
-   Distribution              4 peurs trader                │
-   sur 100 trades            (perdre, rater,                │
-                              se tromper,                   │
-                              argent laissé)                │
-                                  │
-                             Croyances limitantes
-                             (argent, mérite, risque)
-
-   ───────────────────────────────────────────────────────────────────
-                                  │
-            ┌─────────────────────┼─────────────────────┐
-       TOI                                            APPLICATION
-       Tu combats encore                              5 vérités à
-       l'incertitude.                                 imprimer.
-       Pattern +1500                                  Probabiliste avant
-       = recherche                                    chaque trade.
-       d'une certitude                                Pré-décision écrite.
-       impossible.
-""", accent=ACCENT))
+story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
+    "Trader dans la zone",
+    [
+        {"label": "THÈSE", "leaves": ["paix avec incertitude", "probabilités > certitudes"], "color": DARK_GREY},
+        {"label": "MÉCANISMES", "leaves": ["piège analyse", "4 peurs trader", "croyances limitantes"], "color": ACCENT},
+        {"label": "ÉTAT CIBLE", "leaves": ["confiance", "discipline", "perspective probabiliste"], "color": GREEN},
+    ],
+    accent=ACCENT
+)))
+story.append(P("La structure mentale du trader rentable — état de zone.", diagram_caption))
 story.append(PageBreak())
 
 
@@ -3791,29 +4439,16 @@ story.append(P(
 ))
 
 story.append(P("C.  Carte mentale", h_section))
-story.extend(ascii_schema("""
-                       QUAND LE CORPS DIT NON
-                                 │
-        ┌────────────────────────┼────────────────────────┐
-        │                        │                        │
-   THÈSE CENTRALE            MÉCANISMES               RÉPARATION
-        │                        │                        │
-   Émotions refoulées       Stress chronique         Dire non
-   = expression             bas niveau               Authenticité
-   somatique                       │                 émotionnelle
-                            Suppression colère       Réorientation
-                            Personnalité type C      identitaire
-                            Identité d'utilité       Repos non négocié
-
-   ───────────────────────────────────────────────────────────────────
-                                 │
-            ┌────────────────────┼────────────────────┐
-       TOI                                         APPLICATION
-       Identité-performance                        Liste des "non"
-       Hyper-responsabilité                        à dire cette
-       Colère post-2022 ?                          semaine.
-       Pas de demande d'aide
-""", accent=ACCENT))
+story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
+    "Quand le corps dit non",
+    [
+        {"label": "THÈSE", "leaves": ["émotions refoulées", "expression somatique"], "color": DARK_GREY},
+        {"label": "MÉCANISMES", "leaves": ["stress chronique", "personnalité type C", "identité d'utilité"], "color": ACCENT},
+        {"label": "RÉPARATION", "leaves": ["dire non", "authenticité émotion.", "repos non négocié"], "color": GREEN},
+    ],
+    accent=ACCENT
+)))
+story.append(P("Le coût somatique de la suppression émotionnelle et ses antidotes.", diagram_caption))
 story.append(PageBreak())
 
 
@@ -4363,30 +4998,16 @@ story.append(P(
 ))
 
 story.append(P("C.  Carte mentale", h_section))
-story.extend(ascii_schema("""
-                       UN RIEN PEUT TOUT CHANGER
-                                  │
-        ┌─────────────────────────┼─────────────────────────┐
-        │                         │                         │
-   THÈSE CENTRALE             MÉCANISMES                MÉTHODE
-        │                         │                         │
-   Systèmes >                Agrégation 1%             Identité d'abord
-   objectifs                 Plateau potentiel         Environnement
-                             latent                    modifié
-   Identité avant            Hiérarchie 3 couches      Empilement
-   résultat                  Boucle d'habitude         d'habitudes
-                             Règle 2 minutes           Suivi visuel
-
-   ───────────────────────────────────────────────────────────────────
-                                  │
-            ┌─────────────────────┼─────────────────────┐
-       TOI                                            APPLICATION
-       Tu fonctionnes en                              Routines
-       cycles motivation,                             quotidiennes.
-       pas en systèmes.                               Empilement après
-       Tu vises résultats,                            café matin.
-       pas identité.                                  Grille suivi 30j.
-""", accent=ACCENT))
+story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
+    "Un rien peut tout changer",
+    [
+        {"label": "THÈSE", "leaves": ["systèmes > objectifs", "identité > résultat"], "color": DARK_GREY},
+        {"label": "MÉCANISMES", "leaves": ["agrégation 1%", "plateau latent", "boucle d'habitude"], "color": ACCENT},
+        {"label": "MÉTHODE", "leaves": ["empilement", "règle 2 min", "environnement modifié"], "color": GREEN},
+    ],
+    accent=ACCENT
+)))
+story.append(P("L'architecture des habitudes — du résultat à l'identité.", diagram_caption))
 story.append(PageBreak())
 
 
@@ -5017,28 +5638,16 @@ story.append(P(
 ))
 
 story.append(P("C.  Carte mentale", h_section))
-story.extend(ascii_schema("""
-                              LÂCHER PRISE
-                                   │
-        ┌──────────────────────────┼──────────────────────────┐
-        │                          │                          │
-   THÈSE CENTRALE               MÉCANISMES                MÉTHODE
-        │                          │                          │
-   Les émotions               Résistance amplifie       Sentir pleinement
-   non lâchées                3 options : supprimer,    + non-réactivité
-   s'accumulent               exprimer, lâcher          + respiration
-                              Piège du contrôle         = dissolution
-
-   ───────────────────────────────────────────────────────────────────
-                                   │
-            ┌──────────────────────┼──────────────────────┐
-       TOI                                            APPLICATION
-       Contrôleur compulsif                           Lâcher des trades
-       Émotions stockées 2022                         perdants vite
-       Identité-performance                           Pansage = lâcher
-       Pattern +1500 =                                Méditation 20 min
-       refus de lâcher                                / jour
-""", accent=ACCENT))
+story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
+    "Lâcher prise",
+    [
+        {"label": "THÈSE", "leaves": ["résistance amplifie", "lâcher dissout"], "color": DARK_GREY},
+        {"label": "MÉCANISMES", "leaves": ["3 options émotion", "piège du contrôle", "linéaire / stochastique"], "color": ACCENT},
+        {"label": "MÉTHODE", "leaves": ["6 étapes", "90 sec", "non-réactivité"], "color": GREEN},
+    ],
+    accent=ACCENT
+)))
+story.append(P("Le lâcher comme compétence opérationnelle — pas attitude mystique.", diagram_caption))
 story.append(PageBreak())
 
 
@@ -5652,28 +6261,16 @@ story.append(P(
 ))
 
 story.append(P("C.  Carte mentale", h_section))
-story.extend(ascii_schema("""
-                      LA PSYCHOLOGIE DE L'ARGENT
-                                  │
-        ┌─────────────────────────┼─────────────────────────┐
-        │                         │                         │
-   THÈSE CENTRALE             PRINCIPES                  ATTITUDES
-        │                         │                         │
-   L'argent =                Composition long terme   Définir « assez »
-   comportement              Chance + risque          Marge de sécurité
-                             Faire ≠ garder           Raisonnable >
-                             Marge de sécurité        rationnel
-                             Richesse invisible       Acheter du temps
-
-   ───────────────────────────────────────────────────────────────────
-                                  │
-            ┌─────────────────────┼─────────────────────┐
-       TOI                                            APPLICATION
-       Tu cherches le coup,                           Définir ton « assez »
-       pas la durée.                                  Construire marge
-       Tu n'as jamais défini                          Trader < 30% de ta vie
-       ton « assez ».                                 Bâtir liberté à 30 ans
-""", accent=ACCENT))
+story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
+    "Psychologie de l'argent",
+    [
+        {"label": "THÈSE", "leaves": ["argent = comportement", "durée > amplitude"], "color": DARK_GREY},
+        {"label": "PRINCIPES", "leaves": ["chance + risque", "composition LT", "faire ≠ garder"], "color": ACCENT},
+        {"label": "ATTITUDES", "leaves": ["définir assez", "marge sécurité", "acheter du temps"], "color": GREEN},
+    ],
+    accent=ACCENT
+)))
+story.append(P("Comportements financiers durables — au-delà du coup.", diagram_caption))
 story.append(PageBreak())
 
 
