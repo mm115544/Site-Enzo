@@ -599,7 +599,7 @@ print("✓ Infrastructure chargée")
 # ============================================================
 # DOCUMENT
 # ============================================================
-OUTPUT = "/home/user/Site-Enzo/devenir_trader_stable.pdf"
+OUTPUT = "/home/user/Site-Enzo/devenir_trader_stable_v2.pdf"
 doc = SimpleDocTemplate(
     OUTPUT, pagesize=A4,
     leftMargin=2.5*cm, rightMargin=2.5*cm,
@@ -1070,6 +1070,111 @@ story.extend(phrase_ancre(
 story.append(PageBreak())
 
 
+# --- CONCEPT 7 ---
+story.extend(concept_header(7, "La pensée en série — 100 trades, pas 1", ACCENT))
+story.extend(retenir(
+    "Le trader rentable ne juge JAMAIS un trade individuel. Il juge une série de 100 trades. Tant que tu juges "
+    "trade par trade, tu es dans le piège émotionnel. La loi des grands nombres ne s'applique pas à 5 ou 10 "
+    "trades — elle se révèle sur 100, 500, 1000."
+))
+story.extend(explication([
+    "<b>Le principe.</b> Un edge à 55% de win rate avec RR 1:2 produit mathématiquement de l'argent — mais "
+    "seulement sur la durée. Sur 5 trades, tu peux avoir 5 pertes successives (probabilité ~1,8% mais possible). "
+    "Sur 100 trades, la distribution se révèle. Si tu ARRÊTES après les 5 pertes, tu ne sauras jamais si ton "
+    "edge marchait. Tu auras quitté la roulette avant qu'elle ne te paye.",
+    "<b>Le piège du jugement précoce.</b> 3 pertes consécutives ne disent RIEN sur ton edge. C'est statistiquement "
+    "normal. Si tu changes ta méthode après 3 pertes, tu fais deux erreurs : (1) tu abandonnes potentiellement "
+    "un edge valide, (2) tu casses la série de 100 nécessaire pour valider quoi que ce soit."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu juges trop tôt. Tu changes de méthode tous les 15-30 trades. Tu n'as JAMAIS eu une série de 100 trades "
+    "exécutés selon le même protocole strict. Donc tu ne sais pas si ton edge marche. Tu sais seulement que tu "
+    "n'as jamais tenu assez longtemps pour le découvrir."
+], GOLD, NAVY, accent=NAVY))
+
+story.extend(application([
+    "<b>Cible :</b> tu écris dans ton journal en page de garde : « Série en cours — Trade n° X / 100. Méthode "
+    "stricte : SMC + killzones London/NY. Risque 0,5%. SL+TP préfixés. BE à +1R. » Tu coches chaque trade. "
+    "Avant le trade 100, INTERDIT de modifier la méthode."
+]))
+
+story.append(styled_table([
+    [C("Nombre trades", cell_g), C("Conclusion possible", cell_g)],
+    [C("5"), C("Aucune. Bruit statistique pur.")],
+    [C("20"), C("Très limitée. Tendance possible, pas validée.")],
+    [C("50"), C("Indicative. Direction se dessine.")],
+    [C("100"), C("Premier vrai signal. Tu peux commencer à juger.")],
+    [C("300+"), C("Solide. Tu connais ton edge réel.")],
+], [4*cm, 12*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(exercice([
+    "<b>Grille 100 trades.</b> Dans ton cahier, dessine une grille de 100 cases (10×10). Chaque trade exécuté "
+    "selon protocole = 1 case cochée (vert = gain, rouge = perte). Tu vises les 100. Tu ne tires AUCUNE "
+    "conclusion avant. C'est l'engagement de discipline le plus puissant que tu puisses prendre.",
+    "<b>Règle de gel.</b> Pendant la série de 100, tu ne modifies RIEN : méthode, taille, indicateur, timeframe. "
+    "Même si tu prends 8 pertes consécutives. La modification se décide UNIQUEMENT après les 100 trades, à froid."
+]))
+story.extend(phrase_ancre(
+    "« Je joue la série de 100. Pas ce trade. Le résultat individuel ne dit rien. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 8 ---
+story.extend(concept_header(8, "L'opérateur stable — sommeil, énergie, état de base", ACCENT))
+story.extend(retenir(
+    "Ton edge technique ne peut s'exprimer que si l'opérateur (toi) est dans un état de base correct. Sommeil, "
+    "alimentation, hydratation, énergie, état émotionnel : ce sont les variables muettes qui décident de tes "
+    "performances bien plus que le setup."
+))
+story.extend(explication([
+    "<b>L'effet du sommeil.</b> Une nuit à 5h de sommeil produit un déficit cognitif équivalent à 0,5g d'alcool "
+    "dans le sang. Les recherches montrent que les traders qui dorment moins de 6h prennent significativement "
+    "plus de risques, sous-estiment les pertes potentielles et surestiment leur edge. Tu ne le ressens pas — "
+    "ton cerveau ne sait pas qu'il est dégradé.",
+    "<b>L'effet de la glycémie.</b> Une glycémie qui chute (jeûne prolongé, mauvais petit-déjeuner) produit "
+    "irritabilité, impatience, prise de décision dégradée. Tu confonds l'urgence physiologique de manger avec "
+    "« faut que je trade maintenant ».",
+    "<b>L'effet du baseline émotionnel.</b> Une dispute, un stress relationnel, une mauvaise nouvelle non digérée "
+    "te suit dans la session. Tu ne traites pas l'émotion — elle traite ton trading à ta place."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Post-TBI, ton besoin de sommeil est probablement supérieur à la moyenne — 8-9h pour récupération neuronale "
+    "complète. Si tu dors 6h, tu trades dégradé sans le savoir. Tu attribues les mauvaises décisions à un "
+    "manque de discipline. La cause réelle est physiologique."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Check pré-session — l'opérateur est-il en état ?", h_sub))
+story.append(styled_table([
+    [C("Variable", cell_g), C("État OK", cell_g), C("État RED FLAG = pas de trade", cell_g)],
+    [C("Sommeil"), C("7-9h, qualité"), C("< 6h ou agité")],
+    [C("Petit-déjeuner"), C("Pris, équilibré"), C("Sauté ou junk food")],
+    [C("Hydratation"), C("Eau le matin"), C("Café seul à jeun")],
+    [C("Émotion baseline"), C("Calme, neutre"), C("Conflit récent, news perso")],
+    [C("Énergie"), C("Stable, 6+/10"), C("< 5/10 ou hyperexcité")],
+    [C("Substances"), C("Aucune dernières 24h"), C("Alcool hier, drogue récréative")],
+], [3.5*cm, 4*cm, 8.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> avant chaque session, 2 minutes de check des 6 variables. Si ≥2 sont en red flag → "
+    "PAS de trading aujourd'hui. Tu fais autre chose. Tu protèges ta série de 100."
+]))
+
+story.extend(exercice([
+    "<b>Journal d'état pré-session.</b> Pendant 30 jours, note chaque matin les 6 variables sur 10. Note "
+    "aussi ton PnL de la session. Au bout de 30 jours, tu vas voir une corrélation claire entre tes variables "
+    "low (< 5/10) et tes journées perdantes. Tu sauras précisément quels états bloquent ton edge.",
+    "<b>Routine de coucher.</b> 22h max au lit (pour 23h endormi). Pas d'écran 60 min avant. Lecture papier. "
+    "Respiration cohérente 5 min. C'est ton outil de productivité trading le plus rentable."
+]))
+story.extend(phrase_ancre(
+    "« Mon edge ne peut pas s'exprimer si l'opérateur est dégradé. Je protège l'opérateur. »"
+))
+story.append(PageBreak())
+
+
 # --- SYNTHÈSE PARTIE 1 ---
 story.append(P("Carte mentale — Partie 1", h_section))
 story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
@@ -1427,6 +1532,89 @@ story.extend(phrase_ancre(
 story.append(PageBreak())
 
 
+# --- CONCEPT 7 ---
+story.extend(concept_header(7, "L'effet du presque — pourquoi tu reviens même quand tu perds", ACCENT))
+story.extend(retenir(
+    "Le near-miss effect : un PRESQUE-gain produit un pic dopaminergique presque équivalent à un vrai gain. "
+    "Documenté chez les joueurs de machines à sous. C'est pour ça que perdre ne t'arrête pas — chaque trade "
+    "« presque gagné » te recharge en envie de continuer."
+))
+story.extend(explication([
+    "<b>Le mécanisme.</b> Imagerie cérébrale chez les joueurs de machines à sous : un near-miss (deux symboles "
+    "alignés sur trois) produit une activation dopaminergique presque identique à un vrai jackpot — alors que "
+    "rationnellement c'est une PERTE. Ton cerveau ne distingue pas. Il enregistre le « presque » comme un "
+    "signal positif. Tu reviens jouer.",
+    "<b>En trading.</b> Tu prends un trade qui atteint +800 puis reverse à -200. Tu te dis « j'étais à +800, "
+    "j'ai presque gagné, ma prochaine sera la bonne ». Ton cerveau a enregistré +800 comme une quasi-réussite — "
+    "alors que tu as perdu de l'argent réel. La frustration produit de l'élan, pas de l'arrêt."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tes pertes ne t'arrêtent pas parce que tu vois TOUJOURS des « presque-gains » dedans. « Si j'avais coupé "
+    "+800 j'aurais gagné. » « Si j'avais pas décalé j'aurais sorti à zéro. » Chaque presque te recharge. C'est "
+    "pour ça que tu reviens, encore et encore, malgré l'évidence des pertes accumulées."
+], GOLD, NAVY, accent=NAVY))
+
+story.extend(application([
+    "<b>Cible :</b> tu reformules systématiquement les « presque » en réalité. Pas « j'ai presque gagné +800 ». "
+    "Mais « j'ai PERDU -200, point. Le +800 n'a jamais existé — c'était du PnL non réalisé, donc pas un gain. » "
+    "Cette reformulation désarme la recharge dopaminergique."
+]))
+
+story.extend(exercice([
+    "<b>Journal anti-near-miss.</b> Après chaque perte, dans ton journal, INTERDIT d'écrire la phrase « j'étais "
+    "à +X PnL ». Tu écris uniquement le résultat final. -200, c'est -200. Pas « j'étais à +800 ». Le PnL flottant "
+    "n'existe pas. Seul le PnL final compte. Tu coupes l'alimentation de la boucle."
+]))
+story.extend(phrase_ancre(
+    "« Un presque-gain est une perte. Le PnL flottant n'existe pas. Seul le PnL final compte. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 8 ---
+story.extend(concept_header(8, "La pleine présence comme antidote", ACCENT))
+story.extend(retenir(
+    "L'addiction se nourrit de l'évasion mentale — tu n'es pas là, tu es dans l'attente du prochain shoot. "
+    "La pleine présence (être ici, maintenant, dans ce corps) est l'antidote neurologique direct. Pas une "
+    "pratique mystique — une compétence d'attention dirigée."
+))
+story.extend(explication([
+    "<b>Le mécanisme.</b> La pleine présence active le cortex préfrontal et désactive le réseau de mode par "
+    "défaut (DMN — le réseau de rumination/projection). En clair : quand tu es pleinement présent à ce que tu "
+    "fais maintenant, ton cerveau cesse de chasser le prochain shoot. La compulsion s'éteint temporairement.",
+    "<b>Effet cumulatif.</b> Des études longitudinales montrent que 8 semaines de pratique régulière de mindfulness "
+    "modifient mesurablement la structure de l'amygdale et du cortex préfrontal. Tu changes physiquement ton "
+    "cerveau, pas juste tes pensées."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu fais déjà de la méditation Dispenza. C'est excellent. Mais l'enjeu est de faire descendre cette compétence "
+    "dans tes moments compulsifs — pas seulement le matin. Quand l'envie de cliquer monte à 14h, c'est LÀ que "
+    "la présence te sauve. 90 secondes de présence corporelle = pic compulsif désamorcé."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(styled_table([
+    [C("Pratique", cell_g), C("Durée", cell_g), C("Effet immédiat", cell_g)],
+    [C("Scan corporel"), C("5 min"), C("Recentre, calme le SN")],
+    [C("Respiration consciente"), C("3 min"), C("Active le vagal ventral")],
+    [C("Pleine présence aux sens"), C("2 min"), C("Sort de la rumination")],
+    [C("Marche méditative"), C("10 min"), C("Désactive la chasse au shoot")],
+    [C("Pleine présence en pansage"), C("30 min"), C("Co-régulation profonde")],
+], [4.5*cm, 2*cm, 9.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(exercice([
+    "<b>Test du 5-4-3-2-1.</b> Quand tu sens monter la compulsion : nomme 5 choses que tu VOIS, 4 que tu "
+    "ENTENDS, 3 que tu TOUCHES (peau, chaise, vêtement), 2 que tu SENS, 1 que tu GOÛTES. 2 minutes. Tu te "
+    "ramènes dans le corps. La compulsion baisse de plusieurs crans.",
+    "<b>Présence avant chaque session.</b> 3 min de présence corporelle pure (yeux fermés, attention au "
+    "souffle, scan rapide) AVANT d'ouvrir la plateforme. C'est l'antidote préventif au mode compulsif."
+]))
+story.extend(phrase_ancre(
+    "« Quand je suis ici, maintenant, dans mon corps, la compulsion ne peut pas piloter. »"
+))
+story.append(PageBreak())
+
+
 # --- SYNTHÈSE PARTIE 2 ---
 story.append(P("Carte mentale — Partie 2", h_section))
 story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
@@ -1749,6 +1937,109 @@ story.extend(exercice([
 ]))
 story.extend(phrase_ancre(
     "« Pour mon TBI, je ne suis pas obligé de tout porter seul. Je m'accompagne. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 7 ---
+story.extend(concept_header(7, "Le sommeil — consolidation et réparation post-trauma", ACCENT))
+story.extend(retenir(
+    "Le sommeil n'est pas du repos passif. C'est le moment où ton cerveau CONSOLIDE les apprentissages, "
+    "PROCESSE les émotions, ÉLIMINE les déchets neuronaux. Après un trauma comme le tien, le sommeil de "
+    "qualité est probablement ton outil de réparation le plus puissant — et le plus négligé."
+))
+story.extend(explication([
+    "<b>Sommeil paradoxal et processing émotionnel.</b> Pendant le REM (sommeil paradoxal, riche en rêves), "
+    "ton cerveau traite les expériences émotionnelles intenses. Il les « désactive » émotionnellement tout en "
+    "gardant l'info. Sans REM suffisant, les émotions s'accumulent à l'état brut — pour quelqu'un avec ton "
+    "historique, c'est particulièrement coûteux.",
+    "<b>Système glymphatique.</b> Pendant le sommeil profond, ton cerveau s'auto-nettoie via le système "
+    "glymphatique — il évacue les déchets métaboliques (dont les protéines liées à la neurodégénérescence). "
+    "Après un TBI, ce nettoyage est encore plus crucial. Manquer de sommeil = ralentir ta réparation neuronale."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Ton TBI demande plus de sommeil que la moyenne. 8-9h en moyenne. Si tu dors 6h en pensant que c'est OK, tu "
+    "rates non seulement de la performance — tu rates de la réparation. Ce que tu compromets le soir, ton "
+    "trading le paye le lendemain. Et ta reconstruction neuronale globale paie sur des années."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(styled_table([
+    [C("Heures de sommeil", cell_g), C("Effet le lendemain", cell_g)],
+    [C("8-9h qualité"), C("Réparation optimale. Décisions claires.")],
+    [C("7h"), C("Acceptable. Léger déficit.")],
+    [C("6h"), C("Déficit cognitif équivalent à 0,3g d'alcool. Décisions dégradées.")],
+    [C("≤ 5h"), C("Équivalent à 0,8g d'alcool. NE PAS TRADER.")],
+], [4*cm, 12*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> coucher 22h30-23h max. Levé naturel sans réveil si possible. Avant 22h : pas d'écran, pas "
+    "de café, lumière baissée. Si tu dors moins de 6h une nuit : INTERDIT de trader le lendemain. Tu fais "
+    "autre chose — pansage, lecture, sport doux."
+]))
+
+story.extend(exercice([
+    "<b>Routine de coucher en 4 étapes.</b> (1) Couper écrans 60 min avant coucher. (2) Douche tiède ou bain. "
+    "(3) Lecture papier 20-30 min. (4) Respiration cohérente 5 min dans le lit. Reproduits chaque soir 30 jours.",
+    "<b>Si tu mets > 30 min à dormir.</b> Tu te lèves. Tu vas dans une autre pièce. Lecture papier seule, "
+    "lumière faible. Tu retournes te coucher quand tu sens venir le sommeil. Pas avant."
+]))
+story.extend(phrase_ancre(
+    "« Le sommeil n'est pas optionnel. C'est la condition de ma réparation et de mon trading. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 8 ---
+story.extend(concept_header(8, "La dissociation — quand tu te déconnectes de toi-même", ACCENT))
+story.extend(retenir(
+    "La dissociation est un mécanisme de protection : face à un stress trop intense, ton SN te « déconnecte » "
+    "de la sensation, des émotions, parfois de la réalité présente. C'est utile en situation de danger. C'est "
+    "destructeur quand ça devient un mode par défaut."
+))
+story.extend(explication([
+    "<b>Les signaux.</b> Pendant un trade qui tourne mal : tu sens un détachement étrange, comme si tu regardais "
+    "quelqu'un d'autre cliquer. Tu agis sans vraiment être là. Tu te dis après « je ne sais même pas pourquoi "
+    "j'ai fait ça ». Ce n'est pas du déni — c'est de la dissociation. Ton SN t'a déconnecté pour te protéger.",
+    "<b>Le coût.</b> Pendant la dissociation, tu ne peux pas appliquer le protocole. Tu n'es pas là pour "
+    "l'appliquer. Tu reviens après l'événement. Tu constates les dégâts. Tu te flagelles. Mais la décision "
+    "était déjà prise dans un état où tu n'avais pas accès à tes ressources."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Après ton TBI 2022, la dissociation peut être plus facilement déclenchée — ton SN a appris cette "
+    "stratégie en survie. Pendant un crash de compte, tu peux te retrouver à cliquer sans être pleinement là. "
+    "Reconnaître ce moment est crucial : c'est précisément à ce moment qu'il faut FERMER LA PLATEFORME, pas "
+    "essayer de raisonner avec toi-même."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Reconnaître la dissociation — signaux précoces", h_sub))
+story.append(styled_table([
+    [C("Signal", cell_g), C("Description", cell_g)],
+    [C("Sensation de flottement"), C("« Je ne suis pas vraiment là »")],
+    [C("Voix qui vient de loin"), C("Tes propres pensées te paraissent étrangères")],
+    [C("Mains qui agissent seules"), C("Tu cliques sans avoir décidé consciemment")],
+    [C("Anesthésie émotionnelle"), C("Tu ne ressens rien — alors que tu devrais")],
+    [C("Temps qui s'étire"), C("Tu perds la notion du temps écoulé")],
+    [C("Vision rétrécie"), C("Tunnel visuel sur l'écran")],
+], [4*cm, 12*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> à la première reconnaissance d'UN de ces signaux, action mécanique : FERMER LA PLATEFORME. "
+    "Pas négocier. Pas analyser. Fermer. Puis 5 minutes de pleine présence corporelle (5-4-3-2-1) pour te "
+    "ramener dans le corps."
+]))
+
+story.extend(exercice([
+    "<b>Test du « suis-je là ? ».</b> Pendant tes sessions, 3 fois minimum : tu te demandes à voix basse "
+    "« suis-je là ? ». Si la réponse honnête est non ou « pas vraiment » → tu fermes la session. Tu pratiques "
+    "la reconnaissance.",
+    "<b>Ancres corporelles.</b> Garde près de toi 3 objets sensoriels : pierre froide (toucher), bougie "
+    "(odeur), eau fraîche (boire). Si tu sens la dissociation venir, tu actives une ancre. Le sensoriel "
+    "ramène dans le corps."
+]))
+story.extend(phrase_ancre(
+    "« Si je ne suis pas là, je ne décide pas. Je ferme et je reviens d'abord à moi. »"
 ))
 story.append(PageBreak())
 
@@ -2088,6 +2379,134 @@ story.extend(phrase_ancre(
 story.append(PageBreak())
 
 
+# --- CONCEPT 6 ---
+story.extend(concept_header(6, "La respiration polyvagale — outil de poche", ACCENT))
+story.extend(retenir(
+    "La respiration est le SEUL accès conscient et direct à ton système nerveux autonome. Aucune autre fonction "
+    "n'est à la fois automatique ET modifiable volontairement. C'est ton outil de régulation portable, "
+    "gratuit, disponible 24h/24."
+))
+story.extend(explication([
+    "<b>Pourquoi ça marche.</b> L'expiration LONGUE active le nerf vague ventral (calme, parasympathique). "
+    "L'inspiration courte active légèrement le sympathique. Donc une respiration où expi > inspi calme le SN. "
+    "Inversement, hyper-inspiration ample = activation. Tu pilotes ton état neurochimique par le souffle.",
+    "<b>Les ratios utiles.</b> 4-6 (4s inspi, 6s expi) = apaisement. 5-5 (cohérence cardiaque) = équilibre. "
+    "4-7-8 (4 inspi, 7 retenue, 8 expi) = endormissement et anti-stress aigu. Box breathing 4-4-4-4 = concentration."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu pratiques déjà Dispenza. Pas besoin de te convertir. Ajoute juste ces ratios précis en outils ciblés. "
+    "Avant chaque session de trading : 4-6 pendant 5 min. Pendant un trade tendu : 4-7-8 pendant 3 cycles. "
+    "Le soir : 4-7-8 pendant 5 cycles dans le lit. Tu auras un outil par situation."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Les 4 ratios principaux", h_sub))
+story.append(styled_table([
+    [C("Ratio", cell_g), C("Effet", cell_g), C("Quand l'utiliser", cell_g)],
+    [C("4-6"), C("Apaisement progressif"), C("Avant session, entre trades")],
+    [C("5-5 (cohérence cardiaque)"), C("Équilibre, focus"), C("Pendant analyse, méditation")],
+    [C("4-7-8"), C("Anti-stress aigu, endormissement"), C("Pic émotionnel, coucher")],
+    [C("Box 4-4-4-4"), C("Concentration militaire"), C("Décision technique précise")],
+], [3.5*cm, 5*cm, 7.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(exercice([
+    "<b>Pratique quotidienne minimum.</b> 5 sessions/jour de respiration 4-6 (3-5 min chacune). Au réveil, "
+    "avant repas, avant session trading, après session, avant coucher. Tu installes un point d'ancrage SN "
+    "régulier.",
+    "<b>Test du ratio.</b> Cette semaine, expérimente chaque ratio dans son contexte indiqué. Note 1-10 son "
+    "effet. Tu identifies ton outil personnel le plus efficace."
+]))
+story.extend(phrase_ancre(
+    "« Mon souffle est mon télécommande SN. Je l'utilise en conscience, pas par hasard. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 7 ---
+story.extend(concept_header(7, "Les tremblements thérapeutiques (TRE)", ACCENT))
+story.extend(retenir(
+    "Les Tension & Trauma Releasing Exercises (TRE), développés par David Berceli, sont une méthode qui active "
+    "VOLONTAIREMENT les tremblements neurogéniques — la décharge naturelle que ton corps n'a pas pu faire "
+    "après 2022. C'est inconfortable au début. C'est puissant."
+))
+story.extend(explication([
+    "<b>Le principe.</b> Le tremblement neurogénique est un réflexe naturel des mammifères pour décharger "
+    "l'activation post-stress. Les humains l'inhibent socialement. TRE consiste à fatiguer modérément les "
+    "muscles du psoas (zone du bassin, lien clé entre stress et corps) puis à les LAISSER trembler — sans "
+    "résister, sans amplifier. Le tremblement s'auto-dose. Le corps libère ce qu'il peut, à son rythme.",
+    "<b>Effets documentés.</b> Diminution de la tension de fond, amélioration du sommeil, réduction de "
+    "l'hypervigilance, sensation de relâchement profond. Utilisé en zones de guerre, en post-trauma médical, "
+    "en burnout sévère. Reconnu par plusieurs systèmes de santé publique."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Pour ton cas (TBI + énergie figée), TRE peut être un outil très puissant — mais à apprendre avec un "
+    "praticien certifié pour les premières séances. Une fois la technique acquise, tu peux la pratiquer "
+    "seul 2-3 fois par semaine. C'est complémentaire (pas substitut) à un travail SE avec praticien."
+], GOLD, NAVY, accent=NAVY))
+
+story.extend(application([
+    "<b>Combinaison puissante.</b> Box thérapeutique (décharge musculaire intense) + 10 min TRE après (laisser "
+    "trembler) + 5 min respiration calme (intégration). Cycle complet de décharge somatique structurée. "
+    "1-2 fois par semaine."
+]))
+
+story.extend(exercice([
+    "<b>Découverte TRE.</b> Recherche un praticien TRE certifié en France. 3-5 séances pour apprendre la "
+    "technique. Coût : 60-100€/séance. Investissement total ~300-500€. Tu acquiers un outil pour la vie.",
+    "<b>Alternative douce.</b> Si pas accessible : exercices de mobilisation du psoas (postures de yoga "
+    "thérapeutique) + relâchement conscient + observation des tremblements éventuels. Plus lent à installer "
+    "mais accessible seul."
+]))
+story.extend(phrase_ancre(
+    "« Mon corps sait trembler pour se libérer. Je lui rends ce droit. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 8 ---
+story.extend(concept_header(8, "Le contact à la nature comme régulateur", ACCENT))
+story.extend(retenir(
+    "La nature n'est pas un agrément optionnel. C'est un régulateur du SN documenté. Marche en forêt, contact "
+    "avec la terre, exposition à la lumière naturelle, présence d'eau : chacun produit un effet mesurable "
+    "sur ton baseline. C'est gratuit et tu le sous-utilises."
+))
+story.extend(explication([
+    "<b>Effets documentés.</b> Marche en forêt (shinrin-yoku, étudié au Japon) → baisse du cortisol, hausse "
+    "des cellules NK immunitaires, baisse de la tension artérielle, sur 2h de marche. Contact direct avec la "
+    "terre (pieds nus, sol naturel) → effet anti-inflammatoire mesurable. Exposition à la lumière naturelle "
+    "matinale → régulation circadienne, mélatonine du soir.",
+    "<b>Effet sur ton SN.</b> La nature désactive le réseau de mode par défaut (rumination/projection) plus "
+    "efficacement que la plupart des environnements urbains. Ton cerveau bascule plus facilement en vagal "
+    "ventral. C'est physiologique, pas symbolique."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu as les chevaux et probablement l'accès à des espaces naturels. C'est un atout massif. Combinaison "
+    "parfaite pour toi : 1 fois par semaine, marche longue (60-90 min) en forêt ou nature, sans téléphone, "
+    "suivie d'1 heure avec ta filly. C'est de la thérapie SN gratuite, profonde, durable."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(styled_table([
+    [C("Pratique", cell_g), C("Durée", cell_g), C("Effet SN", cell_g)],
+    [C("Marche forêt sans téléphone"), C("60-90 min"), C("Cortisol ↓, vagal ventral ↑")],
+    [C("Pieds nus sur terre/herbe"), C("10-15 min"), C("Anti-inflammatoire, ancrage")],
+    [C("Lumière naturelle matinale"), C("15-30 min"), C("Régulation circadienne")],
+    [C("Eau (rivière, mer, lac)"), C("Présence"), C("Apaisement profond, ions négatifs")],
+    [C("Présence animale"), C("30-60 min"), C("Co-régulation interspécifique")],
+], [5*cm, 3*cm, 8*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(exercice([
+    "<b>Sortie nature hebdomadaire.</b> 1 fois par semaine minimum, 90 min de nature sans téléphone. Forêt, "
+    "campagne, parc. Tu marches lentement. Tu observes. Tu respires. C'est non négociable.",
+    "<b>Lumière matinale.</b> Chaque matin, 15-30 min de lumière naturelle dans les 60 min après réveil "
+    "(idéalement sans lunettes solaires). Tu régules ton horloge interne. Sommeil meilleur le soir."
+]))
+story.extend(phrase_ancre(
+    "« La nature régule mon SN gratuitement. Je l'utilise comme un médicament. »"
+))
+story.append(PageBreak())
+
+
 # --- SYNTHÈSE PARTIE 4 ---
 story.append(P("Carte mentale — Partie 4", h_section))
 story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
@@ -2370,6 +2789,156 @@ story.extend(exercice([
 ]))
 story.extend(phrase_ancre(
     "« La zone n'est pas un état magique. C'est le résultat naturel d'un travail intégré. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 6 ---
+story.extend(concept_header(6, "Discipline face aux prop firms — règles structurelles", ACCENT))
+story.extend(retenir(
+    "Les prop firms (Apex, Topstep, Alpha Futures) imposent des règles structurelles : drawdown trailing, "
+    "limite de perte journalière, ratio gain/perte. Ces règles ne sont pas tes ennemies — elles sont une "
+    "discipline EXTERNE qui peut compenser ta discipline interne défaillante. Apprends à les aimer."
+))
+story.extend(explication([
+    "<b>Les règles typiques.</b> Drawdown trailing (ton compte ne peut pas baisser de plus de X depuis son "
+    "plus haut atteint). Daily loss limit (perte max par jour, souvent 2-3% du compte). Ratio profit-perte "
+    "(certaines exigent une cohérence). Ces règles existent pour protéger la firme. Mais elles te protègent "
+    "AUSSI — elles t'empêchent d'aller dans les zones les plus destructrices.",
+    "<b>Le piège classique.</b> Tu vois les règles comme une contrainte. Tu cherches à les contourner. Tu "
+    "t'épuises mentalement à les négocier. Tu finis par les casser et perdre le compte. Reframe : la règle "
+    "EST ton allié structurel. Sans elle, tu irais plus loin dans ta destruction."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu as cramé plusieurs comptes Apex/Topstep/Alpha. Diagnostic honnête : les règles n'étaient pas le "
+    "problème — elles t'ont arrêté avant que tu ailles plus loin. Le problème était ton incapacité à "
+    "respecter même ces règles. Sans elles, tu aurais perdu plus. Avec elles, tu as au moins limité la casse."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Re-cadrage des règles prop firm", h_sub))
+story.append(styled_table([
+    [C("Règle prop firm", cell_g), C("Lecture saboteur", cell_g), C("Lecture cible", cell_g)],
+    [C("Trailing drawdown"), C("« contrainte qui me bloque »"), C("« filet de sécurité contre ma folie »")],
+    [C("Daily loss limit"), C("« faut respecter ce plafond »"), C("« arrêt obligatoire avant catastrophe »")],
+    [C("Consistency rule"), C("« je dois lisser mes gains »"), C("« preuve que mon edge est réel »")],
+    [C("Pas de news trading"), C("« je rate des opportunités »"), C("« évite les pièges de volatilité »")],
+], [4.5*cm, 5.5*cm, 6*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> tu te fixes tes propres limites PLUS STRICTES que celles de la prop firm. Si le compte "
+    "Apex tolère -3% par jour, tu te fixes -1,5%. Tu utilises 50% de la marge pour avoir un coussin. La règle "
+    "externe te protège, ta règle interne plus stricte t'évite de tester la règle externe."
+]))
+
+story.extend(exercice([
+    "<b>Audit de tes derniers comptes cramés.</b> Pour chaque compte cramé, écris : (1) quelle règle prop firm "
+    "tu as cassée, (2) à quelle perte tu en étais quand tu l'as cassée. Tu vas voir un pattern. Tu sauras "
+    "exactement quelle marge tu dois te garder.",
+    "<b>Marge personnelle stricte.</b> Pour chaque règle prop firm, fixe ta version 50% plus stricte. Affiche "
+    "au mur. C'est ton vrai cadre — pas celui de la firme."
+]))
+story.extend(phrase_ancre(
+    "« La règle prop firm est ma sauvegarde. Je l'aime. Je me fixe ma propre version, encore plus stricte. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 7 ---
+story.extend(concept_header(7, "Exécuter un plan vs avoir raison", ACCENT))
+story.extend(retenir(
+    "Le trader amateur cherche à avoir raison. Le trader pro cherche à exécuter un plan. Deux postures opposées. "
+    "Avoir raison nourrit l'ego — et tue le compte. Exécuter le plan nourrit l'opérateur — et construit l'edge."
+))
+story.extend(explication([
+    "<b>La différence interne.</b> Quand tu cherches à avoir raison, chaque trade est un test de toi-même. "
+    "Une victoire te valide. Une défaite t'attaque. Tu charges chaque clic d'enjeu identitaire. Quand tu "
+    "cherches à exécuter un plan, chaque trade est une instance d'un protocole. Une victoire confirme la "
+    "distribution. Une défaite confirme la distribution aussi. Aucune charge identitaire.",
+    "<b>Le test pratique.</b> Demande-toi : « si je découvrais après-coup que ce trade aurait été gagnant "
+    "mais que je ne l'ai pas pris parce qu'il n'était pas dans mon plan, je me sentirais comment ? » Si la "
+    "réponse est « furieux d'avoir raté » → tu cherches à avoir raison. Si c'est « OK, c'était hors plan » → "
+    "tu cherches à exécuter."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu cherches massivement à avoir raison. Le pattern +1500 EST ça : tu ne veux pas couper parce que couper "
+    "= avoir eu raison partiellement, et tu veux raison ENTIÈREMENT. Tu pousses pour valider ton hypothèse "
+    "jusqu'au bout. Le marché te dément. Tu refuses parce que ça remettrait en cause ta justesse. C'est "
+    "l'ego — pas l'analyse."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(styled_table([
+    [C("Posture", cell_g), C("Question intérieure", cell_g), C("Effet sur le trade", cell_g)],
+    [C("Avoir raison"), C("« J'avais raison ? »"), C("Charge identitaire, pousser, décaler")],
+    [C("Exécuter"), C("« J'ai suivi le plan ? »"), C("Détachement, couper aux niveaux fixés")],
+], [3.5*cm, 5*cm, 7.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> à la fin de chaque trade, ne te demande PAS « ai-je eu raison ». Demande-toi « ai-je "
+    "respecté le plan ». Cette question seule peut être posée. Ta seule responsabilité est l'exécution. "
+    "Le résultat appartient au marché."
+]))
+
+story.extend(exercice([
+    "<b>Le tribunal de l'exécution.</b> Chaque fin de session, dans ton journal, pour chaque trade : "
+    "« exécution = OUI / NON ». Pas « gagnant / perdant ». Juste exécution. Sur 30 jours, tu mesures ta "
+    "vraie compétence — qui est l'exécution, pas le résultat.",
+    "<b>Reframe linguistique.</b> Si tu te surprends à dire « j'avais raison sur ce trade », corrige : « j'ai "
+    "exécuté ce trade ». Cette substitution déconnecte progressivement ton ego du résultat."
+]))
+story.extend(phrase_ancre(
+    "« Je n'ai pas à avoir raison. J'ai à exécuter. Le résultat appartient au marché. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 8 ---
+story.extend(concept_header(8, "Trader émotionnel vs trader systématique", ACCENT))
+story.extend(retenir(
+    "Deux modes de trader. <b>Émotionnel</b> : décide en temps réel selon le feeling, le contexte, l'humeur. "
+    "<b>Systématique</b> : exécute des règles pré-établies, identiques à chaque occurrence. Pour quelqu'un "
+    "comme toi, le mode émotionnel est mortel. Le mode systématique te sauve."
+))
+story.extend(explication([
+    "<b>Le mode émotionnel.</b> Tu rentres parce que « ça sent bon ». Tu modifies parce que « j'ai un doute ». "
+    "Tu coupes parce que « j'ai peur ». Tu pousses parce que « le momentum est solide ». Chaque décision est "
+    "prise dans l'instant, avec l'état émotionnel du moment. C'est ingouvernable sur 100 trades.",
+    "<b>Le mode systématique.</b> Tu as un setup A+ défini précisément (conditions techniques, contexte, "
+    "killzone). Si toutes les conditions sont remplies, tu rentres. Sinon, tu ne rentres pas. Pas de "
+    "discussion. Le SL est à X (calculé). Le TP est à Y (calculé). BE à +1R. Plateforme fermée. Tu reviens "
+    "pour le résultat. Reproduis 100 fois."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu fonctionnes principalement en mode émotionnel — même si tu crois être systématique. Indice : si tu "
+    "ne peux pas écrire ta méthode en une page A4 avec des conditions précises, tu n'es pas systématique. "
+    "Tu es émotionnel avec un vernis de méthode. Le travail est de tout coucher par écrit, précisément, et "
+    "de ne plus jamais dévier."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Ta méthode systématique — à écrire en une page A4", h_sub))
+story.append(styled_table([
+    [C("Élément", cell_g), C("À définir précisément", cell_g)],
+    [C("Contexte macro"), C("Bias daily / weekly clair. Si pas clair → pas de trade.")],
+    [C("Niveau structurel"), C("OB / FVG / liquidité ciblée. Localisation exacte.")],
+    [C("Killzone"), C("London / NY. Horaires fixés.")],
+    [C("Confirmation"), C("CHoCH sur LTF. Indicateur de raison. Précisé.")],
+    [C("Entrée"), C("Limite / market. Précisé.")],
+    [C("Stop loss"), C("Calculé selon structure. % du capital fixé.")],
+    [C("Take profit"), C("Niveau précis. RR minimum 1:2.")],
+    [C("Gestion"), C("BE à +1R obligatoire. Pas de modification après.")],
+    [C("Conditions d'invalidation"), C("Si X arrive avant l'entrée → annulé.")],
+], [4*cm, 12*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(exercice([
+    "<b>Écriture de la méthode A4.</b> Cette semaine, tu écris ta méthode en une page A4. Conditions précises, "
+    "sans ambiguïté. Tu signes en bas. Tu colles au mur. C'est ta loi pour 100 trades.",
+    "<b>Le test de Turing.</b> Donne ta page A4 à quelqu'un qui ne trade pas. Demande-lui de te dire si tel "
+    "setup serait valide ou pas. Si la réponse est ambiguë → ta méthode n'est pas assez précise. Tu reprends."
+]))
+story.extend(phrase_ancre(
+    "« Je passe du trader émotionnel au trader systématique. C'est juste de l'écriture précise. »"
 ))
 story.append(PageBreak())
 
@@ -2675,6 +3244,180 @@ story.extend(phrase_ancre(
 story.append(PageBreak())
 
 
+# --- CONCEPT 6 ---
+story.extend(concept_header(6, "Les signaux corporels avant le sabotage", ACCENT))
+story.extend(retenir(
+    "Ton sabotage n'arrive jamais d'un coup. Le corps envoie des signaux 30 minutes à 2 heures AVANT que la "
+    "décision destructrice soit prise. Apprendre à les lire = interception précoce. Le sabotage de +1500 "
+    "se prépare physiquement avant que tu cliques."
+))
+story.extend(explication([
+    "<b>Le pattern précurseur.</b> Avant que tu décides de pousser au-delà du TP : ta respiration s'est "
+    "accélérée légèrement. Tes épaules se sont contractées. Une chaleur est montée dans la poitrine. Tes "
+    "mâchoires se sont serrées. Tu n'as pas remarqué — mais ton corps était déjà en mode pre-saboteur. "
+    "Quand le moment de décision arrive, le terrain est préparé.",
+    "<b>L'avantage stratégique.</b> Si tu détectes ces signaux 30 min avant, tu peux intervenir AVANT que le "
+    "préfrontal soit complètement OFF. Tu peux fermer la session, marcher, respirer, te ramener à un baseline "
+    "calme. Tu retires l'opportunité au saboteur. C'est 100 fois plus efficace que d'essayer de résister "
+    "au moment du clic."
+]))
+
+story.append(P("Les signaux précurseurs à reconnaître", h_sub))
+story.append(styled_table([
+    [C("Zone du corps", cell_g), C("Signal précoce", cell_g), C("Ce que ça annonce", cell_g)],
+    [C("Respiration"), C("Plus rapide, moins profonde"), C("Activation sympathique en cours")],
+    [C("Épaules / nuque"), C("Contraction progressive"), C("Tension narrative qui monte")],
+    [C("Mâchoire"), C("Serrement involontaire"), C("Résistance interne")],
+    [C("Ventre"), C("Noeud, vide, ou chaleur"), C("Émotion non identifiée")],
+    [C("Poitrine"), C("Chaleur, oppression"), C("Charge dopaminergique ou anxiété")],
+    [C("Mains"), C("Moiteur, agitation"), C("Excitation pré-impulsion")],
+    [C("Yeux"), C("Tunnel visuel sur l'écran"), C("Focus restreint, dissociation possible")],
+], [3*cm, 5*cm, 8*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu n'as probablement aucune conscience de ces signaux actuellement. C'est normal — ton interoception est "
+    "altérée (cf. Partie 3 concept 4). Le travail est de RESTAURER cette capacité. Une fois restaurée, tu vas "
+    "te surprendre : tu sentiras les choses 1h avant que ton mental ne s'en rende compte."
+], GOLD, NAVY, accent=NAVY))
+
+story.extend(application([
+    "<b>Cible :</b> 3 scans corporels par session de trading (avant ouverture, mi-session, fin de session). "
+    "À chaque scan, tu notes 1-10 l'intensité de chaque zone. Si une zone dépasse 7/10 → SIGNAL. Tu prends "
+    "une pause AVANT de prendre un autre trade. Tu ne pousses pas la session."
+]))
+
+story.extend(exercice([
+    "<b>Calibrage du seuil personnel.</b> Pendant 14 jours, à chaque session, scan corporel + notation. Après "
+    "chaque crash ou décision regrettée, retour en arrière : quel score corporel avais-je 30 min avant ? "
+    "Tu vas identifier TON seuil personnel (probablement 6-7/10 sur 1-2 zones). C'est ton red flag personnalisé.",
+    "<b>Journal pré-sabotage.</b> Pour chaque session : score corporel d'entrée + score à la fin + qualité "
+    "des décisions. Tu construis ta propre courbe de corrélation."
+]))
+story.extend(phrase_ancre(
+    "« Mon corps annonce le sabotage avant qu'il arrive. J'apprends à le lire pour intercepter. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 7 ---
+story.extend(concept_header(7, "La fatigue cumulée — l'ennemi invisible", ACCENT))
+story.extend(retenir(
+    "La fatigue ne s'additionne pas linéairement. Elle se CUMULE. Trois nuits courtes consécutives produisent "
+    "un déficit cognitif plus grand que trois nuits courtes isolées. Tu peux te sentir « OK » et être en "
+    "réalité massivement dégradé. C'est précisément à ce moment que les comptes se craament."
+))
+story.extend(explication([
+    "<b>Le mécanisme du cumul.</b> Chaque nuit de sommeil insuffisant produit un déficit qui ne se résorbe "
+    "qu'en partie la nuit suivante. Sur 5-7 jours de sommeil dégradé, tu accumules un déficit qui dégrade ton "
+    "préfrontal de 30-40%. Tu prends des décisions avec un cerveau « ralenti » sans le savoir.",
+    "<b>L'illusion de l'habitude.</b> Le pire : tu ne ressens PLUS la fatigue après quelques jours. Le corps "
+    "compense par cortisol et adrénaline élevés. Tu te sens « normal ». En réalité, ton cerveau prend des "
+    "décisions plus risquées, moins planifiées, plus impulsives. Tu attribues les erreurs à un manque de "
+    "discipline. La cause réelle est physiologique."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Post-TBI, ton seuil de fatigue cumulée est plus bas que la moyenne. Ce qui passerait pour quelqu'un "
+    "d'autre te détruit plus vite. Une semaine intense de trading + ATHÉNA + équitation + sommeil léger = "
+    "terrain parfait pour un crash de compte le vendredi. Tu attribues au stress, à la malchance. Cause "
+    "réelle : fatigue cumulée non reconnue."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Les marqueurs de fatigue cumulée", h_sub))
+story.append(styled_table([
+    [C("Marqueur", cell_g), C("Signal", cell_g)],
+    [C("Réveils sans raison"), C("Sommeil fragmenté → SN saturé")],
+    [C("Café qui ne fait plus rien"), C("Cortisol déjà au max")],
+    [C("Irritabilité disproportionnée"), C("Préfrontal en sous-régime")],
+    [C("Erreurs bêtes répétées"), C("Attention dégradée")],
+    [C("Perte d'envie pour ce que tu aimes"), C("Système dopaminergique épuisé")],
+    [C("Tension musculaire constante"), C("Sympathique bloqué en haut")],
+], [5*cm, 11*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> tu instaures la « semaine de récupération ». Toutes les 3-4 semaines de trading actif, "
+    "une semaine où tu réduis significativement la charge (équitation, ATHÉNA, sport). Tu dors plus. Tu "
+    "fais des marches longues. Tu reconstitues ton baseline. Sur l'année, c'est ce qui te garde performant."
+]))
+
+story.extend(exercice([
+    "<b>Score de fatigue quotidien.</b> Chaque matin, score 1-10 de ton état (sommeil + énergie + clarté "
+    "mentale). Si tu enchaînes 3 jours ≤ 6/10 → SIGNAL ROUGE. Pas de trading ce jour-là. Tu prends une "
+    "demi-journée OFF.",
+    "<b>Variabilité cardiaque (HRV).</b> Si tu as une montre connectée, surveille ton HRV. Baisse marquée "
+    "sur 3-5 jours = fatigue cumulée mesurable. Indicateur le plus fiable disponible."
+]))
+story.extend(phrase_ancre(
+    "« La fatigue cumulée est invisible et destructrice. Je la traque, je la respecte. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 8 ---
+story.extend(concept_header(8, "Le protocole d'arrêt complet", ACCENT))
+story.extend(retenir(
+    "L'arrêt n'est pas l'inverse du trading. C'est une COMPÉTENCE distincte qui demande son propre protocole. "
+    "Tu ne sais pas arrêter — c'est ce qui te crame. Voici le protocole en 4 niveaux pour acquérir la "
+    "compétence d'arrêt."
+))
+
+story.append(P("Protocole d'arrêt en 4 niveaux", h_sub))
+story.extend(ascii_box("""
+NIVEAU 1 — Arrêt de trade
+─────────────────────────
+TP atteint OU SL touché OU décision de couper.
+Tu coupes. Tu ne discutes pas. Tu fermes la position.
+
+NIVEAU 2 — Arrêt de session
+──────────────────────────
+Limite quotidienne atteinte (gain OU perte) OU
+2 pertes consécutives OU 3 trades chaotiques OU
+fatigue manifeste OU émotion forte non gérable.
+→ Plateforme fermée. Téléphone autre pièce.
+   Plus de trade aujourd'hui. Pas de discussion.
+
+NIVEAU 3 — Arrêt de semaine
+──────────────────────────
+3 sessions difficiles consécutives OU
+crash de compte OU pic émotionnel non résolu OU
+fatigue cumulée 5+ jours.
+→ Pause complète 3-7 jours. Pas de chart, pas de plateforme.
+   Reconstruction du baseline.
+
+NIVEAU 4 — Arrêt de cycle
+─────────────────────────
+Crash de compte prop firm OU 2+ comptes perdus en 2 mois OU
+épuisement majeur.
+→ Sevrage 4 semaines minimum. Désinstallation apps.
+   Travail somatique intensif. Retour au protocole zéro.
+""", accent=ACCENT))
+
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu as l'habitude de t'arrêter UNIQUEMENT quand le compte est cramé (niveau 4 forcé). Tu n'as jamais "
+    "pratiqué les niveaux 1, 2, 3 proprement. Tu sautes directement au 4 quand tout explose. Apprendre les "
+    "niveaux 1-3 = ne plus jamais arriver au niveau 4."
+], GOLD, NAVY, accent=NAVY))
+
+story.extend(application([
+    "<b>Cible :</b> tu écris les SEUILS personnels pour chaque niveau. Niveau 1 : tes règles d'entrée/sortie "
+    "claires. Niveau 2 : ta limite quotidienne (par exemple -1% du compte). Niveau 3 : tes critères de "
+    "pause semaine. Niveau 4 : tes critères de sevrage. Tu signes, tu colles. Tu appliques."
+]))
+
+story.extend(exercice([
+    "<b>Le contrat d'arrêt.</b> Sur une feuille A4, à la main : « Mes 4 niveaux d'arrêt. Seuils précis. "
+    "Signé : Marien. » Affiche au mur. Tu lis avant chaque session.",
+    "<b>Le décompte des niveaux pratiqués.</b> Chaque mois, tu comptes : combien de fois j'ai pratiqué le "
+    "niveau 1 (arrêt trade) ? Le niveau 2 (arrêt session) ? Le niveau 3 (arrêt semaine) ? Si le niveau 2 "
+    "n'est pas pratiqué AU MOINS 2 fois par mois, c'est que tu ne respectes pas tes propres limites."
+]))
+story.extend(phrase_ancre(
+    "« Savoir s'arrêter est une compétence distincte du trader rentable. Je l'entraîne à chaque niveau. »"
+))
+story.append(PageBreak())
+
+
 # --- SYNTHÈSE PARTIE 6 ---
 story.append(P("Carte mentale — Partie 6", h_section))
 story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
@@ -2942,6 +3685,191 @@ story.extend(exercice([
 ]))
 story.extend(phrase_ancre(
     "« Je commence ridiculement petit. La consistance bat l'ambition à chaque fois. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 6 ---
+story.extend(concept_header(6, "Le journal — outil maître de transformation", ACCENT))
+story.extend(retenir(
+    "Le journal de trading n'est pas un outil parmi d'autres. C'est L'OUTIL maître. Sans journal manuscrit "
+    "régulier, aucun travail psychologique ne se sédimente. Tu observes en surface — tu n'ancres pas dans "
+    "le temps long. Le journal change le cerveau, physiquement, par la main qui écrit."
+))
+story.extend(explication([
+    "<b>Pourquoi manuscrit.</b> Écrire à la main mobilise une chaîne neuronale (moteur fin + langage + "
+    "mémoire) qui ne s'active pas en tapant. La main qui écrit RALENTIT le débit — tu ne peux pas écrire "
+    "vite, donc tu réfléchis plus. Tu ne peux pas fuir comme en tapant. L'engagement physique est plus fort.",
+    "<b>Trois fonctions du journal.</b> (1) <b>Mémoire externe</b> : sortir l'expérience de ta tête pour la "
+    "voir. (2) <b>Pattern recognition</b> : sur 30-90 jours, tu vois les répétitions, les déclencheurs, les "
+    "régularités. (3) <b>Identité</b> : en t'observant écrire « j'ai été un trader chirurgical aujourd'hui », "
+    "tu deviens cette identité. Le journal sculpte qui tu es."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu n'as probablement jamais tenu un journal trading manuscrit pendant plus de 2 semaines. C'est l'erreur "
+    "centrale. Tous les exercices de ce manuel reposent sur un journal manuscrit régulier. Sans lui, le "
+    "manuel reste de la lecture. Avec lui, il devient transformation."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Template de journal — sections obligatoires", h_sub))
+story.append(styled_table([
+    [C("Section", cell_g), C("Quand", cell_g), C("Contenu", cell_g)],
+    [C("Pré-session"), C("Avant"),
+     C("État SN, sommeil, énergie, intention, taille max")],
+    [C("Trade par trade"), C("Pendant"),
+     C("Setup, entrée, SL, TP, score corporel, décision")],
+    [C("Post-session"), C("Après"),
+     C("Bilan PnL, bilan EXÉCUTION, émotions, leçons")],
+    [C("Hebdo"), C("Dimanche"),
+     C("Pattern de la semaine, vote chirurgical/contre, ajustement")],
+    [C("Mensuel"), C("Fin du mois"),
+     C("Statistiques 100 trades en cours, identité, projection")],
+], [3*cm, 2*cm, 11*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> tu achètes un cahier sérieux (pas un carnet bon marché). Cuir, papier épais, format A5 "
+    "ou A4. Page 1 : « Cahier de Marien, trader chirurgical en formation. Ouvert le [date]. » C'est un "
+    "objet sacré. Tu le respectes. Tu l'ouvres à chaque session."
+]))
+
+story.extend(exercice([
+    "<b>Engagement 90 jours.</b> Tu écris dans le cahier à chaque session pendant 90 jours, sans exception. "
+    "Pas de session sans journal = pas de session le lendemain. Cette règle est non négociable.",
+    "<b>Revue hebdomadaire.</b> Dimanche soir, 30 min : tu relis ta semaine. Tu identifies 3 patterns. Tu "
+    "écris une page de synthèse. Tu projettes la semaine suivante."
+]))
+story.extend(phrase_ancre(
+    "« Pas de journal manuscrit = pas de transformation. Le cahier est sacré. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 7 ---
+story.extend(concept_header(7, "L'automatisation du bon comportement", ACCENT))
+story.extend(retenir(
+    "Le bon comportement automatisé bat le bon comportement volontaire. Tu as peu de volonté disponible "
+    "(elle s'épuise dans la journée). Mais tu as une capacité infinie d'automatisation. Le travail est de "
+    "DÉPLACER tes bons comportements de la zone « volonté requise » vers la zone « automatique »."
+))
+story.extend(explication([
+    "<b>Le mécanisme.</b> Toute action répétée 50-100 fois dans le même contexte devient un automatisme "
+    "neuronal — un programme stocké dans les noyaux gris centraux, indépendant du préfrontal. Tu n'as plus "
+    "à décider — ça se fait. C'est ce qui fait la différence entre un débutant qui force et un expert qui "
+    "exécute sans effort. Tu vises ce stade pour tes gestes de trader.",
+    "<b>Les gestes à automatiser en priorité.</b> Placer SL avec l'ordre. Fermer la plateforme après ordres "
+    "placés. Remonter au BE à +1R. Écrire dans le journal après chaque trade. Méditer le matin. Cold shower. "
+    "Pansage hebdomadaire. Plus tu les répètes dans le même contexte, plus ils deviennent invisibles à ta "
+    "volonté."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu fais souvent les bonnes choses... quand tu y penses. Le problème : tu n'y penses pas toujours. "
+    "L'automatisation supprime le besoin d'y penser. Quand fermer la plateforme après les ordres devient "
+    "aussi automatique que verrouiller ta porte en sortant, le piège du décalage SL disparaît à la racine."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Les 8 gestes à automatiser absolument", h_sub))
+story.append(styled_table([
+    [C("Geste", cell_g), C("Déclencheur (ancre)", cell_g)],
+    [C("Placer SL avec l'ordre"), C("Avant tout clic Buy/Sell")],
+    [C("Fermer la plateforme post-ordres"), C("Dès que SL et TP placés")],
+    [C("Remonter au BE à +1R"), C("Alerte sonore au +1R")],
+    [C("Scan corporel pré-session"), C("Après le café du matin")],
+    [C("Écriture pré-session"), C("Après le scan corporel")],
+    [C("Méditation"), C("Après le réveil, avant café")],
+    [C("Pansage conscient"), C("Mercredi soir 18h fixé")],
+    [C("Cold shower"), C("Immédiatement au lever")],
+], [6.5*cm, 9.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> tu choisis UN geste à automatiser pendant 30 jours. Tu le rattaches à un déclencheur "
+    "existant. Tu le fais sans exception 30 jours. À la fin, il est devenu automatique. Tu passes au suivant. "
+    "Sur 12 mois = 12 gestes automatisés. Ton trading change de nature."
+]))
+
+story.extend(exercice([
+    "<b>Carte d'automatisation.</b> Liste les 8 gestes. Identifie le déclencheur existant pour chacun. Choisis "
+    "l'ORDRE d'installation (commence par le plus facile). Affiche au mur.",
+    "<b>Le compteur des répétitions.</b> Pour chaque geste en cours d'automatisation, tu coches dans un "
+    "calendrier visible. Vise 30 jours consécutifs. À la 30e coche, le geste est ancré."
+]))
+story.extend(phrase_ancre(
+    "« Ma volonté est limitée. Mon automatisme est infini. Je déplace tout vers l'automatique. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 8 ---
+story.extend(concept_header(8, "Le système anti-rechute", ACCENT))
+story.extend(retenir(
+    "Tu vas rechuter. Pas peut-être — certainement. Tous les humains qui changent passent par des rechutes. "
+    "La différence entre ceux qui s'en sortent et ceux qui restent piégés : un SYSTÈME pré-établi pour gérer "
+    "la rechute. Sans système, chaque rechute te détruit. Avec système, chaque rechute te renforce."
+))
+story.extend(explication([
+    "<b>Le piège de la perfection.</b> Tu te promets « plus jamais ». Tu tiens 23 jours. Tu craques. Tu te "
+    "dis « j'ai tout cassé ». Tu retournes au pattern complet, en pire. C'est l'effet « WHAT THE HELL » "
+    "documenté : une transgression mineure produit un abandon total parce que la règle absolue est cassée. "
+    "C'est plus destructeur que la transgression elle-même.",
+    "<b>Le système anti-rechute.</b> 3 composants : (1) <b>Reconnaissance précoce</b> de la rechute (signaux). "
+    "(2) <b>Protocole immédiat</b> d'arrêt + soin. (3) <b>Reprise structurée</b> sans culpabilité massive. "
+    "Tu pré-écris ce système quand tu vas bien, pour l'utiliser quand tu vas mal."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "À chaque crash de compte, tu vis le scénario complet : rechute → catastrophe émotionnelle → arrêt total "
+    "pendant 1-3 mois → reprise sans rien avoir traité → autre rechute. Tu n'as PAS de système anti-rechute. "
+    "Tu vis chaque rechute comme la première. C'est ce qui doit changer."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Ton plan anti-rechute en 6 étapes", h_sub))
+story.extend(ascii_box("""
+ÉTAPE 1 — RECONNAÎTRE
+─────────────────────
+Signaux : décalage de SL, sur-trading, taille augmentée, FOMO.
+Action : nommer « rechute en cours ». Pas de jugement.
+
+ÉTAPE 2 — ARRÊT IMMÉDIAT
+────────────────────────
+Plateforme fermée. Téléphone autre pièce.
+Pas de tentative de se refaire. Sortie physique.
+
+ÉTAPE 3 — SOIN CORPOREL
+───────────────────────
+Marche 30 min. Cold shower. Respiration. Eau. Repas simple.
+Tu reviens à un état physiologique baseline.
+
+ÉTAPE 4 — JOURNAL HONNÊTE
+─────────────────────────
+Tu écris : qu'est-ce qui s'est passé ? Quel signal j'ai
+manqué ? Quelle leçon ? Pas de flagellation. Analyse.
+
+ÉTAPE 5 — RÉ-ENGAGEMENT MINIMAL
+───────────────────────────────
+Tu écris l'engagement nouveau, SANS exiger la perfection.
+« Je reprends demain avec UN ajustement. » Pas tout reprendre.
+
+ÉTAPE 6 — REPRISE STRUCTURÉE
+────────────────────────────
+24-72h après la rechute, reprise avec UN protocole modifié.
+La rechute t'a appris quelque chose. Tu intègres. Tu continues.
+""", accent=ACCENT))
+
+story.extend(application([
+    "<b>Cible :</b> tu écris ce plan en 6 étapes sur une feuille A5, à la main. Tu le glisses dans ton "
+    "portefeuille. Tu l'as physiquement avec toi. Quand la rechute arrive (et elle arrivera), tu sors la "
+    "feuille. Tu suis les étapes."
+]))
+
+story.extend(exercice([
+    "<b>Simulation pré-rechute.</b> Cette semaine, simule mentalement une rechute. Imagine que tu viens de "
+    "casser ta règle de SL. Tu suis les 6 étapes mentalement. Tu sentirais quoi à chaque étape ? Tu te "
+    "prépares.",
+    "<b>Carnet des rechutes.</b> Une page dédiée dans ton cahier journal : « Mes rechutes ». Chaque rechute "
+    "y est consignée : date, signal manqué, leçon. Pas de honte — c'est ton corpus d'apprentissage."
+]))
+story.extend(phrase_ancre(
+    "« La rechute n'est pas l'échec. L'absence de système anti-rechute, oui. »"
 ))
 story.append(PageBreak())
 
@@ -3218,6 +4146,237 @@ story.extend(phrase_ancre(
 story.append(PageBreak())
 
 
+# --- CONCEPT 5 ---
+story.extend(concept_header(5, "Lâcher le besoin d'avoir raison", ACCENT))
+story.extend(retenir(
+    "L'attachement à avoir raison est l'une des causes les plus invisibles et destructrices en trading. Tu "
+    "ne le ressens pas comme « j'ai besoin d'avoir raison » — tu le ressens comme « je suis sûr de ma "
+    "lecture ». C'est la même chose. Lâcher ce besoin libère ton edge."
+))
+story.extend(explication([
+    "<b>Le mécanisme.</b> Tu as fait une analyse. Tu as une hypothèse. Tu y as mis de l'énergie, du temps, "
+    "de l'ego. Quand le marché te contredit, ton cerveau perçoit la contradiction comme une attaque "
+    "identitaire — pas comme une information. Tu défends ton hypothèse au lieu de l'abandonner. C'est ce "
+    "qui produit les décalages de SL, les ajouts au perdant, le refus de couper.",
+    "<b>L'inversion à installer.</b> Ton edge n'est PAS d'avoir raison. C'est d'avoir une distribution de "
+    "trades à edge positif. Sur cette distribution, environ 40-50% de tes hypothèses seront fausses — c'est "
+    "mathématique. Avoir tort est statistiquement NORMAL. Le combat contre cette réalité est ce qui te crame."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Reprends ton pattern +1500. Tu as raison sur la direction (le marché monte). Couper à +1000 = avoir "
+    "raison PARTIELLEMENT. Pour ton ego, c'est insuffisant. Tu pousses pour avoir raison TOTALEMENT. Le "
+    "marché reverse. Tu refuses de l'admettre. Tu décales. La cascade vient de ton besoin d'avoir TOTALEMENT "
+    "raison, pas du marché."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Le diagnostic du besoin d'avoir raison", h_sub))
+story.append(styled_table([
+    [C("Signal", cell_g), C("Ce que ça révèle", cell_g)],
+    [C("« J'avais raison sur ce trade »"), C("Tu t'identifies au résultat correct")],
+    [C("« Le marché s'est trompé »"), C("Tu personnifies le marché contre ton ego")],
+    [C("Décalage de SL"), C("Refus de la contradiction du marché")],
+    [C("Ajout au perdant"), C("Insistance sur ta justesse initiale")],
+    [C("Rumination post-perte"), C("Difficulté à intégrer d'avoir eu tort")],
+], [5*cm, 11*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> tu reformules tes pensées de trader. Pas « j'ai raison de penser que ça monte ». "
+    "Plutôt « mon hypothèse est X% probable, le contraire est Y% probable, je joue ma distribution ». "
+    "Cette reformulation enlève l'ego."
+]))
+
+story.extend(exercice([
+    "<b>Le test du droit d'avoir tort.</b> Chaque matin, dis à voix basse : « aujourd'hui, j'ai le droit "
+    "d'avoir tort sur 40% de mes trades. C'est dans le plan. C'est normal. » Tu donnes la permission à "
+    "l'avance.",
+    "<b>Reframe linguistique 30 jours.</b> Si tu te surprends à dire « j'avais raison », tu reformules en "
+    "« j'ai bien exécuté ». L'identification au résultat est remplacée par l'identification à l'exécution."
+]))
+story.extend(phrase_ancre(
+    "« Mon edge n'est pas d'avoir raison. C'est de jouer ma distribution. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 6 ---
+story.extend(concept_header(6, "Lâcher la honte et la colère post-perte", ACCENT))
+story.extend(retenir(
+    "Après une perte, deux émotions montent presque toujours : HONTE (je suis nul, je n'y arriverai jamais) "
+    "et COLÈRE (contre toi-même, le marché, les prop firms). Sans protocole, elles te submergent. Avec "
+    "protocole, elles passent en 90 secondes."
+))
+story.extend(explication([
+    "<b>La honte spécifique du trader.</b> Honte d'avoir cassé son protocole. Honte d'avoir cramé un compte. "
+    "Honte de devoir le cacher aux proches. Cette honte est particulièrement toxique parce qu'elle est "
+    "SILENCIEUSE — tu la portes seul. Elle nourrit ensuite la revanche : tu veux te REVAUDOR par un gros "
+    "gain qui efface la honte. Tu retournes trader. Cycle.",
+    "<b>La colère post-perte.</b> Activation sympathique massive, recherche de cible. Tu peux la diriger "
+    "contre toi (auto-flagellation), contre le marché (revenge trading), contre les conditions externes "
+    "(prop firms, broker, conjoncture). Aucune direction n'est utile. Toute énergie dirigée vers la colère "
+    "post-perte est de l'énergie qui n'est pas dirigée vers la récupération."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu portes probablement une couche de honte chronique liée à tes crashs successifs — non dite, non "
+    "traitée. Cette honte chronique te pousse paradoxalement à retourner trader plus rapidement (pour "
+    "« effacer » par un gain). C'est exactement contre-productif."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Protocole anti-honte / anti-colère post-perte", h_sub))
+story.extend(ascii_box("""
+PHASE 1 (les 5 premières minutes après la perte)
+───────────────────────────────────────────────
+- Fermer la plateforme. Téléphone autre pièce.
+- Si la colère monte : SORTIR (marche, course, pousser un mur).
+- Pas d'analyse. Pas de journal. Décharge corporelle d'abord.
+
+PHASE 2 (30 minutes - 2 heures)
+──────────────────────────────
+- Quand corps stabilisé : protocole 6 étapes lâcher prise.
+- Nommer l'émotion (honte / colère / tristesse / dégoût).
+- L'observer 90 secondes sans agir.
+- Si vague forte : pendulation avec ressource.
+
+PHASE 3 (le soir)
+─────────────────
+- Journal détaillé : SANS jugement, SANS flagellation.
+- Identifier ce qui s'est passé corporellement et techniquement.
+- Si la honte est forte : DIRE à un proche. La cacher l'aggrave.
+
+PHASE 4 (le lendemain)
+──────────────────────
+- Reprise normale SI prêt. Pas avant.
+- Pas de « se refaire ». Pas de revanche.
+- Trader comme si la perte d'hier n'avait jamais existé.
+""", accent=ACCENT))
+
+story.extend(application([
+    "<b>Cible :</b> la honte se dissout en partie par la VERBALISATION. Tu as au moins UNE personne de "
+    "confiance à qui tu peux dire honnêtement « j'ai cramé un compte aujourd'hui ». Pas pour aide, juste "
+    "pour le dire à voix haute. La honte cachée grandit. La honte dite décroît."
+]))
+
+story.extend(exercice([
+    "<b>L'inventaire des hontes cachées.</b> Sur une page de ton journal, écris toutes les hontes liées au "
+    "trading que tu portes en silence. Tu n'as pas à les dire à quelqu'un — seulement à les écrire et à les "
+    "voir. La conscience seule réduit déjà la charge.",
+    "<b>Le rituel de décharge corporelle.</b> Identifie UNE activité physique intense que tu peux faire dans "
+    "l'heure qui suit une grosse perte. Pour toi probablement : sac de frappe, course rapide, monter à "
+    "cheval en cross. Tu décharges la colère par le corps avant qu'elle ne devienne revanche."
+]))
+story.extend(phrase_ancre(
+    "« La honte cachée grandit. La honte dite décroît. La colère, je la décharge dans le corps. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 7 ---
+story.extend(concept_header(7, "Lâcher prise ≠ abandon", ACCENT))
+story.extend(retenir(
+    "Confusion classique et destructrice : croire que lâcher prise = abandonner. C'est l'inverse. "
+    "L'abandon vient de l'épuisement, du désespoir, du « j'arrête tout ». Le lâcher-prise vient de la "
+    "lucidité, de la capacité à distinguer ce que tu contrôles de ce que tu ne contrôles pas. Ce sont "
+    "deux postures opposées."
+))
+story.extend(explication([
+    "<b>L'abandon.</b> Posture d'écrasement. Tu lâches parce que tu n'en peux plus. C'est passif, résigné, "
+    "désespéré. Tu lâches tout — y compris ce qui mérite d'être tenu. Après une grosse perte, tu peux "
+    "passer en mode abandon : tu arrêtes le trading, tu arrêtes la méditation, tu arrêtes le sport, tu "
+    "scrolles Netflix. Ce n'est pas du lâcher-prise. C'est de la dissociation déguisée.",
+    "<b>Le lâcher-prise.</b> Posture lucide. Tu lâches ce que tu ne contrôles pas (le résultat d'un trade, "
+    "la direction du marché, le passé). Tu maintiens ce que tu contrôles (ton protocole, tes gestes, ta "
+    "discipline). Tu continues à pratiquer tes routines. Tu acceptes ce qui est, et tu CONTINUES à faire "
+    "ce qui dépend de toi."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu confonds probablement les deux. Quand tu cramés un compte, tu passes en abandon : tout s'arrête, tu "
+    "te désorganises, tu abandonnes tes pratiques régulières. C'est l'inverse de ce qu'il faut. Lâcher le "
+    "résultat du compte cramé, oui. Abandonner tes pratiques quotidiennes, non. Les deux sont indépendantes."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(styled_table([
+    [C("Situation", cell_g), C("Abandon (à éviter)", cell_g), C("Lâcher-prise (cible)", cell_g)],
+    [C("Crash de compte"), C("J'arrête tout"), C("Je lâche le compte. Je maintiens mes pratiques.")],
+    [C("Perte de session"), C("Je m'effondre, soirée détruite"), C("Je lâche la perte. Je vais courir.")],
+    [C("Série perdante"), C("Je doute de tout, change de méthode"), C("Je lâche le besoin de comprendre vite. Je continue ma série.")],
+    [C("Émotion difficile"), C("Je la fuis (alcool, écran)"), C("Je la laisse passer 90 sec. Je continue.")],
+], [3.5*cm, 5.5*cm, 7*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> tu sépares CONSCIEMMENT les deux. Lâcher = je relâche ce que je ne contrôle pas. "
+    "Maintenir = je continue ce qui dépend de moi. Après chaque crash, tu fais l'audit : qu'est-ce que je "
+    "lâche (le compte, le résultat) ? Qu'est-ce que je MAINTIENS (méditation, sport, journal, sommeil) ?"
+]))
+
+story.extend(exercice([
+    "<b>Liste de maintien.</b> Écris 5 pratiques que tu maintiens QUOI QU'IL ARRIVE : méditation matinale, "
+    "sport hebdomadaire, pansage avec ta filly, journal, sommeil 8h. Ce sont tes invariants. Même après "
+    "le pire crash, ils continuent.",
+    "<b>Le check abandon vs lâcher.</b> Quand tu sens un « j'en peux plus », demande-toi : suis-je en train "
+    "d'abandonner (rejet de tout) ou de lâcher prise (relâcher ce que je ne contrôle pas) ? Si abandon : "
+    "tu te rapproches d'un proche, tu maintiens UNE pratique, tu te ramènes."
+]))
+story.extend(phrase_ancre(
+    "« Lâcher prise n'est pas abandonner. Je relâche ce que je ne contrôle pas. Je maintiens le reste. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 8 ---
+story.extend(concept_header(8, "Le retour au corps comme ancre", ACCENT))
+story.extend(retenir(
+    "Quand le mental dérape (rumination, panique, dissociation, compulsion), le corps est l'ancre la plus "
+    "fiable pour revenir. Tu ne peux pas penser « je vais arrêter de penser ». Mais tu peux SENTIR ton "
+    "souffle, tes pieds, ton ventre. La sensation corporelle court-circuite le mental."
+))
+story.extend(explication([
+    "<b>Le principe.</b> Le cortex préfrontal (cognition) et le cortex insulaire (interoception) sont en "
+    "concurrence pour l'attention consciente. Plus tu portes attention au corps, moins tu rumines. Plus "
+    "tu rumines, moins tu sens ton corps. Le travail de retour au corps désactive activement la rumination.",
+    "<b>Pourquoi le corps est plus fiable que le mental.</b> Tu peux contrôler ton souffle. Tu peux sentir "
+    "tes pieds. Tu peux nommer la température de tes mains. Ce sont des points d'ancrage solides, indépendants "
+    "de ton état mental. Quand le mental est dans le chaos, le corps est encore là, calme, accessible."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu vis beaucoup en tête — analyse, prédiction, calcul. Le trading t'a renforcé dans cette habitude. "
+    "Ton accès au corps est probablement faible. C'est pour ça que tu te fais déborder par les émotions : "
+    "tu n'as pas d'ancre corporelle pour les traverser. La restauration de l'accès au corps (Partie 3 et 4) "
+    "est l'infrastructure du lâcher-prise."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Les ancres corporelles utilisables en 30 secondes", h_sub))
+story.append(styled_table([
+    [C("Ancre", cell_g), C("Comment", cell_g), C("Effet", cell_g)],
+    [C("Souffle"), C("3 cycles 4-6"), C("Active vagal ventral")],
+    [C("Pieds au sol"), C("Sentir contact, pression"), C("Ancrage spatial")],
+    [C("Mains chaudes/froides"), C("Eau froide ou frottement"), C("Active interoception")],
+    [C("Vue 5 choses"), C("Nommer 5 objets visibles"), C("Sort de la rumination")],
+    [C("Ouïe — 4 sons"), C("Identifier 4 sons distincts"), C("Présence sensorielle")],
+    [C("Goûter / sentir"), C("Aliment fort, huile essentielle"), C("Reset olfacto-gustatif")],
+], [3.5*cm, 5*cm, 7.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> quand tu sens le mental déraper en trade (rumination, panique, compulsion), 30 secondes "
+    "d'ancre corporelle AVANT toute autre action. Pieds au sol + 3 respirations + nommer 3 objets visibles. "
+    "Tu te ramènes. Tu décides ensuite."
+]))
+
+story.extend(exercice([
+    "<b>Routine du retour au corps.</b> 5 fois par jour, à des moments aléatoires (alarme téléphone), tu "
+    "fais 30 sec d'ancre corporelle. Pas en réaction à un problème — en pratique régulière. À force, "
+    "l'ancre devient disponible automatiquement en cas de besoin.",
+    "<b>Trousse d'ancres physiques.</b> Garde près de toi (sur ton bureau) 3 objets : pierre froide, "
+    "bracelet en bois texturé, petite bouteille d'huile essentielle. Quand tu sens dériver, tu actives "
+    "une ancre concrète. Sensoriel toujours plus puissant que mental."
+]))
+story.extend(phrase_ancre(
+    "« Quand le mental dérape, le corps reste. Je reviens au corps pour revenir à moi. »"
+))
+story.append(PageBreak())
+
+
 # --- SYNTHÈSE PARTIE 8 ---
 story.append(P("Carte mentale — Partie 8", h_section))
 story.append(Schema(8.5*cm, lambda c, w, h: draw_mindmap(c, w, h,
@@ -3478,6 +4637,169 @@ story.extend(exercice([
 ]))
 story.extend(phrase_ancre(
     "« L'argent gagne sa valeur quand il achète du temps, du sens, de la liberté. Pas des choses. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 6 ---
+story.extend(concept_header(6, "Le risque de ruine — la math que tu ignores", ACCENT))
+story.extend(retenir(
+    "Le risque de ruine est la probabilité MATHÉMATIQUE que ta série de trades te ruine à long terme. Cette "
+    "probabilité dépend de trois variables : ton win rate, ton ratio gain/perte, et ton risque par trade. "
+    "Tu peux la calculer. Si elle est > 1%, ton compte va exploser tôt ou tard — mathématiquement."
+))
+story.extend(explication([
+    "<b>La formule simplifiée.</b> Si tu risques 5% par trade avec un edge de 55% et un RR 1:1, ton risque "
+    "de perdre 50% du compte sur une série est massif. Si tu risques 0,5% avec le même edge, ton risque "
+    "tombe à quelques pourcents. La taille de risque par trade est la variable la plus puissante de toutes — "
+    "plus que ton edge.",
+    "<b>Le paradoxe contre-intuitif.</b> Réduire ton risque par trade de moitié ne divise pas tes gains "
+    "par deux — il les divise par environ 1,3 à 1,5 sur le long terme, parce que tu cessés de subir les "
+    "drawdowns destructeurs. Plus tu réduis le risque par trade, plus ta courbe de capital devient lisse, "
+    "plus tu peux composer durablement."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu risques probablement 1-3% par trade (peut-être plus quand tu pousses). Avec ton win rate réel "
+    "(probablement 40-55%) et ton RR réel (probablement perturbé par les décalages et pushs), ton risque "
+    "de ruine est très probablement > 30%. Mathématiquement, sans changer ces variables, tu vas continuer "
+    "à cramer des comptes. Ce n'est pas la discipline qui manque — c'est l'arithmétique."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Effet du risque par trade sur la stabilité du capital", h_sub))
+story.append(styled_table([
+    [C("Risque/trade", cell_g), C("Edge 55% RR 1:2", cell_g), C("Effet long terme", cell_g)],
+    [C("3%"), C("Drawdowns -40% fréquents"), C("Risque de ruine élevé")],
+    [C("2%"), C("Drawdowns -25% possibles"), C("Risque modéré")],
+    [C("1%"), C("Drawdowns -15% rares"), C("Risque faible")],
+    [C("0,5%"), C("Drawdowns -8% rares"), C("Risque quasi nul, croissance lente mais sûre")],
+    [C("0,25%"), C("Drawdowns -5% très rares"), C("Quasi indestructible. Croissance très lente.")],
+], [3.5*cm, 6*cm, 6.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> tu fixes ton risque par trade à 0,5% MAXIMUM. Pour un compte de 50K, ça représente 250$ "
+    "par trade. Tu trouves ça « trop peu » ? C'est précisément le problème. Tu confonds amplitude et "
+    "compétence. À 0,5%, sur 1000 trades à edge positif, ton capital grandit MASSIVEMENT par composition. "
+    "Tu lis Partie 9 concept 2 pour t'en rappeler."
+]))
+
+story.extend(exercice([
+    "<b>Calcul de ton risque de ruine actuel.</b> Outils gratuits en ligne (chercher « risk of ruin calculator »). "
+    "Entre ton win rate réel, ton RR réel, ton risque par trade actuel. Tu vas voir le chiffre.",
+    "<b>Re-paramétrage strict.</b> Risk par trade fixé à 0,5%. Pas modifiable. Pas négociable. Pendant 100 "
+    "trades. Tu vas voir : tes pertes sont gérables, tes gains sont consistants, ta courbe se lisse."
+]))
+story.extend(phrase_ancre(
+    "« Mon risque par trade est la variable la plus puissante. Je la fixe bas, je laisse la composition agir. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 7 ---
+story.extend(concept_header(7, "Prop firms et patience structurelle", ACCENT))
+story.extend(retenir(
+    "Les prop firms sont conçues pour récompenser la patience structurelle et punir l'impatience. Leurs "
+    "règles favorisent statistiquement les traders qui prennent peu de risque, exécutent constamment, "
+    "encaissent les gains progressivement. Si tu te plies à cette logique au lieu de la combattre, tu "
+    "passes du côté des 5-10% qui réussissent."
+))
+story.extend(explication([
+    "<b>La logique du business model.</b> Les prop firms gagnent quand les traders échouent (commissions "
+    "d'évaluation, comptes cramés). Elles perdent quand un trader devient consistent et empoche des payouts "
+    "réguliers. Donc structurellement, leurs règles SONT le filtre qui sépare l'impatient (qui paye des "
+    "frais) du patient (qui touche des payouts). La règle est l'opposante du saboteur, pas la tienne.",
+    "<b>Le pattern du trader patient en prop firm.</b> Petits gains réguliers. Respect strict du drawdown. "
+    "Sessions courtes (1-3 trades par jour max). Payouts réguliers sortis et sécurisés en compte personnel. "
+    "Ce trader est INVISIBLE sur les réseaux sociaux. Il ne fait pas le buzz. Il fait de l'argent."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu as vu probablement les comptes Twitter/Instagram avec « +$15 000 today on $50K Apex ». Tu as cru que "
+    "c'était le modèle à reproduire. C'est en réalité l'EXCEPTION dopaminergique mise en avant — la majorité "
+    "des grosses journées finit en compte cramé la semaine suivante. Les traders prop firm qui durent font "
+    "$300-500 par jour, sortent en payout dès qu'ils peuvent, et restent. Tu veux être visible — ou tu veux être riche ?"
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Patience structurelle en prop firm", h_sub))
+story.append(styled_table([
+    [C("Comportement saboteur", cell_g), C("Comportement patient", cell_g)],
+    [C("Viser le grand payout en 1-2 mois"), C("Viser le 1er payout dès qu'autorisé")],
+    [C("Pousser le compte au max permis"), C("Garder 50% de marge sur drawdown")],
+    [C("Trader chaque jour pour « profiter »"), C("Trader 2-3 fois/semaine, A+ uniquement")],
+    [C("Réinvestir 100% des gains"), C("Sortir 70% des payouts vers personnel")],
+    [C("Acheter un nouveau compte après crash"), C("Pause 4 semaines, analyse, reprise lente")],
+], [7.5*cm, 8.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> tu trades comme si le compte était PRÉCIEUX (parce qu'il l'est : il a coûté en frais "
+    "d'inscription + temps + énergie). Tu ne le risques pas pour un « gros coup ». Tu vises la durée. "
+    "Plus le compte vit, plus tu peux composer ses gains."
+]))
+
+story.extend(exercice([
+    "<b>Re-calibration des objectifs.</b> Au lieu de « je veux faire +$5000 ce mois », vise « je veux que "
+    "mon compte ait survécu intact dans 6 mois, avec un payout mensuel régulier de $500-800 ». Objectif "
+    "qui change tout.",
+    "<b>Audit des derniers comptes cramés.</b> Combien aurais-tu gagné en restant patient ? Si tu avais "
+    "fait $500/mois pendant 12 mois sur chaque compte = $6000 par compte × N comptes. La patience aurait "
+    "rapporté MASSIVEMENT plus que tes coups."
+]))
+story.extend(phrase_ancre(
+    "« Les prop firms récompensent la patience structurelle. Je joue leur jeu, pas contre. »"
+))
+story.append(PageBreak())
+
+
+# --- CONCEPT 8 ---
+story.extend(concept_header(8, "L'obsession du gros payout vs les micro-victoires", ACCENT))
+story.extend(retenir(
+    "Tu cherches le gros payout qui change tout. C'est ton fantasme — payer une voiture, partir en voyage, "
+    "prouver à tout le monde. Cette obsession est la matrice de ton problème. La richesse réelle se "
+    "construit en MICRO-VICTOIRES répétées des milliers de fois — pas en gros coups."
+))
+story.extend(explication([
+    "<b>Le mythe du gros coup.</b> Les médias trading et les réseaux sociaux glorifient le gros coup ("
+    "« +$50K en une session »). C'est ce qui fait l'audience. Statistiquement, la grosse majorité de ces "
+    "gros coups est : (a) suivi de pertes massives qui annulent tout, (b) attribuable à de la chance non "
+    "reproductible, ou (c) carrément faux/exagéré. Les vrais riches du trading construisent par milliers "
+    "de petits gains.",
+    "<b>La réalité de la construction.</b> Un trader qui fait $500 par jour, 200 jours par an, fait $100K "
+    "par an. Sur 10 ans, en composant intelligemment, il peut devenir multi-millionnaire. Sans drama. "
+    "Sans Twitter. Avec une vie équilibrée. C'est ennuyeux à raconter. C'est ce qui marche."
+]))
+story.extend(make_callout("◈  CHEZ TOI", [
+    "Tu portes probablement le fantasme du gros payout qui efface tes échecs. Si tu fais +$30K en une "
+    "session, tu effaces 6 mois de pertes, tu prouves à tout le monde, tu reconstruis ton estime. C'est "
+    "compréhensible — mais c'est précisément le piège. Ce fantasme te pousse à prendre les risques qui te "
+    "détruisent. La sortie n'est pas dans le gros payout — elle est dans l'abandon de ce fantasme."
+], GOLD, NAVY, accent=NAVY))
+
+story.append(P("Reprogrammation : du gros payout aux micro-victoires", h_sub))
+story.append(styled_table([
+    [C("Ancien objectif", cell_g), C("Nouvel objectif", cell_g)],
+    [C("Faire $10K en une session"), C("Faire $500 avec exécution propre")],
+    [C("Doubler le compte en 2 mois"), C("Composer 1-2% par mois sur 5 ans")],
+    [C("Tweeter mes gros gains"), C("Remplir mon journal de mes 100 trades")],
+    [C("Acheter une voiture symbolique"), C("Augmenter mon compte épargne de $X")],
+    [C("Devenir visible"), C("Devenir libre")],
+], [7.5*cm, 8.5*cm]))
+story.append(Spacer(1, 10))
+
+story.extend(application([
+    "<b>Cible :</b> tu te récompenses non pas pour le gros payout, mais pour les MICRO-VICTOIRES quotidiennes. "
+    "« Aujourd'hui j'ai respecté mon SL. C'est une victoire. » « J'ai pris mon payout mensuel modeste mais "
+    "régulier. C'est une victoire. » « J'ai fait 1% sur la semaine sans crisper. C'est une victoire. »"
+]))
+
+story.extend(exercice([
+    "<b>Le journal des micro-victoires.</b> Une page dédiée. Chaque jour, 1 micro-victoire de trader notée. "
+    "Petite, mais réelle. Sur 100 jours, tu auras 100 micro-victoires écrites. C'est ta richesse réelle.",
+    "<b>Désintoxication des réseaux sociaux trading.</b> Pendant 90 jours, tu ne suis aucun trader « gros payout » "
+    "sur Twitter/Instagram/YouTube. Tu te déprogrammes de l'image du gros coup. Tu te reprogrammes vers "
+    "la patience."
+]))
+story.extend(phrase_ancre(
+    "« La richesse se construit par milliers de micro-victoires. Pas en un gros payout. »"
 ))
 story.append(PageBreak())
 
@@ -3758,6 +5080,74 @@ story.extend(ascii_box("""
 ║    Pas par discipline rigide. Par lucidité.                ║
 ╚══════════════════════════════════════════════════════════╝
 """, accent=GOLD))
+story.append(PageBreak())
+
+
+# ============================================================
+# POUR ALLER PLUS LOIN — BIBLIOGRAPHIE RECOMMANDÉE
+# ============================================================
+_part_color[0] = GOLD
+story.append(P("POUR ALLER PLUS LOIN", h_part))
+story.append(P("Lectures recommandées sur les thèmes du manuel", h_part_sub))
+story.append(GoldRule())
+story.append(Spacer(1, 12))
+
+story.append(P(
+    "Ce manuel est un cours personnalisé original sur des concepts généraux de psychologie, neurosciences, "
+    "psychologie du trauma, sciences comportementales et finance comportementale. <b>Il n'est pas un résumé, "
+    "un dérivé ou un substitut des livres ci-dessous.</b> Les neuf ouvrages listés sont des références "
+    "indépendantes que tu peux lire pour approfondir les thèmes que ce manuel aborde — chacune avec la voix "
+    "propre de son auteur, ses anecdotes, sa structure argumentative."
+))
+story.append(P(
+    "Ne t'attends pas à retrouver le contenu de mon manuel dans ces livres. Ne t'attends pas non plus à "
+    "retrouver le contenu de ces livres dans mon manuel. Ce sont des chemins parallèles vers les mêmes "
+    "territoires."
+))
+story.append(Spacer(1, 10))
+
+bib_data = [
+    [C("#", cell_g), C("Titre — Auteur", cell_g), C("Thème principal", cell_g)],
+    [C("1"), C("Best Loser Wins — Tom Hougaard", cell_b),
+     C("Psychologie du trader perdant et de la gestion de la perte.")],
+    [C("2"), C("Un monde sous dopamine (Dopamine Nation) — Anna Lembke", cell_b),
+     C("Neurochimie de l'addiction et de l'équilibre plaisir-douleur.")],
+    [C("3"), C("Le corps n'oublie rien (The Body Keeps the Score) — Bessel van der Kolk", cell_b),
+     C("Trauma, cerveau, corps. Référence en psycho-traumatologie.")],
+    [C("4"), C("Réveiller le tigre (Waking the Tiger) — Peter Levine", cell_b),
+     C("Somatic Experiencing — méthode de libération du trauma corporel.")],
+    [C("5"), C("Trader dans la zone (Trading in the Zone) — Mark Douglas", cell_b),
+     C("Psychologie du trader rentable et pensée probabiliste.")],
+    [C("6"), C("Quand le corps dit non (When the Body Says No) — Gabor Maté", cell_b),
+     C("Stress chronique, émotions refoulées, médecine psychosomatique.")],
+    [C("7"), C("Un rien peut tout changer (Atomic Habits) — James Clear", cell_b),
+     C("Architecture des habitudes et changement comportemental.")],
+    [C("8"), C("Lâcher prise (Letting Go) — David R. Hawkins", cell_b),
+     C("Régulation émotionnelle, acceptation, mécanisme du lâcher.")],
+    [C("9"), C("La psychologie de l'argent (The Psychology of Money) — Morgan Housel", cell_b),
+     C("Comportements financiers durables et patience patrimoniale.")],
+]
+story.append(styled_table(bib_data, [0.7*cm, 7.3*cm, 8*cm]))
+story.append(Spacer(1, 12))
+
+story.append(P("Comment intégrer ces lectures dans ton plan 12 mois", h_section))
+story.append(P(
+    "Tu peux intégrer ces lectures à raison d'<b>un livre par mois</b> pendant la deuxième moitié de ton plan "
+    "12 mois (à partir du Mois 7, quand les fondations somatiques et identitaires sont posées). Avant le Mois 7, "
+    "concentre-toi sur l'application des modules de ce manuel — pas sur l'ajout d'autres lectures. Tu serais en "
+    "fuite dans la consommation de contenu (cf. Concept 1 de la Partie 1)."
+))
+story.append(P(
+    "À partir du Mois 7 : tu choisis un livre par mois selon ton besoin du moment. Tu lis lentement. Tu prends "
+    "tes propres notes manuscrites (cf. Concept 6 de la Partie 7). Tu confrontes tes notes à ce que tu as appris "
+    "dans ce manuel. Tu enrichis. Tu ne remplaces pas."
+))
+story.append(P(
+    "<b>Avertissement honnête :</b> ces 9 livres ne couvrent qu'une fraction de la littérature scientifique sur "
+    "ces thèmes. Pour chacun, il existe des dizaines d'autres ouvrages également pertinents (Kahneman, Steenbarger, "
+    "Porges, Brewer, Schultz, Duhigg, Bogle, etc.). Cette liste est un point de départ, pas une liste exhaustive.",
+    body_i
+))
 story.append(PageBreak())
 
 
