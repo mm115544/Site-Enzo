@@ -165,7 +165,10 @@
   <div class="dashboard" id="dashboard">
     <div class="head">
       <h1>Dashboard</h1>
-      <button id="refreshBtn">Rafraîchir</button>
+      <div style="display:flex;gap:8px;">
+        <button id="refreshBtn">Rafraîchir</button>
+        <button id="clearBtn" style="background:rgba(255,107,107,0.12);color:#ff8888;">Vider</button>
+      </div>
     </div>
     <div class="stats" id="stats"></div>
     <div class="section">
@@ -278,8 +281,21 @@
       return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     }
 
+    async function clearAll() {
+      if (!confirm("Supprimer toutes les visites ? Cette action est irréversible.")) return;
+      try {
+        const res = await fetch("/api/clear", {
+          method: "POST",
+          headers: { "x-admin-password": currentPwd },
+        });
+        if (!res.ok) { alert("Erreur " + res.status); return; }
+        refresh();
+      } catch (e) { alert("Erreur réseau"); }
+    }
+
     document.getElementById("loginBtn").addEventListener("click", login);
     document.getElementById("refreshBtn").addEventListener("click", refresh);
+    document.getElementById("clearBtn").addEventListener("click", clearAll);
     document.getElementById("pwd").addEventListener("keypress", e => { if (e.key === "Enter") login(); });
   </script>
 </body>
