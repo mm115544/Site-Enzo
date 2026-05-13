@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin · Visites</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #0a0a0f;
+      color: #e0e0e8;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 24px;
+      font-size: 14px;
+    }
+    .gate {
+      max-width: 380px;
+      margin: 80px auto;
+      text-align: center;
+    }
+    .gate h1 {
+      font-size: 26px;
+      margin-bottom: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 12px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus { border-color: #667eea; }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #667eea;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #5568d3; }
+    .err { color: #ff6b6b; margin-top: 12px; font-size: 13px; min-height: 18px; }
+    .dashboard { max-width: 1200px; margin: 0 auto; display: none; }
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .head h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+    .head button {
+      width: auto;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.06);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .head button:hover { background: rgba(255,255,255,0.12); }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    .stat {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: #707088;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 600;
+    }
+    .stat-value { font-size: 30px; font-weight: 700; margin-top: 6px; color: #fff; }
+    h2 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: #a0a0b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .section { margin-bottom: 36px; }
+    .top-ips {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 10px;
+    }
+    .ip-row {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ip-info { font-size: 13px; }
+    .ip-info .ip { font-family: ui-monospace, "SF Mono", Monaco, monospace; color: #c8c8e0; }
+    .ip-info .loc { color: #808098; font-size: 12px; margin-top: 2px; }
+    .badge {
+      background: rgba(102, 126, 234, 0.15);
+      color: #a8b4ff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .visits { display: flex; flex-direction: column; gap: 8px; }
+    .visit {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 1.2fr 1.4fr 1fr 1fr 0.6fr;
+      gap: 14px;
+      align-items: center;
+    }
+    .visit > div { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .visit-label {
+      font-size: 10px;
+      color: #606078;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .visit-value { font-size: 13px; color: #d8d8e8; }
+    .empty {
+      color: #606078;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+    @media (max-width: 800px) {
+      .visit { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="gate" id="gate">
+    <h1>Admin</h1>
+    <input type="password" id="pwd" placeholder="Mot de passe" autofocus />
+    <button id="loginBtn">Entrer</button>
+    <div class="err" id="err"></div>
+  </div>
+  <div class="dashboard" id="dashboard">
+    <div class="head">
+      <h1>Dashboard</h1>
+      <button id="refreshBtn">Rafraîchir</button>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="section">
+      <h2>Top visiteurs (par IP)</h2>
+      <div class="top-ips" id="topIps"></div>
+    </div>
+    <div class="section">
+      <h2>Toutes les visites</h2>
+      <div class="visits" id="visits"></div>
+    </div>
+  </div>
+  <script>
+    let currentPwd = "";
+
+    async function login() {
+      const pwd = document.getElementById("pwd").value;
+      const err = document.getElementById("err");
+      err.textContent = "";
+      try {
+        const res = await fetch("/api/visits", { headers: { "x-admin-password": pwd } });
+        if (res.status === 401) { err.textContent = "Mot de passe incorrect"; return; }
+        if (!res.ok) { err.textContent = "Erreur " + res.status; return; }
+        const { visits } = await res.json();
+        currentPwd = pwd;
+        document.getElementById("gate").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        render(visits);
+      } catch (e) {
+        err.textContent = "Erreur réseau";
+      }
+    }
+
+    async function refresh() {
+      try {
+        const res = await fetch("/api/visits", { headers: { "x-admin-password": currentPwd } });
+        if (!res.ok) return;
+        const { visits } = await res.json();
+        render(visits);
+      } catch (e) {}
+    }
+
+    function fmtDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
+    }
+
+    function render(visits) {
+      const total = visits.length;
+      const ips = {};
+      visits.forEach(v => {
+        if (!v.ip) return;
+        if (!ips[v.ip]) ips[v.ip] = { count: 0, last: v, country: v.country, city: v.city };
+        ips[v.ip].count++;
+      });
+      const uniqueIps = Object.keys(ips).length;
+      const countries = new Set(visits.map(v => v.country).filter(Boolean)).size;
+      const todayStr = new Date().toDateString();
+      const today = visits.filter(v => new Date(v.timestamp).toDateString() === todayStr).length;
+
+      document.getElementById("stats").innerHTML = `
+        <div class="stat"><div class="stat-label">Total clics</div><div class="stat-value">${total}</div></div>
+        <div class="stat"><div class="stat-label">Visiteurs uniques</div><div class="stat-value">${uniqueIps}</div></div>
+        <div class="stat"><div class="stat-label">Pays</div><div class="stat-value">${countries}</div></div>
+        <div class="stat"><div class="stat-label">Aujourd'hui</div><div class="stat-value">${today}</div></div>
+      `;
+
+      const sortedIps = Object.entries(ips).sort((a, b) => b[1].count - a[1].count);
+      document.getElementById("topIps").innerHTML = sortedIps.length === 0
+        ? '<div class="empty">Aucun visiteur pour le moment</div>'
+        : sortedIps.map(([ip, info]) => `
+            <div class="ip-row">
+              <div class="ip-info">
+                <div class="ip">${escapeHtml(ip)}</div>
+                <div class="loc">${escapeHtml([info.city, info.country].filter(Boolean).join(", ") || "—")}</div>
+              </div>
+              <div class="badge">${info.count} clic${info.count > 1 ? "s" : ""}</div>
+            </div>
+          `).join("");
+
+      const list = document.getElementById("visits");
+      list.innerHTML = visits.length === 0
+        ? '<div class="empty">Aucune visite pour le moment</div>'
+        : visits.map(v => `
+            <div class="visit">
+              <div>
+                <div class="visit-label">Quand</div>
+                <div class="visit-value">${escapeHtml(fmtDate(v.timestamp))}</div>
+              </div>
+              <div>
+                <div class="visit-label">Lieu · IP</div>
+                <div class="visit-value">${escapeHtml([v.city, v.country].filter(Boolean).join(", ") || "—")} · <span style="font-family:ui-monospace,monospace;color:#a8a8c0;font-size:12px">${escapeHtml(v.ip || "—")}</span></div>
+              </div>
+              <div>
+                <div class="visit-label">Appareil</div>
+                <div class="visit-value">${escapeHtml((v.device || "—") + " · " + (v.os || "—"))}</div>
+              </div>
+              <div>
+                <div class="visit-label">Navigateur</div>
+                <div class="visit-value">${escapeHtml(v.browser || "—")}</div>
+              </div>
+              <div>
+                <div class="visit-label">Provenance</div>
+                <div class="visit-value">${escapeHtml(v.referrer ? new URL(v.referrer).hostname : "direct")}</div>
+              </div>
+            </div>
+          `).join("");
+    }
+
+    function escapeHtml(s) {
+      return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    document.getElementById("loginBtn").addEventListener("click", login);
+    document.getElementById("refreshBtn").addEventListener("click", refresh);
+    document.getElementById("pwd").addEventListener("keypress", e => { if (e.key === "Enter") login(); });
+  </script>
+</body>
+</html>
