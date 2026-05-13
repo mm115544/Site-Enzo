@@ -14,9 +14,9 @@ export default async (req) => {
   try {
     const store = getStore("visits");
     const { blobs } = await store.list();
-    const visits = await Promise.all(
-      blobs.map(b => store.get(b.key, { type: "json" }))
-    );
+    const visits = (await Promise.all(
+      blobs.map(b => store.get(b.key, { type: "json" }).catch(() => null))
+    )).filter(v => v && v.timestamp);
     visits.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
     return new Response(JSON.stringify({ visits }), {
