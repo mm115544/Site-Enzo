@@ -9,6 +9,13 @@ export default async (req, context) => {
   try { body = await req.json(); } catch (_) {}
 
   const ua = req.headers.get("user-agent") || "";
+
+  if (isBot(ua)) {
+    return new Response(JSON.stringify({ ok: true, skipped: "bot" }), {
+      status: 200,
+      headers: { "content-type": "application/json", "cache-control": "no-store" },
+    });
+  }
   const ip =
     req.headers.get("x-nf-client-connection-ip") ||
     (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() ||
@@ -77,6 +84,11 @@ function parseUA(ua) {
   else if (/Safari/.test(ua)) browser = "Safari";
 
   return { browser, os, device };
+}
+
+function isBot(ua) {
+  if (!ua) return true;
+  return /Headless|bot|crawler|spider|curl|wget|node-fetch|axios|python-requests|Go-http-client|facebookexternalhit|Pingdom|UptimeRobot|GTmetrix|Lighthouse|monitoring|preview|prerender/i.test(ua);
 }
 
 export const config = { path: "/api/track" };
