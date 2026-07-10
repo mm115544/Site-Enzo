@@ -1,0 +1,18 @@
+{
+  "name": "Synapse — Deviens un monstre",
+  "short_name": "Synapse",
+  "description": "Micro-apprentissage quotidien pour reprogrammer ton cerveau : trading, mental, physique, savoir, neuroplasticité.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0E0E0E",
+  "theme_color": "#0E0E0E",
+  "categories": ["education", "productivity", "lifestyle"],
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

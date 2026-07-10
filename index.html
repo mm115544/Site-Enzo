@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Synapse — Deviens un monstre</title>
+<meta name="theme-color" content="#0E0E0E">
+<meta name="description" content="Un TikTok de l'apprentissage pour reprogrammer ton cerveau : trading, mental, physique, savoir, neuroplasticité.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Synapse">
+<style>
+  :root{
+    --bg:#0E0E0E; --bg2:#151515; --card:#1A1A1A; --line:#2A2A2A;
+    --gold:#D4AF37; --gold-soft:#B8962E; --gold-pale:#F2E5B4;
+    --text:#F4F0E6; --muted:#9A968C; --dim:#6A665E;
+    --ok:#4ADE80; --warn:#EF6B6B;
+    --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    overscroll-behavior:none}
+  body{overflow:hidden}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  #app{height:100vh;height:100dvh;position:relative;overflow:hidden}
+
+  /* ---------- VIEWS ---------- */
+  .view{position:absolute;inset:0;display:none;flex-direction:column}
+  .view.active{display:flex}
+  .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+  /* ---------- FEED (TikTok) ---------- */
+  #feed{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  #feed::-webkit-scrollbar{display:none}
+  .slide{height:100vh;height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;
+    position:relative;display:flex;flex-direction:column;justify-content:center;
+    padding:calc(var(--safe-t) + 74px) 82px calc(var(--safe-b) + 96px) 20px}
+  .slide.end{padding-left:24px;padding-right:24px}
+  .slide-bg{position:absolute;inset:0;z-index:0}
+  .slide-bg::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(120% 90% at 15% 8%, rgba(255,255,255,.05), transparent 60%),
+      linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.55) 100%)}
+  .slide-inner{position:relative;z-index:1;max-width:560px;margin:0 auto;width:100%}
+  .theme-chip{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;
+    padding:6px 12px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(6px);margin-bottom:18px}
+  .slide h2{font-size:27px;line-height:1.22;margin:0 0 16px;font-weight:800;letter-spacing:-.3px}
+  .slide p{font-size:17px;line-height:1.55;margin:0 0 18px;color:#E9E4D7}
+  .slide .src{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+  .slide .src b{color:var(--gold-pale);font-weight:600}
+
+  /* action rail */
+  .rail{position:absolute;right:14px;bottom:calc(var(--safe-b) + 108px);z-index:3;
+    display:flex;flex-direction:column;gap:20px;align-items:center}
+  .rail button{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:#fff;font-weight:600}
+  .rail .ic{width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.16);
+    display:flex;align-items:center;justify-content:center;font-size:23px;backdrop-filter:blur(6px);transition:transform .15s}
+  .rail button:active .ic{transform:scale(.86)}
+  .rail button.on .ic{background:var(--gold);border-color:var(--gold);color:#111}
+  .rail button.on-red .ic{background:var(--warn);border-color:var(--warn)}
+
+  .swipe-hint{position:absolute;left:0;right:0;bottom:calc(var(--safe-b) + 92px);z-index:2;text-align:center;
+    font-size:12px;color:rgba(255,255,255,.6);animation:bob 1.8s ease-in-out infinite;pointer-events:none}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(6px);opacity:.9}}
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{position:absolute;top:0;left:0;right:0;z-index:5;
+    padding:calc(var(--safe-t) + 12px) 16px 12px;display:flex;align-items:center;gap:10px;
+    background:linear-gradient(180deg,rgba(0,0,0,.6),transparent)}
+  .brand{font-weight:800;font-size:18px;letter-spacing:.5px;color:var(--gold)}
+  .brand span{color:#fff}
+  .top-stats{margin-left:auto;display:flex;gap:8px}
+  .pill{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;
+    padding:6px 11px;border-radius:999px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(6px)}
+  .pill.streak{color:#FFB454}.pill.xp{color:var(--gold-pale)}
+
+  /* ---------- BOTTOM NAV ---------- */
+  .nav{position:absolute;bottom:0;left:0;right:0;z-index:6;display:flex;
+    padding:8px 6px calc(var(--safe-b) + 8px);background:rgba(10,10,10,.92);
+    border-top:1px solid var(--line);backdrop-filter:blur(12px)}
+  .nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    font-size:10.5px;color:var(--dim);padding:4px 0;font-weight:600}
+  .nav button .nic{font-size:21px;line-height:1}
+  .nav button.active{color:var(--gold)}
+  .nav .badge{position:absolute;transform:translate(14px,-6px);min-width:16px;height:16px;padding:0 4px;
+    background:var(--warn);color:#fff;border-radius:8px;font-size:10px;font-weight:800;
+    display:flex;align-items:center;justify-content:center}
+
+  /* ---------- GENERIC PAGE ---------- */
+  .page{padding:calc(var(--safe-t) + 18px) 18px calc(var(--safe-b) + 96px)}
+  .page h1{font-size:26px;margin:2px 0 4px;font-weight:800;letter-spacing:-.3px}
+  .page .sub{color:var(--muted);font-size:14px;margin:0 0 20px}
+  .sec-title{font-size:13px;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold-soft);
+    font-weight:700;margin:26px 0 12px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+  .card h3{margin:0 0 8px;font-size:16px;font-weight:700;line-height:1.3}
+  .card p{margin:0;font-size:14px;line-height:1.5;color:#DDD8CC}
+  .card .meta{margin-top:10px;font-size:12px;color:var(--muted)}
+  .card .cardchip{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;display:inline-flex;gap:5px;align-items:center;margin-bottom:10px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .theme-card{border-radius:16px;padding:16px;min-height:104px;display:flex;flex-direction:column;justify-content:space-between;
+    border:1px solid var(--line);position:relative;overflow:hidden}
+  .theme-card .te{font-size:26px}
+  .theme-card .tn{font-weight:800;font-size:15px;margin-top:6px}
+  .theme-card .td{font-size:11.5px;color:rgba(255,255,255,.7);margin-top:2px;line-height:1.35}
+
+  .stat-row{display:flex;gap:12px;margin-bottom:8px}
+  .stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
+  .stat .n{font-size:28px;font-weight:800;color:var(--gold)}
+  .stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
+
+  .identity{background:linear-gradient(135deg,#1d1a12,#241f10);border:1px solid var(--gold-soft);
+    border-radius:18px;padding:20px;margin-bottom:8px}
+  .identity .lab{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--gold-soft);font-weight:700}
+  .identity .st{font-size:19px;font-weight:700;line-height:1.4;margin-top:8px;color:var(--gold-pale)}
+  .identity .who{font-size:13px;color:var(--muted);margin-top:10px}
+
+  .levelbar{height:10px;border-radius:6px;background:var(--line);overflow:hidden;margin:10px 0 6px}
+  .levelbar > i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--gold-pale));border-radius:6px;transition:width .4s}
+
+  .btn{display:block;width:100%;text-align:center;padding:15px;border-radius:14px;font-weight:800;font-size:16px}
+  .btn-gold{background:var(--gold);color:#141414}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+  .btn-red{background:transparent;border:1px solid var(--warn);color:var(--warn)}
+  .btn + .btn{margin-top:10px}
+
+  .empty{text-align:center;color:var(--muted);padding:50px 20px}
+  .empty .e{font-size:44px;margin-bottom:12px}
+
+  /* ---------- REVIEW ---------- */
+  .rev-wrap{padding:calc(var(--safe-t) + 18px) 18px calc(var(--safe-b) + 84px);display:flex;flex-direction:column;height:100%}
+  .rev-card{flex:1;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;
+    display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
+  .rev-card h2{font-size:23px;line-height:1.28;margin:0 0 4px}
+  .rev-answer{margin-top:16px;font-size:16px;line-height:1.55;color:#E4DFD2}
+  .rev-actions{display:flex;gap:10px;margin-top:16px}
+  .rev-actions button{flex:1;padding:14px 6px;border-radius:13px;font-weight:800;font-size:14px}
+  .rev-hard{background:#3a1f1f;color:#ffb4b4;border:1px solid #5c2b2b}
+  .rev-mid{background:#332c17;color:#f2d98a;border:1px solid #55491f}
+  .rev-easy{background:#1d3320;color:#a7e6b4;border:1px solid #2c5c34}
+  .reveal-btn{margin-top:18px}
+
+  /* ---------- MODAL ---------- */
+  .modal{position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);
+    display:none;align-items:flex-end}
+  .modal.open{display:flex}
+  .sheet{width:100%;max-height:92%;overflow-y:auto;background:var(--bg2);
+    border-radius:22px 22px 0 0;border-top:1px solid var(--line);
+    padding:22px 20px calc(var(--safe-b) + 22px);animation:up .28s ease}
+  @keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:translateY(0);opacity:1}}
+  .sheet h2{margin:0 0 4px;font-size:22px;font-weight:800}
+  .sheet .sub{color:var(--muted);font-size:14px;margin:0 0 18px}
+  label.fld{display:block;font-size:13px;color:var(--muted);font-weight:600;margin:14px 0 6px}
+  input.tf,textarea.tf{width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    color:var(--text);font-size:16px;padding:13px;font-family:inherit}
+  textarea.tf{min-height:96px;resize:vertical}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:4px}
+  .chips button{padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);
+    font-size:14px;font-weight:600}
+  .chips button.sel{background:var(--gold);color:#141414;border-color:var(--gold)}
+  .toast{position:absolute;left:50%;bottom:calc(var(--safe-b) + 92px);transform:translateX(-50%) translateY(20px);
+    z-index:30;background:var(--gold);color:#141414;font-weight:800;font-size:14px;padding:12px 20px;border-radius:999px;
+    opacity:0;transition:.3s;pointer-events:none;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ FEED (TikTok) ============ -->
+  <section class="view active" id="v-feed">
+    <div class="topbar">
+      <div class="brand">SYN<span>APSE</span></div>
+      <div class="top-stats">
+        <div class="pill streak">🔥 <span id="t-streak">0</span></div>
+        <div class="pill xp">⚡ <span id="t-xp">0</span></div>
+      </div>
+    </div>
+    <div id="feed"></div>
+  </section>
+
+  <!-- ============ EXPLORER ============ -->
+  <section class="view" id="v-explore">
+    <div class="scroll"><div class="page">
+      <h1>Explorer</h1>
+      <p class="sub">Choisis un terrain. Chaque carte est une brique pour ton nouveau cerveau.</p>
+      <div class="grid2" id="theme-grid"></div>
+    </div></div>
+  </section>
+
+  <!-- ============ REVISER ============ -->
+  <section class="view" id="v-review">
+    <div class="rev-wrap" id="rev-wrap"></div>
+  </section>
+
+  <!-- ============ BIBLIOTHEQUE ============ -->
+  <section class="view" id="v-lib">
+    <div class="scroll"><div class="page">
+      <h1>Ma bibliothèque</h1>
+      <p class="sub">Tout ce que tu as gravé. Révisé au bon moment pour ne jamais l'oublier.</p>
+      <div id="lib-list"></div>
+    </div></div>
+  </section>
+
+  <!-- ============ MOI / IDENTITE ============ -->
+  <section class="view" id="v-me">
+    <div class="scroll"><div class="page" id="me-page"></div></div>
+  </section>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav">
+    <button data-go="feed" class="active"><span class="nic">🏠</span>Pour toi</button>
+    <button data-go="explore"><span class="nic">🧭</span>Explorer</button>
+    <button data-go="review"><span class="nic">🔁</span>Réviser<span class="badge" id="rev-badge" style="display:none">0</span></button>
+    <button data-go="lib"><span class="nic">📚</span>Biblio</button>
+    <button data-go="me"><span class="nic">👤</span>Moi</button>
+  </nav>
+
+  <!-- ============ MODALS ============ -->
+  <div class="modal" id="modal-onboard"><div class="sheet" id="onboard-sheet"></div></div>
+  <div class="modal" id="modal-create"><div class="sheet" id="create-sheet"></div></div>
+  <div class="modal" id="modal-identity"><div class="sheet" id="identity-sheet"></div></div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="content.js"></script>
+<script>
+/* ============================================================
+   SYNAPSE — logique application
+   ============================================================ */
+const KEY = 'synapse_state_v1';
+const today = () => new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
+const REV_INTERVALS = [0,1,3,7,16,35,70]; // jours par boîte (répétition espacée)
+const DAILY_GOAL = 7;
+
+const DEFAULT = {
+  onboarded:false, prenom:'', identite:'', interets:[],
+  xp:0, streak:0, lastActive:'', dailyCount:0, dailyDate:'',
+  seen:[], liked:[], stash:{}, own:[]
+};
+let S = load();
+
+function load(){ try{ return Object.assign({}, DEFAULT, JSON.parse(localStorage.getItem(KEY)||'{}')); }catch(e){ return {...DEFAULT}; } }
+function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
+
+/* -------- niveau -------- */
+function currentLevel(){
+  let lv = NIVEAUX[0], next = null;
+  for(let i=0;i<NIVEAUX.length;i++){
+    if(S.xp>=NIVEAUX[i].seuil){ lv=NIVEAUX[i]; next=NIVEAUX[i+1]||null; }
+  }
+  return {lv,next};
+}
+
+/* -------- gamification -------- */
+function addXP(n){ S.xp+=n; refreshStats(); save(); }
+function touchDay(){
+  const d=today();
+  if(S.dailyDate!==d){ S.dailyDate=d; S.dailyCount=0; }
+  // streak
+  if(S.lastActive!==d){
+    const y=new Date(); y.setDate(y.getDate()-1);
+    const yStr=y.toLocaleDateString('en-CA');
+    S.streak = (S.lastActive===yStr) ? S.streak+1 : 1;
+    S.lastActive=d;
+  }
+}
+function refreshStats(){
+  document.getElementById('t-streak').textContent=S.streak;
+  document.getElementById('t-xp').textContent=S.xp;
+  const b=document.getElementById('rev-badge'); const due=dueCards().length;
+  if(due>0){ b.style.display='flex'; b.textContent=due; } else b.style.display='none';
+}
+
+/* -------- feed personnalisé -------- */
+function allCards(){
+  const own = S.own.map(o=>({id:o.id,theme:o.theme||'mental',titre:o.titre,corps:o.corps,source:'Ta propre idée',auteur:S.prenom||'Toi',mine:true}));
+  return CARTES.concat(own);
+}
+function personalized(){
+  const cards = allCards().slice();
+  const w = c => {
+    let s=0;
+    if(S.interets.includes(c.theme)) s-=10;   // intérêts d'abord
+    if(!S.seen.includes(c.id)) s-=5;           // non vus d'abord
+    if(c.mine) s-=3;
+    s += (c.id.charCodeAt(0)+c.id.length);     // ordre stable, pseudo-mélange
+    return s;
+  };
+  return cards.sort((a,b)=>w(a)-w(b));
+}
+
+/* -------- répétition espacée -------- */
+function scheduleReview(id, box){
+  const d=new Date(); d.setDate(d.getDate()+REV_INTERVALS[Math.min(box,REV_INTERVALS.length-1)]);
+  S.stash[id]={ box, due:d.toLocaleDateString('en-CA'), addedAt: S.stash[id]?.addedAt||today() };
+}
+function dueCards(){
+  const t=today();
+  return Object.keys(S.stash).filter(id=>S.stash[id].due<=t);
+}
+function cardById(id){ return allCards().find(c=>c.id===id); }
+
+/* ============================================================
+   RENDU
+   ============================================================ */
+function themeOf(c){ return THEMES[c.theme]||THEMES.mental; }
+
+function slideHTML(c){
+  const th=themeOf(c);
+  const stashed = !!S.stash[c.id];
+  const liked = S.liked.includes(c.id);
+  const grad = `linear-gradient(160deg, ${th.couleur}22 0%, #0E0E0E 55%)`;
+  return `
+  <div class="slide" data-id="${c.id}">
+    <div class="slide-bg" style="background:${grad}"></div>
+    <div class="slide-inner">
+      <span class="theme-chip" style="color:${th.couleur}">${th.emoji} ${th.nom}</span>
+      <h2>${esc(c.titre)}</h2>
+      <p>${esc(c.corps)}</p>
+      <div class="src">📖 <b>${esc(c.source)}</b> · ${esc(c.auteur)}</div>
+    </div>
+    <div class="rail">
+      <button data-act="like" data-id="${c.id}" class="${liked?'on-red':''}">
+        <span class="ic">${liked?'❤️':'🤍'}</span>J'aime</button>
+      <button data-act="stash" data-id="${c.id}" class="${stashed?'on':''}">
+        <span class="ic">${stashed?'✅':'📌'}</span>${stashed?'Gravé':'Graver'}</button>
+      <button data-act="share" data-id="${c.id}"><span class="ic">↗</span>Partager</button>
+    </div>
+  </div>`;
+}
+
+let feedBuilt=false, io=null;
+function buildFeed(){
+  const feed=document.getElementById('feed');
+  const cards=personalized();
+  feed.innerHTML = cards.map(slideHTML).join('') +
+    `<div class="slide end"><div class="slide-inner" style="text-align:center">
+       <div style="font-size:44px;margin-bottom:14px">👑</div>
+       <h2>Tu as parcouru tout le fil du moment.</h2>
+       <p>Reviens demain : de nouvelles idées, ta série qui grandit, ton cerveau qui se recâble. Un peu, mais tous les jours.</p>
+       <button class="btn btn-gold" onclick="go('review')" style="max-width:280px;margin:10px auto 0">Réviser ce que j'ai gravé</button>
+     </div></div>`;
+  feedBuilt=true;
+  // observer : marquer vu quand la carte est à l'écran
+  if(io) io.disconnect();
+  io=new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting && en.intersectionRatio>0.6){
+      const id=en.target.dataset.id; if(id) markSeen(id);
+    }});
+  },{threshold:[0.6]});
+  feed.querySelectorAll('.slide[data-id]').forEach(s=>io.observe(s));
+  // actions
+  feed.querySelectorAll('.rail button').forEach(btn=>{
+    btn.addEventListener('click', ()=>railAction(btn.dataset.act, btn.dataset.id, btn));
+  });
+}
+function markSeen(id){
+  touchDay();
+  if(!S.seen.includes(id)){ S.seen.push(id); S.dailyCount++; addXP(5);
+    if(S.dailyCount===DAILY_GOAL) toast('🎯 Objectif du jour atteint ! +'+DAILY_GOAL+' idées');
+  }
+  save(); refreshStats();
+}
+function railAction(act,id,btn){
+  const c=cardById(id); if(!c) return;
+  if(act==='like'){
+    const i=S.liked.indexOf(id);
+    if(i>=0){ S.liked.splice(i,1); btn.classList.remove('on-red'); btn.querySelector('.ic').textContent='🤍'; }
+    else { S.liked.push(id); btn.classList.add('on-red'); btn.querySelector('.ic').textContent='❤️'; addXP(2); }
+    save();
+  } else if(act==='stash'){
+    if(S.stash[id]){ delete S.stash[id]; btn.classList.remove('on'); btn.querySelector('.ic').textContent='📌'; btn.childNodes[1].textContent='Graver'; }
+    else { scheduleReview(id,0); btn.classList.add('on'); btn.querySelector('.ic').textContent='✅'; btn.childNodes[1].textContent='Gravé'; addXP(3); toast('📌 Gravé — tu le reverras au bon moment'); }
+    save(); refreshStats();
+  } else if(act==='share'){
+    const txt=`${c.titre}\n\n${c.corps}\n\n— ${c.source}, ${c.auteur}\n(via Synapse)`;
+    if(navigator.share){ navigator.share({text:txt}).catch(()=>{}); }
+    else { navigator.clipboard?.writeText(txt); toast('📋 Copié'); }
+  }
+}
+
+/* -------- explorer -------- */
+function buildExplore(){
+  const g=document.getElementById('theme-grid');
+  g.innerHTML=Object.values(THEMES).map(th=>{
+    const n=CARTES.filter(c=>c.theme===th.id).length;
+    return `<button class="theme-card" style="background:linear-gradient(150deg,${th.couleur}2b,#141414)" onclick="openTheme('${th.id}')">
+      <div class="te">${th.emoji}</div>
+      <div><div class="tn">${th.nom}</div><div class="td">${th.desc}</div>
+      <div class="td" style="color:${th.couleur};margin-top:6px;font-weight:700">${n} idées ›</div></div>
+    </button>`;
+  }).join('');
+}
+function openTheme(tid){
+  S._filter=tid;
+  // réordonne le feed pour ce thème et bascule dessus
+  const feed=document.getElementById('feed');
+  const th=THEMES[tid];
+  const cards=allCards().filter(c=>c.theme===tid);
+  feed.innerHTML=cards.map(slideHTML).join('')+
+    `<div class="slide end"><div class="slide-inner" style="text-align:center">
+       <div style="font-size:40px">${th.emoji}</div><h2>Fin du thème « ${th.nom} ».</h2>
+       <p>Passe à un autre terrain ou révise ce que tu as gravé.</p>
+       <button class="btn btn-gold" onclick="rebuildAndFeed()" style="max-width:260px;margin:8px auto 0">Retour au fil « Pour toi »</button></div></div>`;
+  feed.querySelectorAll('.slide[data-id]').forEach(s=>io&&io.observe(s));
+  feed.querySelectorAll('.rail button').forEach(btn=>btn.addEventListener('click',()=>railAction(btn.dataset.act,btn.dataset.id,btn)));
+  feed.scrollTop=0;
+  go('feed');
+}
+function rebuildAndFeed(){ buildFeed(); go('feed'); document.getElementById('feed').scrollTop=0; }
+
+/* -------- révision -------- */
+let revQueue=[], revCurrent=null, revShown=false;
+function buildReview(){
+  const w=document.getElementById('rev-wrap');
+  revQueue=dueCards();
+  if(revQueue.length===0){
+    const total=Object.keys(S.stash).length;
+    w.innerHTML=`<div class="empty">
+      <div class="e">🧘</div>
+      <h2 style="color:var(--text)">Rien à réviser maintenant.</h2>
+      <p>${total? 'Tu es à jour. Reviens plus tard : les cartes remonteront pile avant que tu les oublies.' : 'Grave des idées dans le fil (bouton 📌) pour construire ta révision espacée.'}</p>
+      <button class="btn btn-gold" onclick="go('feed')" style="max-width:260px;margin:16px auto 0">Aller au fil</button>
+    </div>`;
+    return;
+  }
+  nextReview();
+}
+function nextReview(){
+  const w=document.getElementById('rev-wrap');
+  if(revQueue.length===0){ toast('✅ Révision terminée !'); addXP(10); buildReview(); refreshStats(); return; }
+  revCurrent=revQueue[0]; revShown=false;
+  const c=cardById(revCurrent); const th=themeOf(c);
+  w.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="sec-title" style="margin:0">Révision · ${revQueue.length} restante(s)</div>
+      <span class="theme-chip" style="color:${th.couleur};margin:0">${th.emoji} ${th.nom}</span>
+    </div>
+    <div class="rev-card">
+      <h2>${esc(c.titre)}</h2>
+      <div id="rev-body"></div>
+    </div>
+    <div id="rev-foot"></div>`;
+  const foot=document.getElementById('rev-foot');
+  foot.innerHTML=`<button class="btn btn-gold reveal-btn" onclick="revealReview()">Afficher la réponse</button>`;
+}
+function revealReview(){
+  const c=cardById(revCurrent);
+  document.getElementById('rev-body').innerHTML=`<div class="rev-answer">${esc(c.corps)}</div>
+    <div class="src" style="margin-top:14px;font-size:13px;color:var(--muted)">📖 <b style="color:var(--gold-pale)">${esc(c.source)}</b> · ${esc(c.auteur)}</div>`;
+  document.getElementById('rev-foot').innerHTML=`
+    <div class="rev-actions">
+      <button class="rev-hard" onclick="gradeReview(0)">Difficile</button>
+      <button class="rev-mid" onclick="gradeReview(1)">Correct</button>
+      <button class="rev-easy" onclick="gradeReview(2)">Facile</button>
+    </div>`;
+}
+function gradeReview(grade){
+  const id=revCurrent; const cur=S.stash[id]?.box||0;
+  let box = grade===0 ? 0 : grade===1 ? Math.min(cur+1,REV_INTERVALS.length-1) : Math.min(cur+2,REV_INTERVALS.length-1);
+  scheduleReview(id,box); addXP(4); save();
+  revQueue.shift(); refreshStats(); nextReview();
+}
+
+/* -------- bibliothèque -------- */
+function buildLib(){
+  const box=document.getElementById('lib-list');
+  const ids=Object.keys(S.stash);
+  if(ids.length===0 && S.own.length===0){
+    box.innerHTML=`<div class="empty"><div class="e">📭</div>
+      <h2 style="color:var(--text)">Ta bibliothèque est vide.</h2>
+      <p>Dans le fil, touche 📌 sur une idée qui te frappe. Elle atterrit ici et revient en révision au bon moment.</p></div>`;
+    return;
+  }
+  // regroupe par thème
+  const byTheme={};
+  ids.forEach(id=>{ const c=cardById(id); if(!c) return; (byTheme[c.theme]=byTheme[c.theme]||[]).push(c); });
+  let html=`<button class="btn btn-ghost" onclick="openCreate()" style="margin-bottom:18px">✍️ Écrire ma propre idée</button>`;
+  Object.keys(byTheme).forEach(t=>{
+    const th=THEMES[t];
+    html+=`<div class="sec-title">${th.emoji} ${th.nom}</div>`;
+    byTheme[t].forEach(c=>{
+      const st=S.stash[c.id];
+      html+=`<div class="card">
+        <span class="cardchip" style="background:${th.couleur}22;color:${th.couleur}">Boîte ${st.box+1} · revoir le ${st.due===today()?"aujourd'hui":frDate(st.due)}</span>
+        <h3>${esc(c.titre)}</h3><p>${esc(c.corps)}</p>
+        <div class="meta">📖 ${esc(c.source)} · ${esc(c.auteur)}
+          <button onclick="unstash('${c.id}')" style="float:right;color:var(--warn);font-weight:700">Retirer</button></div>
+      </div>`;
+    });
+  });
+  if(S.own.length){
+    html+=`<div class="sec-title">✍️ Mes idées</div>`;
+    S.own.forEach(o=>{ html+=`<div class="card"><h3>${esc(o.titre)}</h3><p>${esc(o.corps)}</p>
+      <div class="meta">Écrite le ${frDate(o.createdAt)}<button onclick="delOwn('${o.id}')" style="float:right;color:var(--warn);font-weight:700">Supprimer</button></div></div>`; });
+  }
+  box.innerHTML=html;
+}
+function unstash(id){ delete S.stash[id]; save(); buildLib(); refreshStats(); toast('Retiré de la bibliothèque'); }
+function delOwn(id){ S.own=S.own.filter(o=>o.id!==id); delete S.stash[id]; save(); buildLib(); toast('Idée supprimée'); }
+
+/* -------- moi / identité -------- */
+function buildMe(){
+  const p=document.getElementById('me-page');
+  const {lv,next}=currentLevel();
+  const prog = next ? Math.round(((S.xp-lv.seuil)/(next.seuil-lv.seuil))*100) : 100;
+  const gravees=Object.keys(S.stash).length;
+  p.innerHTML=`
+    <h1>${S.prenom?('Salut '+esc(S.prenom)):'Moi'} ${lv.emoji}</h1>
+    <p class="sub">Niveau : <b style="color:var(--gold)">${lv.nom}</b>${next?` · ${next.seuil-S.xp} XP avant « ${next.nom} »`:' · niveau max 👑'}</p>
+
+    <div class="identity">
+      <div class="lab">Ma nouvelle identité</div>
+      <div class="st">${S.identite?('« '+esc(S.identite)+' »'):'« Je suis en train de devenir une personne disciplinée, lucide et rentable. »'}</div>
+      <div class="who">Chaque idée gravée, chaque révision, chaque jour de série est un vote pour cette personne.</div>
+      <button class="btn btn-ghost" style="margin-top:14px" onclick="openIdentity()">Modifier mon identité</button>
+    </div>
+
+    <div class="levelbar"><i style="width:${prog}%"></i></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:20px">${S.xp} XP au total</div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="n">🔥 ${S.streak}</div><div class="l">Jours de série</div></div>
+      <div class="stat"><div class="n">${S.dailyCount}/${DAILY_GOAL}</div><div class="l">Idées aujourd'hui</div></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="n">${S.seen.length}</div><div class="l">Idées apprises</div></div>
+      <div class="stat"><div class="n">${gravees}</div><div class="l">Idées gravées</div></div>
+    </div>
+
+    <div class="sec-title">🧠 Pourquoi ça marche</div>
+    <div class="card"><p>Cette app applique la <b>répétition espacée</b> et le <b>rappel actif</b> : les deux méthodes les plus prouvées pour graver durablement dans le cerveau. En revoyant chaque idée juste avant de l'oublier, tu forces tes neurones à reconstruire le souvenir — et le circuit devient plus solide à chaque passage. C'est exactement ce dont ton cortex a besoin pour recréer des connexions.</p></div>
+
+    <div class="sec-title">Mes centres d'intérêt</div>
+    <div class="chips" style="margin-bottom:20px">
+      ${Object.values(THEMES).map(th=>`<button class="${S.interets.includes(th.id)?'sel':''}" onclick="toggleInteret('${th.id}')">${th.emoji} ${th.nom}</button>`).join('')}
+    </div>
+
+    <button class="btn btn-ghost" onclick="installHint()">📲 Installer sur mon écran d'accueil</button>
+    <button class="btn btn-red" onclick="resetAll()" style="margin-top:24px">Réinitialiser mes données</button>
+    <p style="text-align:center;color:var(--dim);font-size:12px;margin-top:18px">Synapse — 100 % privé, tout reste sur ton téléphone.</p>
+  `;
+}
+function toggleInteret(id){
+  const i=S.interets.indexOf(id);
+  if(i>=0)S.interets.splice(i,1); else S.interets.push(id);
+  save(); buildMe(); buildFeed();
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+function openIdentity(){
+  document.getElementById('identity-sheet').innerHTML=`
+    <h2>Ma nouvelle identité</h2>
+    <p class="sub">Écris qui tu deviens, au présent. Ton cerveau finit par croire ce que tu répètes.</p>
+    <label class="fld">Mon prénom</label>
+    <input class="tf" id="id-prenom" value="${escAttr(S.prenom)}" placeholder="Marien">
+    <label class="fld">Je suis en train de devenir…</label>
+    <textarea class="tf" id="id-stmt" placeholder="Un trader discipliné et rentable, calme sous pression, qui apprend chaque jour et reconstruit son cerveau plus fort qu'avant.">${esc(S.identite)}</textarea>
+    <button class="btn btn-gold" style="margin-top:18px" onclick="saveIdentity()">Enregistrer</button>
+    <button class="btn btn-ghost" onclick="closeModals()">Annuler</button>`;
+  document.getElementById('modal-identity').classList.add('open');
+}
+function saveIdentity(){
+  S.prenom=document.getElementById('id-prenom').value.trim();
+  S.identite=document.getElementById('id-stmt').value.trim();
+  save(); closeModals(); buildMe(); toast('💪 Identité mise à jour');
+}
+function openCreate(){
+  document.getElementById('create-sheet').innerHTML=`
+    <h2>Écrire ma propre idée</h2>
+    <p class="sub">Reformuler avec tes mots grave dix fois plus fort. Écris une leçon que tu veux ancrer.</p>
+    <label class="fld">Thème</label>
+    <div class="chips" id="create-themes">
+      ${Object.values(THEMES).map((th,i)=>`<button data-t="${th.id}" class="${i===0?'sel':''}">${th.emoji} ${th.nom}</button>`).join('')}
+    </div>
+    <label class="fld">Titre / la leçon en une phrase</label>
+    <input class="tf" id="ci-titre" placeholder="Ce que je retiens…">
+    <label class="fld">Développe (pourquoi, comment l'appliquer)</label>
+    <textarea class="tf" id="ci-corps" placeholder="…"></textarea>
+    <button class="btn btn-gold" style="margin-top:18px" onclick="saveOwn()">Graver mon idée</button>
+    <button class="btn btn-ghost" onclick="closeModals()">Annuler</button>`;
+  const ts=document.querySelectorAll('#create-themes button');
+  ts.forEach(b=>b.addEventListener('click',()=>{ts.forEach(x=>x.classList.remove('sel'));b.classList.add('sel');}));
+  document.getElementById('modal-create').classList.add('open');
+}
+function saveOwn(){
+  const titre=document.getElementById('ci-titre').value.trim();
+  const corps=document.getElementById('ci-corps').value.trim();
+  if(!titre){ toast('Écris au moins un titre'); return; }
+  const theme=document.querySelector('#create-themes button.sel')?.dataset.t||'mental';
+  const id='own_'+Date.now();
+  S.own.unshift({id,theme,titre,corps,createdAt:today()});
+  scheduleReview(id,0); addXP(8); save(); closeModals();
+  buildLib(); refreshStats(); toast('✍️ Ton idée est gravée + programmée en révision');
+}
+function closeModals(){ document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open')); }
+
+/* -------- onboarding -------- */
+function openOnboard(){
+  document.getElementById('onboard-sheet').innerHTML=`
+    <h2>Bienvenue 👋</h2>
+    <p class="sub">Synapse, c'est ton TikTok de l'apprentissage. Un peu chaque jour, ton cerveau se recâble et tu deviens la personne que tu vises.</p>
+    <label class="fld">Ton prénom</label>
+    <input class="tf" id="ob-prenom" placeholder="Marien">
+    <label class="fld">Qui veux-tu devenir ? (au présent)</label>
+    <textarea class="tf" id="ob-stmt" placeholder="Un trader discipliné et rentable, calme, qui apprend chaque jour et reconstruit son cerveau plus fort qu'avant."></textarea>
+    <label class="fld">Ce que tu veux muscler</label>
+    <div class="chips" id="ob-themes">
+      ${Object.values(THEMES).map(th=>`<button data-t="${th.id}">${th.emoji} ${th.nom}</button>`).join('')}
+    </div>
+    <button class="btn btn-gold" style="margin-top:20px" onclick="finishOnboard()">Commencer à devenir un monstre</button>`;
+  const ts=document.querySelectorAll('#ob-themes button');
+  ts.forEach(b=>b.addEventListener('click',()=>b.classList.toggle('sel')));
+  document.getElementById('modal-onboard').classList.add('open');
+}
+function finishOnboard(){
+  S.prenom=document.getElementById('ob-prenom').value.trim();
+  S.identite=document.getElementById('ob-stmt').value.trim();
+  S.interets=[...document.querySelectorAll('#ob-themes button.sel')].map(b=>b.dataset.t);
+  S.onboarded=true; save(); closeModals();
+  buildFeed(); buildMe(); toast('🔥 En route. Swipe vers le haut.');
+}
+
+/* ============================================================
+   NAV + UTILS
+   ============================================================ */
+function go(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('v-'+v).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===v));
+  if(v==='explore')buildExplore();
+  if(v==='review')buildReview();
+  if(v==='lib')buildLib();
+  if(v==='me')buildMe();
+  refreshStats();
+}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s){ return esc(s).replace(/"/g,'&quot;'); }
+function frDate(d){ try{ return new Date(d+'T00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'}); }catch(e){ return d; } }
+let toastT;
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
+function installHint(){ toast("Sur iPhone : Partager ⬆️ → « Sur l'écran d'accueil »"); }
+function resetAll(){ if(confirm('Effacer toute ta progression et repartir de zéro ?')){ localStorage.removeItem(KEY); S={...DEFAULT}; location.reload(); } }
+
+/* -------- init -------- */
+function init(){
+  touchDay(); save(); refreshStats();
+  buildFeed();
+  if(!S.onboarded) openOnboard();
+  // rafraîchit la série/date au retour dans l'app
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ touchDay(); save(); refreshStats(); } });
+}
+init();
+
+/* -------- PWA -------- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
