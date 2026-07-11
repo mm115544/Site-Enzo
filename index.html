@@ -55,6 +55,9 @@
     display:flex;align-items:center;justify-content:center}
   .slide .ill svg{width:58px;height:58px;filter:drop-shadow(0 3px 12px rgba(0,0,0,.45))}
   .rev-card .ill svg{width:56px;height:56px;filter:drop-shadow(0 3px 12px rgba(0,0,0,.45))}
+  .hero{width:100%;height:clamp(140px,43vw,196px);border-radius:18px;overflow:hidden;
+    margin:0 0 15px;position:relative;border:1px solid rgba(255,255,255,.09)}
+  .hero .scene{position:absolute;inset:0;width:100%;height:100%}
   .slide h2{font-size:26px;line-height:1.22;margin:0 0 14px;font-weight:800;letter-spacing:-.3px}
   .slide p{font-size:17px;line-height:1.55;margin:0 0 18px;color:#E9E4D7}
   .slide .src{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
@@ -335,6 +338,17 @@ function iconSVG(key,color){
   const inner=(typeof ICONS!=='undefined' && ICONS[key]) ? ICONS[key] : '';
   return '<svg viewBox="0 0 100 100" fill="none" stroke="'+color+'" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>';
 }
+// grande "image" pédagogique de la carte : infographie sur mesure si dispo, sinon icône agrandie
+function posterScene(c,color){
+  const key=illKey(c); const inner=(typeof ICONS!=='undefined' && ICONS[key])?ICONS[key]:'';
+  return '<g transform="translate(110,40)" stroke="'+color+'" style="color:'+color+'" stroke-width="3.4" fill="none">'+inner+'</g>';
+}
+function heroHTML(c, th){
+  const key=(typeof SCENE_OF!=='undefined' && SCENE_OF[c.id]);
+  const inner=(key && typeof SCENES!=='undefined' && SCENES[key]) ? SCENES[key](th.couleur) : posterScene(c, th.couleur);
+  const bg='linear-gradient(150deg, '+th.couleur+'24, #0d0d0d 72%)';
+  return '<div class="hero" style="background:'+bg+'"><svg class="scene" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" fill="none" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg></div>';
+}
 
 function slideHTML(c){
   const th=themeOf(c);
@@ -345,7 +359,7 @@ function slideHTML(c){
   <div class="slide" data-id="${c.id}">
     <div class="slide-bg" style="background:${grad}"></div>
     <div class="slide-inner">
-      <div class="ill" style="background:radial-gradient(circle at 50% 38%, ${th.couleur}2e, transparent 72%);border:1px solid ${th.couleur}30">${iconSVG(illKey(c), th.couleur)}</div>
+      ${heroHTML(c, th)}
       <span class="theme-chip" style="color:${th.couleur}">${th.emoji} ${th.nom}</span>
       <h2>${esc(c.titre)}</h2>
       <p>${esc(c.corps)}</p>
@@ -470,7 +484,7 @@ function nextReview(){
       <span class="theme-chip" style="color:${th.couleur};margin:0">${th.emoji} ${th.nom}</span>
     </div>
     <div class="rev-card">
-      <div class="ill" style="width:88px;height:88px;margin:0 auto 14px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%, ${th.couleur}2e, transparent 72%);border:1px solid ${th.couleur}30">${iconSVG(illKey(c), th.couleur)}</div>
+      ${heroHTML(c, th)}
       <h2 style="text-align:center">${esc(c.titre)}</h2>
       <div id="rev-body"></div>
     </div>

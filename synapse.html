@@ -55,6 +55,9 @@
     display:flex;align-items:center;justify-content:center}
   .slide .ill svg{width:58px;height:58px;filter:drop-shadow(0 3px 12px rgba(0,0,0,.45))}
   .rev-card .ill svg{width:56px;height:56px;filter:drop-shadow(0 3px 12px rgba(0,0,0,.45))}
+  .hero{width:100%;height:clamp(140px,43vw,196px);border-radius:18px;overflow:hidden;
+    margin:0 0 15px;position:relative;border:1px solid rgba(255,255,255,.09)}
+  .hero .scene{position:absolute;inset:0;width:100%;height:100%}
   .slide h2{font-size:26px;line-height:1.22;margin:0 0 14px;font-weight:800;letter-spacing:-.3px}
   .slide p{font-size:17px;line-height:1.55;margin:0 0 18px;color:#E9E4D7}
   .slide .src{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
@@ -567,6 +570,160 @@ const VISUELS = {
 };
 const THEME_ICON = { neuro:'brain', trading:'chart', mental:'feather', physique:'bodybrain', appren:'book', reflex:'twospeed' };
 
+/* ============================================================
+   SCÈNES — infographies pédagogiques (une image qui explique l'idée)
+   viewBox 0 0 320 180. c = couleur du thème.
+   ============================================================ */
+const SCENES = {
+  plast:(c)=>`
+    <text x="52" y="24" fill="#fff" font-size="12" font-weight="700">Avant</text>
+    <text x="196" y="24" fill="${c}" font-size="12" font-weight="700">Après apprentissage</text>
+    <g stroke="${c}" stroke-width="2" opacity=".55"><circle cx="55" cy="70" r="4" fill="${c}"/><circle cx="95" cy="105" r="4" fill="${c}"/><circle cx="70" cy="140" r="4" fill="${c}"/><line x1="55" y1="70" x2="95" y2="105"/></g>
+    <path d="M150 95 h26 m-7 -6 l7 6 -7 6" stroke="#fff" stroke-width="2.5"/>
+    <g stroke="${c}" stroke-width="2"><circle cx="228" cy="60" r="4" fill="${c}"/><circle cx="278" cy="88" r="4" fill="${c}"/><circle cx="240" cy="120" r="4" fill="${c}"/><circle cx="290" cy="140" r="4" fill="${c}"/><circle cx="210" cy="108" r="4" fill="${c}"/>
+      <line x1="228" y1="60" x2="278" y2="88"/><line x1="278" y1="88" x2="240" y2="120"/><line x1="240" y1="120" x2="210" y2="108"/><line x1="210" y1="108" x2="228" y2="60"/><line x1="240" y1="120" x2="290" y2="140"/><line x1="278" y1="88" x2="290" y2="140"/></g>`,
+  hebb:(c)=>`
+    <circle cx="80" cy="82" r="20" stroke="${c}" stroke-width="3"/><circle cx="240" cy="82" r="20" stroke="${c}" stroke-width="3"/>
+    <g stroke="${c}" stroke-width="2"><path d="M62 72l-20-8M60 90l-20 8M58 82l-22 0"/><path d="M258 72l20-8M260 90l20 8M262 82l22 0"/></g>
+    <path d="M102 82 h116" stroke="${c}" stroke-width="3"/>
+    <path d="M150 68 l5 10 11 2 -11 3 -3 12 -5 -11 -11 -2 11 -3z" fill="${c}" stroke="none"/>
+    <text x="70" y="150" fill="#fff" font-size="13" font-weight="700">S'activent ensemble → se lient</text>`,
+  reorg:(c)=>`
+    <circle cx="46" cy="92" r="6" fill="${c}"/><circle cx="274" cy="92" r="6" fill="${c}"/>
+    <path d="M52 92 h56" stroke="${c}" stroke-width="3"/>
+    <g stroke="#EF6B6B" stroke-width="3"><path d="M120 78 l18 18 -18 18M138 78 l-18 18 18 18"/></g>
+    <path d="M112 90 C 150 36, 220 36, 268 86" stroke="${c}" stroke-width="3"/>
+    <path d="M262 80 l8 8 -11 3" stroke="${c}" stroke-width="3"/>
+    <text x="82" y="150" fill="#fff" font-size="12.5" font-weight="700">Une route contourne la lésion</text>`,
+  uselose:(c)=>`
+    <text x="42" y="24" fill="${c}" font-size="12" font-weight="700">Utilisé → renforcé</text>
+    <text x="186" y="24" fill="#fff" fill-opacity=".55" font-size="12" font-weight="700">Ignoré → s'efface</text>
+    <g stroke="${c}" stroke-width="3"><circle cx="60" cy="70" r="5" fill="${c}"/><circle cx="105" cy="105" r="5" fill="${c}"/><circle cx="70" cy="140" r="5" fill="${c}"/><line x1="60" y1="70" x2="105" y2="105"/><line x1="105" y1="105" x2="70" y2="140"/><line x1="70" y1="140" x2="60" y2="70"/></g>
+    <g stroke="#fff" stroke-opacity=".28" stroke-width="2" stroke-dasharray="4 5"><circle cx="230" cy="80" r="5" fill="#fff" fill-opacity=".2"/><circle cx="278" cy="115" r="5" fill="#fff" fill-opacity=".12"/><circle cx="238" cy="145" r="5" fill="#fff" fill-opacity=".08"/><line x1="230" y1="80" x2="278" y2="115"/><line x1="278" y1="115" x2="238" y2="145"/></g>`,
+  sleepmem:(c)=>`
+    <circle cx="55" cy="78" r="14" stroke="${c}" stroke-width="3"/><g stroke="${c}" stroke-width="2"><path d="M55 56v-7M55 107v-7M31 78h-7M86 78h-7M39 62l-5-5M76 94l-5-5M71 62l5-5M39 94l-5 5"/></g>
+    <text x="34" y="150" fill="#fff" font-size="11" font-weight="700">Apprendre</text>
+    <path d="M104 78 h24 m-7 -6 l7 6 -7 6" stroke="#fff" stroke-width="2.5"/>
+    <path d="M172 62 a20 20 0 1 0 0 30 15 15 0 0 1 0-30z" stroke="${c}" stroke-width="3"/>
+    <text x="150" y="150" fill="#fff" font-size="11" font-weight="700">Dormir</text>
+    <path d="M212 78 h24 m-7 -6 l7 6 -7 6" stroke="#fff" stroke-width="2.5"/>
+    <g stroke="${c}" stroke-width="3"><circle cx="285" cy="66" r="4" fill="${c}"/><circle cx="268" cy="92" r="4" fill="${c}"/><circle cx="293" cy="98" r="4" fill="${c}"/><line x1="285" y1="66" x2="268" y2="92"/><line x1="268" y1="92" x2="293" y2="98"/><line x1="293" y1="98" x2="285" y2="66"/></g>
+    <text x="246" y="150" fill="${c}" font-size="11" font-weight="700">Mémoire</text>`,
+  bdnf:(c)=>`
+    <circle cx="52" cy="66" r="6" fill="${c}"/><path d="M52 72 l-8 12 8 8 -4 18" stroke="${c}" stroke-width="3"/><g stroke="${c}" stroke-width="3"><path d="M44 84l-10 4M60 92l10 6M44 100l-8 10"/></g>
+    <text x="34" y="150" fill="#fff" font-size="11" font-weight="700">Bouger</text>
+    <path d="M96 88 h26 m-7 -6 l7 6 -7 6" stroke="#fff" stroke-width="2.5"/>
+    <rect x="140" y="72" width="66" height="30" rx="7" stroke="${c}" stroke-width="2.5"/><text x="150" y="92" fill="${c}" font-size="14" font-weight="800">BDNF</text>
+    <path d="M220 88 h24 m-7 -6 l7 6 -7 6" stroke="#fff" stroke-width="2.5"/>
+    <g stroke="${c}" stroke-width="3"><circle cx="288" cy="70" r="4" fill="${c}"/><circle cx="270" cy="98" r="4" fill="${c}"/><circle cx="296" cy="104" r="4" fill="${c}"/><line x1="288" y1="70" x2="270" y2="98"/><line x1="270" y1="98" x2="296" y2="104"/></g>
+    <text x="240" y="150" fill="${c}" font-size="11" font-weight="700">+ neurones</text>`,
+  dopa:(c)=>`
+    <circle cx="160" cy="96" r="32" stroke="${c}" stroke-width="3"/><circle cx="160" cy="96" r="17" stroke="${c}" stroke-width="2.5"/><circle cx="160" cy="96" r="5" fill="${c}"/>
+    <path d="M160 24 l6 14 15 1 -11 10 4 15 -14 -9 -14 9 4 -15 -11 -10 15 -1z" fill="${c}" stroke="none"/>
+    <text x="86" y="168" fill="#fff" font-size="12" font-weight="700">Petite victoire → le cerveau grave</text>`,
+  attention:(c)=>`
+    <text x="30" y="26" fill="#fff" fill-opacity=".6" font-size="11" font-weight="700">distractions</text>
+    <g stroke="#fff" stroke-opacity=".4" stroke-width="2"><line x1="40" y1="52" x2="120" y2="86"/><line x1="40" y1="78" x2="120" y2="92"/><line x1="40" y1="104" x2="120" y2="98"/><line x1="40" y1="128" x2="120" y2="104"/></g>
+    <path d="M120 74 L172 92 L120 110 Z" stroke="${c}" stroke-width="3"/>
+    <path d="M172 92 h44 m-7 -6 l7 6 -7 6" stroke="${c}" stroke-width="3"/>
+    <g stroke="${c}" stroke-width="3"><circle cx="248" cy="74" r="4" fill="${c}"/><circle cx="280" cy="98" r="4" fill="${c}"/><circle cx="244" cy="112" r="4" fill="${c}"/><line x1="248" y1="74" x2="280" y2="98"/><line x1="280" y1="98" x2="244" y2="112"/></g>
+    <text x="150" y="164" fill="${c}" font-size="12" font-weight="700">1 focus → plasticité</text>`,
+  prefrontal:(c)=>`
+    <text x="140" y="26" fill="#fff" font-size="13" font-weight="800">À +1500 €</text>
+    <path d="M120 66 a30 26 0 1 0 0 42" stroke="${c}" stroke-width="3"/><path d="M120 66 a24 20 0 0 1 40 6" stroke="${c}" stroke-width="3"/><path d="M120 108 a24 20 0 0 0 34 6" stroke="${c}" stroke-width="3"/>
+    <path d="M98 72 a16 26 0 0 0 0 30" stroke="#EF6B6B" stroke-width="4"/>
+    <text x="52" y="150" fill="#EF6B6B" font-size="12" font-weight="700">Préfrontal OFF</text>
+    <path d="M188 60 l-11 22 h10 l-12 24" stroke="${c}" stroke-width="3"/>
+    <text x="205" y="96" fill="${c}" font-size="12" font-weight="700">dopamine</text>`,
+  bestloser:(c)=>`
+    <text x="40" y="26" fill="#fff" font-size="13" font-weight="700">Perdre petit = durer</text>
+    <line x1="40" y1="98" x2="290" y2="98" stroke="#fff" stroke-opacity=".25"/>
+    <path d="M40 98 L110 116 L160 92 L230 114 L288 88" stroke="${c}" stroke-width="3"/>
+    <text x="200" y="80" fill="${c}" font-size="11" font-weight="700">survit</text>
+    <path d="M40 98 L90 90 L140 110 L190 140 L232 166" stroke="#EF6B6B" stroke-width="3"/>
+    <text x="150" y="162" fill="#EF6B6B" font-size="11" font-weight="700">compte cramé</text>`,
+  eighty:(c)=>`
+    <rect x="40" y="66" width="176" height="42" fill="#EF6B6B" fill-opacity=".9"/><rect x="216" y="66" width="64" height="42" fill="${c}"/>
+    <text x="82" y="92" fill="#fff" font-size="16" font-weight="800">80% perdent</text>
+    <text x="226" y="92" fill="#101010" font-size="15" font-weight="800">20%</text>
+    <text x="40" y="140" fill="#fff" font-size="12.5" font-weight="700">Fais l'inverse de la masse</text>`,
+  stoploss:(c)=>`
+    <text x="40" y="26" fill="#fff" font-size="12.5" font-weight="700">Le stop protège le capital</text>
+    <path d="M40 58 L80 88 L110 68 L150 108 L180 92 L208 138" stroke="${c}" stroke-width="3"/>
+    <line x1="40" y1="120" x2="290" y2="120" stroke="#EF6B6B" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <text x="214" y="116" fill="#EF6B6B" font-size="12" font-weight="800">STOP</text>
+    <path d="M250 52 l24 8 v15 c0 16-12 23-24 29 -12-6-24-13-24-29 V60z" stroke="${c}" stroke-width="2.5"/><path d="M240 78 l7 8 12-14" stroke="${c}" stroke-width="2.5"/>`,
+  risk1:(c)=>`
+    <text x="40" y="26" fill="${c}" font-size="12" font-weight="700">99% capital protégé</text>
+    <rect x="40" y="60" width="240" height="42" stroke="#fff" stroke-opacity=".45" stroke-width="2"/><rect x="40" y="60" width="8" height="42" fill="#EF6B6B"/>
+    <text x="30" y="126" fill="#EF6B6B" font-size="12" font-weight="700">1% risqué</text>
+    <text x="40" y="158" fill="#fff" font-size="12.5" font-weight="700">Risque 1% → tu dures 100 trades</text>`,
+  lossav:(c)=>`
+    <path d="M160 42 v72 M120 150 h80" stroke="#fff" stroke-width="3"/>
+    <path d="M104 58 h112" stroke="#fff" stroke-width="3" transform="rotate(-13 160 58)"/>
+    <circle cx="118" cy="92" r="22" fill="#EF6B6B" fill-opacity=".9"/><text x="101" y="97" fill="#fff" font-size="13" font-weight="800">-100</text>
+    <circle cx="208" cy="50" r="15" fill="${c}"/><text x="194" y="55" fill="#101010" font-size="12" font-weight="800">+100</text>
+    <text x="52" y="170" fill="#fff" font-size="12.5" font-weight="700">La perte pèse deux fois plus</text>`,
+  plan:(c)=>`
+    <text x="66" y="26" fill="${c}" font-size="12" font-weight="700">Plan écrit AVANT d'entrer</text>
+    <rect x="95" y="42" width="130" height="108" rx="8" stroke="${c}" stroke-width="2.5"/>
+    <g stroke="${c}" stroke-width="2.5"><path d="M110 66 l6 6 10-12"/><path d="M110 96 l6 6 10-12"/><path d="M110 126 l6 6 10-12"/></g>
+    <text x="134" y="70" fill="#fff" font-size="13" font-weight="700">Entrée</text>
+    <text x="134" y="100" fill="#fff" font-size="13" font-weight="700">Stop</text>
+    <text x="134" y="130" fill="#fff" font-size="13" font-weight="700">Objectif</text>`,
+  compound:(c)=>`
+    <line x1="40" y1="150" x2="292" y2="150" stroke="#fff" stroke-opacity=".3"/><line x1="40" y1="28" x2="40" y2="150" stroke="#fff" stroke-opacity=".3"/>
+    <path d="M40 148 C 170 145, 225 120, 286 40" stroke="${c}" stroke-width="3.5"/><circle cx="286" cy="40" r="5" fill="${c}"/>
+    <text x="150" y="76" fill="${c}" font-size="17" font-weight="800">×37</text>
+    <text x="58" y="140" fill="#fff" font-size="12" font-weight="700">1% par jour</text>
+    <text x="205" y="168" fill="#fff" font-size="12" font-weight="700">en 1 an</text>`,
+  systems:(c)=>`
+    <path d="M160 50 A46 46 0 1 1 118 60" stroke="${c}" stroke-width="3"/><path d="M118 60 l-3 -16 16 5" stroke="${c}" stroke-width="3"/>
+    <text x="132" y="46" fill="#fff" font-size="13" font-weight="700">Système</text>
+    <text x="196" y="100" fill="#fff" font-size="13" font-weight="700">Action</text>
+    <text x="120" y="160" fill="#fff" font-size="13" font-weight="700">Résultat</text>
+    <text x="40" y="100" fill="${c}" font-size="12" font-weight="700">répète</text>`,
+  identity:(c)=>`
+    <rect x="40" y="52" width="164" height="34" rx="8" stroke="${c}" stroke-width="2.5"/><text x="52" y="74" fill="#fff" font-size="12.5" font-weight="700">« Je suis discipliné »</text>
+    <path d="M120 90 v14 m-6 -6 l6 6 6 -6" stroke="#fff" stroke-width="2.5"/>
+    <g stroke="${c}" stroke-width="2.5"><path d="M56 120 l5 6 10-12"/><path d="M96 120 l5 6 10-12"/><path d="M136 120 l5 6 10-12"/></g>
+    <text x="60" y="152" fill="${c}" font-size="11.5" font-weight="700">chaque acte = un vote</text>
+    <circle cx="256" cy="76" r="15" stroke="${c}" stroke-width="2.5"/><path d="M234 120 a22 20 0 0 1 44 0" stroke="${c}" stroke-width="2.5"/>`,
+  twospeed:(c)=>`
+    <text x="46" y="26" fill="${c}" font-size="11" font-weight="700">rapide</text><text x="228" y="26" fill="#fff" font-size="11" font-weight="700">lent</text>
+    <path d="M72 66 a32 32 0 0 0 0 64z" stroke="${c}" stroke-width="3" fill="${c}" fill-opacity=".15"/>
+    <text x="42" y="152" fill="${c}" font-size="12.5" font-weight="700">Système 1</text>
+    <path d="M248 66 a32 32 0 0 1 0 64z" stroke="#fff" stroke-width="3" fill="#fff" fill-opacity=".1"/>
+    <text x="222" y="152" fill="#fff" font-size="12.5" font-weight="700">Système 2</text>
+    <line x1="160" y1="46" x2="160" y2="140" stroke="#fff" stroke-opacity=".2" stroke-dasharray="4 5"/>`,
+  spaced:(c)=>`
+    <line x1="42" y1="30" x2="42" y2="150" stroke="#fff" stroke-opacity=".3"/><line x1="42" y1="150" x2="298" y2="150" stroke="#fff" stroke-opacity=".3"/>
+    <path d="M42 44 C 80 120, 108 138, 118 138 L118 66 C 150 130,168 138,178 138 L178 74 C 214 128,232 134,298 122" stroke="${c}" stroke-width="3"/>
+    <g fill="${c}"><circle cx="118" cy="66" r="4"/><circle cx="178" cy="74" r="4"/></g>
+    <text x="46" y="24" fill="#fff" font-size="11" font-weight="700">Mémoire</text>
+    <text x="248" y="168" fill="#fff" font-size="11" font-weight="700">Temps →</text>
+    <text x="120" y="58" fill="${c}" font-size="10.5" font-weight="700">révision</text>
+    <text x="182" y="66" fill="${c}" font-size="10.5" font-weight="700">révision</text>`,
+  feynman:(c)=>`
+    <circle cx="74" cy="74" r="15" stroke="${c}" stroke-width="3"/><path d="M74 90 v22" stroke="${c}" stroke-width="3"/><path d="M56 150 a18 16 0 0 1 36 0" stroke="${c}" stroke-width="3"/>
+    <path d="M120 62 h94 a6 6 0 0 1 6 6 v36 a6 6 0 0 1 -6 6 h-58 l-16 12 v-12 h-20 a6 6 0 0 1 -6 -6 v-36 a6 6 0 0 1 6 -6z" stroke="${c}" stroke-width="2.5"/>
+    <text x="134" y="88" fill="#fff" font-size="12.5" font-weight="700">Explique</text>
+    <text x="134" y="106" fill="#fff" font-size="12.5" font-weight="700">simplement</text>
+    <text x="44" y="172" fill="${c}" font-size="11" font-weight="700">→ tes trous apparaissent</text>`,
+  sleepbed:(c)=>`
+    <path d="M56 122 v-28 a12 12 0 0 1 12 -12 h58 a26 26 0 0 1 26 26 v14 M56 108 h108 M164 96 v26 M56 122 v16 M164 122 v16" stroke="${c}" stroke-width="3"/><circle cx="82" cy="96" r="8" stroke="${c}" stroke-width="3"/>
+    <path d="M226 60 a20 20 0 1 0 0 30 15 15 0 0 1 0-30z" stroke="${c}" stroke-width="3"/>
+    <text x="52" y="162" fill="#fff" font-size="12.5" font-weight="700">Dormir consolide la mémoire</text>`
+};
+const SCENE_OF = {
+  n1:'plast', n2:'hebb', n3:'reorg', n4:'uselose', n6:'sleepmem', n7:'bdnf', n9:'dopa', n10:'attention',
+  t1:'bestloser', t2:'eighty', t3:'stoploss', t4:'risk1', t5:'prefrontal', t6:'lossav', t7:'plan',
+  m2:'systems', m3:'compound', m8:'identity', m9:'identity',
+  a1:'spaced', a3:'feynman', a7:'sleepbed',
+  r1:'twospeed',
+  p3:'sleepbed'
+};
+
 </script>
 <script>
 /* ============================================================
@@ -658,6 +815,17 @@ function iconSVG(key,color){
   const inner=(typeof ICONS!=='undefined' && ICONS[key]) ? ICONS[key] : '';
   return '<svg viewBox="0 0 100 100" fill="none" stroke="'+color+'" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>';
 }
+// grande "image" pédagogique de la carte : infographie sur mesure si dispo, sinon icône agrandie
+function posterScene(c,color){
+  const key=illKey(c); const inner=(typeof ICONS!=='undefined' && ICONS[key])?ICONS[key]:'';
+  return '<g transform="translate(110,40)" stroke="'+color+'" style="color:'+color+'" stroke-width="3.4" fill="none">'+inner+'</g>';
+}
+function heroHTML(c, th){
+  const key=(typeof SCENE_OF!=='undefined' && SCENE_OF[c.id]);
+  const inner=(key && typeof SCENES!=='undefined' && SCENES[key]) ? SCENES[key](th.couleur) : posterScene(c, th.couleur);
+  const bg='linear-gradient(150deg, '+th.couleur+'24, #0d0d0d 72%)';
+  return '<div class="hero" style="background:'+bg+'"><svg class="scene" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" fill="none" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg></div>';
+}
 
 function slideHTML(c){
   const th=themeOf(c);
@@ -668,7 +836,7 @@ function slideHTML(c){
   <div class="slide" data-id="${c.id}">
     <div class="slide-bg" style="background:${grad}"></div>
     <div class="slide-inner">
-      <div class="ill" style="background:radial-gradient(circle at 50% 38%, ${th.couleur}2e, transparent 72%);border:1px solid ${th.couleur}30">${iconSVG(illKey(c), th.couleur)}</div>
+      ${heroHTML(c, th)}
       <span class="theme-chip" style="color:${th.couleur}">${th.emoji} ${th.nom}</span>
       <h2>${esc(c.titre)}</h2>
       <p>${esc(c.corps)}</p>
@@ -793,7 +961,7 @@ function nextReview(){
       <span class="theme-chip" style="color:${th.couleur};margin:0">${th.emoji} ${th.nom}</span>
     </div>
     <div class="rev-card">
-      <div class="ill" style="width:88px;height:88px;margin:0 auto 14px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%, ${th.couleur}2e, transparent 72%);border:1px solid ${th.couleur}30">${iconSVG(illKey(c), th.couleur)}</div>
+      ${heroHTML(c, th)}
       <h2 style="text-align:center">${esc(c.titre)}</h2>
       <div id="rev-body"></div>
     </div>
