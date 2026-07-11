@@ -28,8 +28,10 @@
   .slide.end{padding-left:24px;padding-right:24px}
   .slide-bg{position:absolute;inset:0;z-index:0}
   .slide-bg::after{content:"";position:absolute;inset:0;
-    background:radial-gradient(120% 90% at 15% 8%, rgba(255,255,255,.05), transparent 60%),
-      linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.55) 100%)}
+    background:linear-gradient(180deg, rgba(10,10,10,.10) 0%, rgba(10,10,10,.30) 42%, rgba(10,10,10,.74) 100%)}
+  /* fond neuronal animé, derrière tout le fil */
+  #fx{position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none}
+  #feed{position:relative;z-index:1;background:transparent}
   .slide-inner{position:relative;z-index:1;max-width:560px;margin:0 auto;width:100%}
   .theme-chip{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;
     padding:6px 12px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14);
@@ -63,6 +65,8 @@
   .pill{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;
     padding:6px 11px;border-radius:999px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(6px)}
   .pill.streak{color:#FFB454}.pill.xp{color:var(--gold-pale)}
+  .pill.sound{color:#8FE3D0;border-color:rgba(143,227,208,.35)}
+  .pill.sound.on{background:#8FE3D0;color:#0c1a17;border-color:#8FE3D0}
 
   /* ---------- BOTTOM NAV ---------- */
   .nav{position:absolute;bottom:0;left:0;right:0;z-index:6;display:flex;
@@ -159,9 +163,11 @@
 
   <!-- ============ FEED (TikTok) ============ -->
   <section class="view active" id="v-feed">
+    <canvas id="fx"></canvas>
     <div class="topbar">
       <div class="brand">SYN<span>APSE</span></div>
       <div class="top-stats">
+        <button id="sound-btn" class="pill sound" onclick="toggleSound()"><span class="si">🔈</span> Focus</button>
         <div class="pill streak">🔥 <span id="t-streak">0</span></div>
         <div class="pill xp">⚡ <span id="t-xp">0</span></div>
       </div>
@@ -373,6 +379,73 @@ const CARTES = [
   { id:'r6', theme:'reflex', titre:"Ralentis pour aller plus vite",
     corps:"Les décisions prises dans la précipitation coûtent des heures à réparer. Prendre 30 secondes pour respirer et clarifier ton intention avant d'agir améliore radicalement la qualité de tes choix. Dans un monde qui pousse à réagir vite, la capacité à faire une pause devient un super-pouvoir.",
     source:"Décision réfléchie", auteur:"Sagesse pratique" },
+
+  /* ---------------- AJOUTS ---------------- */
+  { id:'n9', theme:'neuro', titre:"La dopamine grave ce qui compte",
+    corps:"La dopamine n'est pas que le plaisir : c'est le marqueur qui dit à ton cerveau « ça, c'est important, garde-le ». Quand tu ressens une petite victoire — comprendre une idée, réussir un trade propre — ce pic de dopamine renforce le circuit. Célèbre tes micro-réussites : tu programmes ton cerveau à vouloir recommencer.",
+    source:"Système de récompense", auteur:"Neurosciences" },
+  { id:'n10', theme:'neuro', titre:"Sans attention, pas de plasticité",
+    corps:"Ton cerveau ne se recâble que sur ce à quoi tu prêtes vraiment attention. Faire dix choses à la fois n'entraîne rien. Une concentration pleine sur une seule tâche ouvre la porte du changement neuronal. La concentration n'est pas un détail : c'est la condition même de l'apprentissage. Coupe les distractions, et ton cerveau se transforme.",
+    source:"Focus & neuroplasticité", auteur:"Andrew Huberman" },
+  { id:'n11', theme:'neuro', titre:"L'erreur ouvre la porte du cerveau",
+    corps:"Se tromper libère des signaux (dopamine, acétylcholine) qui indiquent au cerveau : « quelque chose ne colle pas, adapte-toi ». C'est juste après une erreur que la plasticité est maximale — si tu restes et corriges. Ne fuis pas tes erreurs : c'est exactement le moment où ton cerveau est le plus prêt à apprendre.",
+    source:"Apprentissage par l'erreur", auteur:"Neurosciences" },
+  { id:'n12', theme:'neuro', titre:"La méditation muscle ton attention",
+    corps:"Quelques minutes par jour à ramener ton attention sur ta respiration renforcent le cortex préfrontal (décision, contrôle de soi) et calment l'amygdale (peur, impulsivité). C'est un entraînement direct des zones qui te servent en trading et dans la vie. Méditer, c'est de la musculation pour ton self-control.",
+    source:"Méditation & cerveau", auteur:"Neurosciences contemplatives" },
+
+  { id:'t9', theme:'trading', titre:"Coupe court aux pertes, laisse courir les gains",
+    corps:"La règle qui sépare les gagnants des perdants tient en une phrase. La plupart font l'inverse : ils encaissent vite un petit gain (peur de le perdre) et laissent grossir une perte (espoir qu'elle revienne). Fais le contraire de ton instinct : petite perte assumée, gain qu'on laisse respirer. C'est contre-nature, et c'est tout le métier.",
+    source:"Règle d'or", auteur:"Devenir un trader stable" },
+  { id:'t10', theme:'trading', titre:"Le marché ne te doit rien",
+    corps:"Le marché n'a pas de mémoire de ton dernier trade, ne sait pas que tu as besoin d'argent, ne te récompensera pas pour ton effort. Il est neutre. Attendre une « revanche » ou une « justice » du marché, c'est le début de la ruine. Ton seul avantage : un processus à espérance positive, répété avec discipline.",
+    source:"Réalité du marché", auteur:"Devenir un trader stable" },
+  { id:'t11', theme:'trading', titre:"Ne rien faire est une position",
+    corps:"L'envie de « trader pour trader » a ruiné plus de comptes que les mauvaises analyses. Attendre le bon setup, mains sur les genoux, est une compétence rare et rentable. Le marché est ouvert des milliers d'heures ; ton edge n'apparaît que quelques-unes. La patience n'est pas de l'inaction : c'est de la précision.",
+    source:"Sur-trading", auteur:"Devenir un trader stable" },
+  { id:'t12', theme:'trading', titre:"Juge le processus, pas le résultat",
+    corps:"Un trade peut être parfaitement exécuté et perdre ; mal exécuté et gagner. Sur un coup, le hasard décide. Sur mille coups, c'est ton processus qui décide. Arrête de noter tes trades sur « gagné / perdu » et note-les sur « ai-je respecté mon plan ? ». Répète le bon process, et les résultats suivent.",
+    source:"Variance & discipline", auteur:"Annie Duke (adapté)" },
+
+  { id:'m11', theme:'mental', titre:"La règle des 2 minutes",
+    corps:"Pour vaincre la procrastination, réduis l'action à sa version de 2 minutes : « ouvrir mon graphique », « mettre mes baskets », « lire une carte ». Une fois lancé, le plus dur est fait — le mouvement appelle le mouvement. Ne vise pas la séance parfaite : vise juste à commencer. Le démarrage est 90 % de la bataille.",
+    source:"Atomic Habits", auteur:"James Clear" },
+  { id:'m12', theme:'mental', titre:"La discipline, c'est la liberté",
+    corps:"Ça semble paradoxal : se donner des règles strictes rend libre. La discipline te libère de tes impulsions, de tes humeurs, du chaos. Celui qui n'obéit à aucune règle est esclave de chaque envie. Choisis tes disciplines, et tu choisis ta liberté. Le relâchement, lui, finit toujours en prison de regrets.",
+    source:"Discipline Equals Freedom", auteur:"Jocko Willink" },
+  { id:'m13', theme:'mental', titre:"Compare-toi à toi d'hier",
+    corps:"Te comparer aux autres, c'est courir une course truquée : tu ne vois que leurs sommets, jamais leurs galères. Le seul adversaire utile, c'est toi d'hier. Un peu mieux qu'hier, chaque jour : c'est mesurable, c'est motivant, et ça t'appartient. La vraie compétition est intérieure.",
+    source:"Progrès personnel", auteur:"Jordan Peterson (adapté)" },
+
+  { id:'p7', theme:'physique', titre:"Tiens-toi droit, ton cerveau suit",
+    corps:"La posture ne fait pas que refléter ton état mental — elle l'influence. Se redresser augmente le sentiment de confiance et d'énergie, se tasser nourrit le doute. Avant un trade ou une décision, redresse-toi, épaules en arrière, respire. Ton corps envoie un signal de calme et de contrôle à ton cerveau.",
+    source:"Cognition incarnée", auteur:"Psychologie" },
+  { id:'p8', theme:'physique', titre:"Ta glycémie pilote ta lucidité",
+    corps:"Des pics et chutes de sucre dans le sang déstabilisent ton humeur, ta concentration et ton self-control — mauvais pour décider. Des repas stables (protéines, fibres, bons gras), moins de sucres rapides, et ton cerveau garde un carburant régulier. On ne trade pas bien le ventre en montagnes russes.",
+    source:"Nutrition & cognition", auteur:"Physiologie" },
+  { id:'p9', theme:'physique', titre:"Marche pour débloquer tes idées",
+    corps:"Marcher, surtout dehors, augmente nettement la créativité et aide à résoudre les problèmes sur lesquels tu bloques. Le mouvement doux met le cerveau dans un mode associatif où les idées se relient. Coincé sur une décision ? Ne force pas devant l'écran : lève-toi et marche 10 minutes. La solution vient souvent en chemin.",
+    source:"Marche & créativité", auteur:"Étude Stanford" },
+
+  { id:'a7', theme:'appren', titre:"Apprends, puis dors",
+    corps:"Le meilleur moment pour dormir, c'est après avoir appris quelque chose d'important : le sommeil transfère l'info de la mémoire fragile vers la mémoire durable. Réviser une carte le soir, puis dormir, ancre bien mieux que réviser puis rester debout des heures. Fais du sommeil le dernier geste de ton apprentissage.",
+    source:"Sommeil & mémoire", auteur:"Neurosciences du sommeil" },
+  { id:'a8', theme:'appren', titre:"Enseigner, c'est apprendre deux fois",
+    corps:"Quand tu expliques une idée à quelqu'un, tu es obligé de l'organiser, de la simplifier, de combler tes trous. C'est l'un des moyens les plus puissants d'ancrer un savoir. Prends l'habitude, après chaque carte, de la reformuler à voix haute comme si tu l'enseignais. Ce que tu peux transmettre, tu le possèdes vraiment.",
+    source:"Effet protégé (learning by teaching)", auteur:"Sciences de l'apprentissage" },
+  { id:'a9', theme:'appren', titre:"Regroupe pour mémoriser (chunking)",
+    corps:"Ta mémoire de travail ne tient que ~4 éléments à la fois. L'astuce des experts : regrouper l'info en « paquets » qui font sens (un numéro de téléphone en blocs, un setup de trading en une seule image mentale). En reliant le nouveau à ce que tu sais déjà, tu transformes plein de détails en une seule idée solide.",
+    source:"Chunking", auteur:"Sciences cognitives" },
+
+  { id:'r7', theme:'reflex', titre:"L'explication la plus simple d'abord",
+    corps:"Le rasoir d'Occam : face à plusieurs explications, la plus simple est souvent la bonne. En trading comme dans la vie, on invente des scénarios compliqués pour justifier ce qu'on veut croire. Reviens au plus simple : que disent les faits, sans histoire ? La complexité est souvent le déguisement d'un biais.",
+    source:"Rasoir d'Occam", auteur:"Guillaume d'Ockham" },
+  { id:'r8', theme:'reflex', titre:"Fais un pré-mortem",
+    corps:"Avant une décision importante, imagine qu'on est dans six mois et que ça a échoué. Demande-toi : « qu'est-ce qui a mal tourné ? » Cet exercice révèle les risques que l'optimisme te cache. En trading : « si ce trade tourne mal, ce sera à cause de quoi ? » Tu prépares ta défense avant l'attaque.",
+    source:"Pre-mortem", auteur:"Gary Klein" },
+  { id:'r9', theme:'reflex', titre:"La carte n'est pas le territoire",
+    corps:"Ton idée de la réalité n'est pas la réalité — c'est une carte, forcément simplifiée et parfois fausse. Le graphique n'est pas le marché ; ton plan n'est pas l'avenir. Reste humble face à tes modèles : garde-les tant qu'ils marchent, jette-les quand la réalité les contredit. Confondre la carte et le terrain, c'est foncer dans le mur avec confiance.",
+    source:"Sémantique générale", auteur:"Alfred Korzybski" },
 ];
 
 /* Niveaux de progression — de novice à monstre */
@@ -483,7 +556,7 @@ function slideHTML(c){
   const th=themeOf(c);
   const stashed = !!S.stash[c.id];
   const liked = S.liked.includes(c.id);
-  const grad = `linear-gradient(160deg, ${th.couleur}22 0%, #0E0E0E 55%)`;
+  const grad = `radial-gradient(135% 82% at 22% 4%, ${th.couleur}33, transparent 56%)`;
   return `
   <div class="slide" data-id="${c.id}">
     <div class="slide-bg" style="background:${grad}"></div>
@@ -530,6 +603,7 @@ function buildFeed(){
 }
 function markSeen(id){
   touchDay();
+  const _c=cardById(id); if(_c) setFeedTheme(themeOf(_c).couleur);
   if(!S.seen.includes(id)){ S.seen.push(id); S.dailyCount++; addXP(5);
     if(S.dailyCount===DAILY_GOAL) toast('🎯 Objectif du jour atteint ! +'+DAILY_GOAL+' idées');
   }
@@ -824,10 +898,94 @@ function resetAll(){ if(confirm('Effacer toute ta progression et repartir de zé
 /* -------- init -------- */
 function init(){
   touchDay(); save(); refreshStats();
-  buildFeed();
+  buildFeed(); initFx();
   if(!S.onboarded) openOnboard();
   // rafraîchit la série/date au retour dans l'app
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ touchDay(); save(); refreshStats(); } });
 }
+
+/* ============================================================
+   FOND NEURONAL ANIMÉ (mémoire visuelle)
+   Un réseau de neurones vivant qui prend la couleur du thème.
+   ============================================================ */
+let fxTarget=[212,175,55];           // couleur cible (or au départ)
+let fxCur=[212,175,55];
+function hexToRgb(h){ h=h.replace('#',''); return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
+function setFeedTheme(hex){ try{ fxTarget=hexToRgb(hex); }catch(e){} }
+function initFx(){
+  const cv=document.getElementById('fx'); if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const DPR=Math.min(window.devicePixelRatio||1,2);
+  const reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W=0,H=0;
+  function resize(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=Math.max(1,W*DPR); cv.height=Math.max(1,H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); }
+  resize(); window.addEventListener('resize',resize);
+  const N=reduce?24:40;
+  const rnd=()=>Math.random();
+  const nodes=Array.from({length:N},()=>({x:rnd(),y:rnd(),vx:(rnd()-.5)*0.0007,vy:(rnd()-.5)*0.0007,r:rnd()*1.7+0.9,p:rnd()*6.28}));
+  const LINK=118;
+  function frame(){
+    fxCur=fxCur.map((v,i)=>v+(fxTarget[i]-v)*0.04);
+    const r=Math.round(fxCur[0]), g=Math.round(fxCur[1]), b=Math.round(fxCur[2]);
+    ctx.clearRect(0,0,W,H);
+    if(!reduce){ for(const n of nodes){ n.x+=n.vx; n.y+=n.vy; if(n.x<0||n.x>1)n.vx*=-1; if(n.y<0||n.y>1)n.vy*=-1; n.p+=0.02; } }
+    for(let i=0;i<N;i++){ for(let j=i+1;j<N;j++){
+      const a=nodes[i],c=nodes[j]; const dx=(a.x-c.x)*W, dy=(a.y-c.y)*H; const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<LINK){ ctx.strokeStyle='rgba('+r+','+g+','+b+','+((1-d/LINK)*0.20)+')'; ctx.lineWidth=0.7;
+        ctx.beginPath(); ctx.moveTo(a.x*W,a.y*H); ctx.lineTo(c.x*W,c.y*H); ctx.stroke(); }
+    }}
+    for(const n of nodes){ const pulse=reduce?0.55:(0.42+0.28*Math.sin(n.p));
+      ctx.fillStyle='rgba('+r+','+g+','+b+','+pulse+')';
+      ctx.beginPath(); ctx.arc(n.x*W,n.y*H,n.r,0,6.29); ctx.fill(); }
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  if(reduce){ frame(); } else { requestAnimationFrame(frame); }
+}
+
+/* ============================================================
+   SON DE CONCENTRATION (généré, libre de droits)
+   Nappe douce + souffle filtré + lent mouvement — style ondes calmes.
+   ============================================================ */
+let audio=null, audioOn=false;
+function toggleSound(){
+  if(!audio){ startAudio(); }
+  else {
+    audioOn=!audioOn;
+    audio.master.gain.setTargetAtTime(audioOn?0.06:0.0001, audio.ctx.currentTime, 0.4);
+    if(audioOn && audio.ctx.state==='suspended') audio.ctx.resume();
+  }
+  updateSoundBtn();
+}
+function startAudio(){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    const ctx=new AC();
+    const master=ctx.createGain(); master.gain.value=0.0001; master.connect(ctx.destination);
+    // nappe chaude : oscillateurs légèrement désaccordés à travers un passe-bas
+    const filt=ctx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=650; filt.Q.value=0.7; filt.connect(master);
+    const voices=[[110,'triangle',0.16,-6],[164.81,'triangle',0.11,0],[220,'sine',0.09,6]];
+    voices.forEach(([f,t,gain,det])=>{ const o=ctx.createOscillator(); o.type=t; o.frequency.value=f; o.detune.value=det;
+      const g=ctx.createGain(); g.gain.value=gain; o.connect(g); g.connect(filt); o.start(); });
+    // lent balayage du filtre pour un mouvement organique
+    const lfo=ctx.createOscillator(); lfo.frequency.value=0.05; const lg=ctx.createGain(); lg.gain.value=240;
+    lfo.connect(lg); lg.connect(filt.frequency); lfo.start();
+    // souffle doux (bruit brun) très filtré
+    const size=2*ctx.sampleRate; const buf=ctx.createBuffer(1,size,ctx.sampleRate); const d=buf.getChannelData(0); let last=0;
+    for(let i=0;i<size;i++){ const w=Math.random()*2-1; last=(last+0.02*w)/1.02; d[i]=last*3.2; }
+    const noise=ctx.createBufferSource(); noise.buffer=buf; noise.loop=true;
+    const nf=ctx.createBiquadFilter(); nf.type='lowpass'; nf.frequency.value=420;
+    const ng=ctx.createGain(); ng.gain.value=0.45; noise.connect(nf); nf.connect(ng); ng.connect(master); noise.start();
+    audio={ctx,master}; audioOn=true;
+    if(ctx.state==='suspended') ctx.resume();
+    master.gain.setTargetAtTime(0.06, ctx.currentTime, 0.6);
+    toast('🎧 Son de concentration activé (mets un casque pour le mieux)');
+  }catch(e){ toast('Le son n’est pas dispo sur ce navigateur'); }
+}
+function updateSoundBtn(){
+  const b=document.getElementById('sound-btn'); if(!b) return;
+  b.classList.toggle('on', audioOn);
+  b.querySelector('.si').textContent = audioOn ? '🔊' : '🔈';
+}
+
 init();
 </script>
