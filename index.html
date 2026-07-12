@@ -39,7 +39,7 @@
   #feed::-webkit-scrollbar{display:none}
   .slide{height:100vh;height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;
     position:relative;display:flex;flex-direction:column;justify-content:center;
-    padding:calc(var(--safe-t) + 74px) 82px calc(var(--safe-b) + 96px) 20px}
+    padding:calc(var(--safe-t) + 66px) 82px calc(var(--safe-b) + 90px) 20px}
   .slide.end{padding-left:24px;padding-right:24px}
   .slide-bg{position:absolute;inset:0;z-index:0}
   .slide-bg::after{content:"";position:absolute;inset:0;
@@ -48,15 +48,15 @@
   #fx{position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none}
   #feed{position:relative;z-index:1;background:transparent}
   .slide-inner{position:relative;z-index:1;max-width:560px;margin:0 auto;width:100%}
-  .theme-chip{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;
-    padding:6px 12px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14);
-    backdrop-filter:blur(6px);margin-bottom:18px}
+  .theme-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+    padding:5px 11px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(6px);margin-bottom:11px}
   .slide .ill{width:92px;height:92px;margin:0 0 16px;border-radius:22px;
     display:flex;align-items:center;justify-content:center}
   .slide .ill svg{width:58px;height:58px;filter:drop-shadow(0 3px 12px rgba(0,0,0,.45))}
   .rev-card .ill svg{width:56px;height:56px;filter:drop-shadow(0 3px 12px rgba(0,0,0,.45))}
-  .hero{width:100%;height:clamp(150px,46vw,210px);border-radius:18px;overflow:hidden;
-    margin:0 0 15px;position:relative;border:1px solid rgba(255,255,255,.09)}
+  .hero{width:100%;height:clamp(118px,34vw,152px);border-radius:16px;overflow:hidden;
+    margin:0 0 11px;position:relative;border:1px solid rgba(255,255,255,.09)}
   .hero .scene{position:absolute;inset:0;width:100%;height:100%}
   .hero.photo{background-size:cover;background-position:center}
   .hero.photo::after{content:"";position:absolute;inset:0;
@@ -64,8 +64,8 @@
   .hero .credit{position:absolute;left:10px;bottom:7px;z-index:2;font-size:9px;
     color:rgba(255,255,255,.7);background:rgba(0,0,0,.28);padding:2px 6px;border-radius:6px;backdrop-filter:blur(3px)}
   .hero .hero-accent{position:absolute;left:0;top:0;height:4px;width:100%;z-index:2}
-  .slide h2{font-size:26px;line-height:1.22;margin:0 0 14px;font-weight:800;letter-spacing:-.3px}
-  .slide p{font-size:17px;line-height:1.55;margin:0 0 18px;color:#E9E4D7}
+  .slide h2{font-size:23px;line-height:1.2;margin:0 0 11px;font-weight:800;letter-spacing:-.3px}
+  .slide p{font-size:15.5px;line-height:1.46;margin:0 0 13px;color:#E9E4D7}
   .slide .src{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
   .slide .src b{color:var(--gold-pale);font-weight:600}
 
@@ -221,6 +221,25 @@
   .ob-proof{display:flex;align-items:center;gap:8px;justify-content:center;margin:-6px 0 16px;
     color:var(--gold-pale);font-size:13px;font-weight:700}
   .ob-proof .stars{color:var(--gold)}
+
+  /* ---------- AUTEUR / SUIVRE ---------- */
+  .author{display:flex;align-items:center;gap:9px;margin:0 0 10px}
+  .av-sm{width:32px;height:32px;border-radius:50%;flex:0 0 32px;display:flex;align-items:center;justify-content:center;
+    font-size:18px;border:2px solid rgba(255,255,255,.14)}
+  .author .ah{font-weight:800;font-size:14px;line-height:1.1}
+  .author .foll{font-size:11.5px;color:var(--muted)}
+  .author .follow{margin-left:auto;font-size:13px;font-weight:800;padding:7px 15px;border-radius:999px;
+    border:1px solid var(--gold);color:var(--gold);background:transparent}
+  .author .follow.on{background:transparent;border-color:var(--line);color:var(--muted)}
+  /* ---------- TENDANCE + DOUBLE-TAP ---------- */
+  .trend{position:absolute;left:10px;top:10px;z-index:2;font-size:11px;font-weight:800;padding:4px 9px;
+    border-radius:999px;background:rgba(0,0,0,.5);color:#fff;backdrop-filter:blur(4px)}
+  .heartburst{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%) scale(0);
+    font-size:88px;z-index:5;pointer-events:none;filter:drop-shadow(0 6px 20px rgba(0,0,0,.55));opacity:0}
+  .heartburst.go{animation:hb .85s ease}
+  @keyframes hb{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}
+    22%{transform:translate(-50%,-50%) scale(1.18);opacity:1}
+    68%{opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
 </style>
 </head>
 <body>
@@ -308,7 +327,7 @@ const DAILY_GOAL = 7;
 const DEFAULT = {
   onboarded:false, prenom:'', identite:'', interets:[],
   xp:0, streak:0, lastActive:'', dailyCount:0, dailyDate:'',
-  seen:[], liked:[], stash:{}, own:[], myComments:{}
+  seen:[], liked:[], stash:{}, own:[], myComments:{}, follows:[]
 };
 let S = load();
 
@@ -397,8 +416,10 @@ function heroHTML(c, th){
   if(pk && typeof PHOTOS!=='undefined' && PHOTOS[pk]){
     const ph=PHOTOS[pk];
     const cred=esc(ph.credit)+(ph.license?(' · '+esc(ph.license)):'');
+    const hot=engagement(c.id).likes>430000;
     return '<div class="hero photo ph-'+pk+'">'
       +'<span class="hero-accent" style="background:'+th.couleur+'"></span>'
+      +(hot?'<span class="trend">🔥 Tendance</span>':'')
       +'<span class="credit">📷 '+cred+'</span></div>';
   }
   // 2) sinon infographie sur mesure, 3) sinon icône agrandie
@@ -438,6 +459,38 @@ function genComments(id){
       likes:1+((hi>>>5)%340), av:hi%AVC.length, j:1+((hi>>>7)%72) }); }
   return out;
 }
+/* ---- "créateurs" par thème (comme des comptes qui publient) ---- */
+const CREATORS={
+  neuro:{h:'@neuro.facts',e:'🧠'}, trading:{h:'@trader.mindset',e:'📈'},
+  mental:{h:'@discipline.daily',e:'🎯'}, physique:{h:'@corps.cerveau',e:'💪'},
+  appren:{h:'@memoire.hacks',e:'📚'}, reflex:{h:'@pense.clair',e:'🔍'}
+};
+function authorRow(c, th){
+  const cr=CREATORS[c.theme]||{h:'@synapse',e:'🧠'};
+  const foll=fmtCount(180000+(hashId(cr.h)%3200000));
+  const on=(S.follows||[]).includes(c.theme);
+  return '<div class="author"><div class="av-sm" style="background:'+th.couleur+'22;color:'+th.couleur+'">'+cr.e+'</div>'
+    +'<div><div class="ah">'+cr.h+'</div><div class="foll">'+foll+' abonnés</div></div>'
+    +'<button class="follow'+(on?' on':'')+'" onclick="toggleFollow(\''+c.theme+'\',this)">'+(on?'Suivi ✓':'Suivre')+'</button></div>';
+}
+function toggleFollow(theme,btn){
+  S.follows=S.follows||[]; const i=S.follows.indexOf(theme);
+  if(i>=0){ S.follows.splice(i,1); btn.classList.remove('on'); btn.textContent='Suivre'; }
+  else { S.follows.push(theme); btn.classList.add('on'); btn.textContent='Suivi ✓'; addXP(1); toast('Abonné à '+(CREATORS[theme]||{}).h); }
+  save();
+}
+/* ---- double-tap sur la photo => like + cœur animé ---- */
+function doDoubleLike(slide){
+  const id=slide.dataset.id; if(!id) return;
+  if(!S.liked.includes(id)){ S.liked.push(id); addXP(2); save();
+    const lb=slide.querySelector('button[data-act="like"]');
+    if(lb){ lb.classList.add('on-red'); lb.querySelector('.ic').textContent='❤️'; lb.querySelector('b').textContent=fmtCount(engagement(id).likes+1); }
+  }
+  const hero=slide.querySelector('.hero'); if(!hero) return;
+  let hb=hero.querySelector('.heartburst');
+  if(!hb){ hb=document.createElement('div'); hb.className='heartburst'; hb.textContent='❤️'; hero.appendChild(hb); }
+  hb.classList.remove('go'); void hb.offsetWidth; hb.classList.add('go');
+}
 
 function slideHTML(c){
   const th=themeOf(c);
@@ -450,6 +503,7 @@ function slideHTML(c){
     <div class="slide-bg" style="background:${grad}"></div>
     <div class="slide-inner">
       ${heroHTML(c, th)}
+      ${authorRow(c, th)}
       <span class="theme-chip" style="color:${th.couleur}">${th.emoji} ${th.nom}</span>
       <h2>${esc(c.titre)}</h2>
       <p>${esc(c.corps)}</p>
@@ -490,6 +544,16 @@ function buildFeed(){
   feed.querySelectorAll('.rail button').forEach(btn=>{
     btn.addEventListener('click', ()=>railAction(btn.dataset.act, btn.dataset.id, btn));
   });
+  if(!feed._dtBound){ feed._dtBound=true; let lt=0, ls=null;
+    feed.addEventListener('click', function(e){
+      if(e.target.closest('.rail')||e.target.closest('.author')) return;
+      const hero=e.target.closest('.hero'); if(!hero) return;
+      const slide=hero.closest('.slide[data-id]'); if(!slide) return;
+      const now=performance.now();
+      if(now-lt<350 && ls===slide){ doDoubleLike(slide); lt=0; ls=null; }
+      else { lt=now; ls=slide; }
+    });
+  }
 }
 function markSeen(id){
   touchDay();
