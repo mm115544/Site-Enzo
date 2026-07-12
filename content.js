@@ -476,3 +476,60 @@ const SCENE_OF = {
   r1:'twospeed',
   p3:'sleepbed'
 };
+
+/* ============================================================
+   SOCIAL — pseudos & commentaires (pour l'ambiance "appli vivante")
+   ============================================================ */
+const NOMS = ["Léa M.","Thomas R.","Sofia_","Karim B.","yasmine.k","Lucas","Emma D.","noah_trade","Chloé","Maxime P.",
+ "inès","Gabriel","Jade.R","Ethan","camille_z","Nathan","Manon","adam.fx","Sarah L.","Rayan",
+ "Louna","Théo B.","mila_","Hugo","Anaïs","yanis.dev","Zoé","Enzo M.","clara__","Aaron",
+ "Lina","Paul R.","juju","Nour","Tom_","Alicia","samir","Eva","mehdi.k","Romane"];
+const COMMENTAIRES = [
+ "Ça change tout 🔥","Je note direct dans ma biblio","Tellement vrai…","Punchline 💯","J'en avais besoin aujourd'hui",
+ "Wow je (re)découvre ça","Merci pour le rappel 🙏","Ça résume 3 livres en 10 sec","Je partage à mon frère",
+ "Exactement mon problème 😅","À relire chaque matin","La carte la plus utile ici","Ça pique mais c'est vrai",
+ "Enfin expliqué simplement","Je bloque là-dessus depuis des mois","Sauvegardé ✅","Gros déclic 🤯","Trop réel",
+ "C'est devenu ma routine","Appliqué depuis 2 semaines, ça marche","Le genre de truc qu'on n'apprend pas à l'école",
+ "Simple et puissant","J'aurais aimé voir ça avant","Ça vaut de l'or 💰","Répète ça 100 fois","Mindset 🧠",
+ "Screenshot direct","Chaque jour un peu 💪","Discipline > motivation, validé","On oublie tellement ça"];
+const REPONSES=["totalement","+1","facts","carré","👏👏","grave","bien dit","💯","oui !!","exactement"];
+
+/* ---------------- NOUVELLES CARTES (v7) ---------------- */
+CARTES.push(
+  { id:'n13', theme:'neuro', titre:"Le cerveau retient les histoires, pas les listes",
+    corps:"Ton cerveau est câblé pour la narration. Une info transformée en histoire (avec un personnage, un enjeu, une émotion) se retient bien mieux qu'une liste sèche. Quand tu veux ancrer une idée, raconte-la : « imagine quelqu'un qui… ». Le récit crée des accroches émotionnelles auxquelles la mémoire s'agrippe.",
+    source:"Mémoire narrative", auteur:"Sciences cognitives" },
+  { id:'n14', theme:'neuro', titre:"Dis-le à voix haute pour mieux le retenir",
+    corps:"Prononcer une information à voix haute la grave mieux que la lire en silence : c'est l'effet de production. Le geste d'articuler ajoute une trace motrice et auditive au souvenir. Après une carte, reformule-la à voix haute avec tes mots. Ton cerveau enregistre trois fois : en lisant, en parlant, en t'entendant.",
+    source:"Effet de production", auteur:"Psychologie de la mémoire" },
+  { id:'t13', theme:'trading', titre:"Le marché paie la patience, pas l'agitation",
+    corps:"Le trader qui clique tout le temps se fatigue et se fait tondre. Celui qui attend son setup, immobile, frappe fort quand ça compte. La bourse transfère l'argent des impatients vers les patients. Ton edge n'est pas dans le nombre de trades, mais dans la qualité de ceux que tu oses ne pas prendre.",
+    source:"Patience", auteur:"Devenir un trader stable" },
+  { id:'t14', theme:'trading', titre:"Accepte de ne jamais être sûr",
+    corps:"Le besoin de certitude est l'ennemi du trader. Le marché est probabiliste : même le meilleur setup peut perdre. Vouloir « être sûr » avant d'entrer te fait rater les bons trades et t'accrocher aux mauvais. Agis avec un plan malgré le doute. La confiance ne vient pas de la certitude, mais de ton processus.",
+    source:"Incertitude", auteur:"Devenir un trader stable" },
+  { id:'m14', theme:'mental', titre:"Ton environnement bat ta volonté",
+    corps:"Compter sur la volonté seule est épuisant et perdant. Change plutôt ton environnement : range ton téléphone dans une autre pièce, prépare tes affaires de sport la veille, supprime l'appli qui te distrait. Rendre le bon comportement facile et le mauvais difficile fait 90 % du travail. Conçois ton décor, il décidera pour toi.",
+    source:"Design de l'environnement", auteur:"James Clear" },
+  { id:'m15', theme:'mental', titre:"Fais-le, même effrayé",
+    corps:"Le courage n'est pas l'absence de peur, c'est agir avec elle. Attendre de ne plus avoir peur, c'est attendre pour toujours. La confiance vient APRÈS l'action, pas avant. Fais le petit pas qui te fait peur aujourd'hui : passer l'appel, prendre le trade planifié, dire la vérité. De l'autre côté de la peur, il y a ta croissance.",
+    source:"Courage", auteur:"Développement personnel" },
+  { id:'p10', theme:'physique', titre:"Le froid réveille ton système nerveux",
+    corps:"Une douche froide de 30 secondes déclenche une décharge de noradrénaline qui booste la vigilance, l'humeur et la résistance au stress pendant des heures. C'est un entraînement mental autant que physique : rester calme dans l'inconfort volontaire. Commence tiède, finis froid. Tu apprends à ton cerveau à ne pas fuir la difficulté.",
+    source:"Exposition au froid", auteur:"Physiologie" },
+  { id:'p11', theme:'physique', titre:"Nourris ton cerveau (oméga-3, vrai carburant)",
+    corps:"Ton cerveau est composé en grande partie de gras : les oméga-3 (poissons gras, noix, graines) entretiennent les membranes des neurones et la fluidité des connexions. Trop de sucre et d'ultra-transformé, à l'inverse, encrasse la machine. Manger pour ton cerveau, c'est manger pour ta lucidité et ta mémoire.",
+    source:"Nutrition cérébrale", auteur:"Neuronutrition" },
+  { id:'a10', theme:'appren', titre:"Prends tes notes à la main",
+    corps:"Écrire à la main est plus lent que taper — et c'est justement pour ça que c'est plus efficace. La lenteur t'oblige à reformuler, sélectionner, comprendre au lieu de recopier mot à mot. Les études montrent une meilleure mémorisation avec le stylo. Pour ancrer une idée, ne la tape pas : écris-la.",
+    source:"Note-taking", auteur:"Sciences de l'apprentissage" },
+  { id:'a11', theme:'appren', titre:"Fais des pauses : le cerveau apprend au repos",
+    corps:"Juste après avoir appris, de courtes pauses (même 10 secondes les yeux fermés) permettent au cerveau de rejouer et consolider l'info à toute vitesse. Enchaîner sans respirer sature la mémoire. Alterne travail concentré et micro-pauses. Le repos n'est pas l'arrêt de l'apprentissage : c'en est une partie active.",
+    source:"Consolidation éveillée", auteur:"Neurosciences" },
+  { id:'r10', theme:'reflex', titre:"La règle 10/10/10",
+    corps:"Avant une décision, demande-toi : comment je me sentirai dans 10 minutes ? dans 10 mois ? dans 10 ans ? Ce zoom arrière dégonfle les émotions du moment et révèle ce qui compte vraiment. Beaucoup de tentations perdent leur pouvoir quand on les regarde à l'échelle de 10 ans. Décide depuis le futur, pas depuis l'impulsion.",
+    source:"10/10/10", auteur:"Suzy Welch" },
+  { id:'r11', theme:'reflex', titre:"Sépare le signal du bruit",
+    corps:"On se noie sous l'information : actus, avis, notifications. 95 % est du bruit qui agite sans informer. Le signal, c'est le petit nombre de faits qui changent vraiment ta décision. Apprends à demander : « est-ce que ça modifie ce que je vais faire ? » Sinon, ignore. Protéger ton attention, c'est protéger ta lucidité.",
+    source:"Signal vs bruit", auteur:"Nassim Taleb (adapté)" }
+);
