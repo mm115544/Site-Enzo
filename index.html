@@ -55,9 +55,15 @@
     display:flex;align-items:center;justify-content:center}
   .slide .ill svg{width:58px;height:58px;filter:drop-shadow(0 3px 12px rgba(0,0,0,.45))}
   .rev-card .ill svg{width:56px;height:56px;filter:drop-shadow(0 3px 12px rgba(0,0,0,.45))}
-  .hero{width:100%;height:clamp(140px,43vw,196px);border-radius:18px;overflow:hidden;
+  .hero{width:100%;height:clamp(150px,46vw,210px);border-radius:18px;overflow:hidden;
     margin:0 0 15px;position:relative;border:1px solid rgba(255,255,255,.09)}
   .hero .scene{position:absolute;inset:0;width:100%;height:100%}
+  .hero.photo{background-size:cover;background-position:center}
+  .hero.photo::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(12,12,12,.10) 0%, rgba(12,12,12,.30) 55%, rgba(12,12,12,.72) 100%)}
+  .hero .credit{position:absolute;left:10px;bottom:7px;z-index:2;font-size:9px;
+    color:rgba(255,255,255,.7);background:rgba(0,0,0,.28);padding:2px 6px;border-radius:6px;backdrop-filter:blur(3px)}
+  .hero .hero-accent{position:absolute;left:0;top:0;height:4px;width:100%;z-index:2}
   .slide h2{font-size:26px;line-height:1.22;margin:0 0 14px;font-weight:800;letter-spacing:-.3px}
   .slide p{font-size:17px;line-height:1.55;margin:0 0 18px;color:#E9E4D7}
   .slide .src{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
@@ -248,6 +254,7 @@
 </div>
 
 <script src="content.js"></script>
+<script src="photos.js"></script>
 <script>
 /* ============================================================
    SYNAPSE — logique application
@@ -344,10 +351,27 @@ function posterScene(c,color){
   return '<g transform="translate(110,40)" stroke="'+color+'" style="color:'+color+'" stroke-width="3.4" fill="none">'+inner+'</g>';
 }
 function heroHTML(c, th){
+  // 1) vraie photo si disponible pour cette carte
+  const pk=(typeof PHOTO_OF!=='undefined' && PHOTO_OF[c.id]);
+  if(pk && typeof PHOTOS!=='undefined' && PHOTOS[pk]){
+    const ph=PHOTOS[pk];
+    const cred=esc(ph.credit)+(ph.license?(' · '+esc(ph.license)):'');
+    return '<div class="hero photo ph-'+pk+'">'
+      +'<span class="hero-accent" style="background:'+th.couleur+'"></span>'
+      +'<span class="credit">📷 '+cred+'</span></div>';
+  }
+  // 2) sinon infographie sur mesure, 3) sinon icône agrandie
   const key=(typeof SCENE_OF!=='undefined' && SCENE_OF[c.id]);
   const inner=(key && typeof SCENES!=='undefined' && SCENES[key]) ? SCENES[key](th.couleur) : posterScene(c, th.couleur);
   const bg='linear-gradient(150deg, '+th.couleur+'24, #0d0d0d 72%)';
   return '<div class="hero" style="background:'+bg+'"><svg class="scene" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" fill="none" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg></div>';
+}
+// injecte une classe CSS par photo (image chargée une seule fois)
+function initPhotos(){
+  if(typeof PHOTOS==='undefined') return;
+  let css='';
+  for(const k in PHOTOS){ css+='.ph-'+k+"{background-image:url('"+PHOTOS[k].data+"')}"; }
+  const s=document.createElement('style'); s.textContent=css; document.head.appendChild(s);
 }
 
 function slideHTML(c){
@@ -698,7 +722,7 @@ function resetAll(){ if(confirm('Effacer toute ta progression et repartir de zé
 /* -------- init -------- */
 function init(){
   touchDay(); save(); refreshStats();
-  buildFeed(); initFx();
+  initPhotos(); buildFeed(); initFx();
   if(!S.onboarded) openOnboard();
   // rafraîchit la série/date au retour dans l'app
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ touchDay(); save(); refreshStats(); } });
